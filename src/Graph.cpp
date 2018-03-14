@@ -4,20 +4,30 @@
 
 #include "../include/Graph.h"
 
-Graph::Graph(int nodesNb) : m_trucks() {
-    m_distances = new int*[nodesNb];
-    for(int i=0;i<nodesNb;i++) {
-        m_distances[i] = new int[];
+Graph::Graph(int nodeNb) : m_trucks(), m_nodeNb(nodeNb) {
+    m_distances = new int*[nodeNb];
+    for(int i=0;i<nodeNb;i++) {
+        m_distances[i] = new int[nodeNb];
     }
-    m_nodes = new Node[nodesNb];
+    m_nodes = new Node[nodeNb];
 }
 
-Graph::Graph(Node *nodes, int **distances) : m_trucks(), m_distances(distances), m_nodes(nodes) {
+Graph::Graph(int nodeNb, Node *nodes, int **distances) : m_trucks(), m_distances(distances), m_nodes(nodes), m_nodeNb(nodeNb) {
     //Nothing
 }
 
-Graph::Graph(Node *nodes, int **distances, vector<Truck> trucks) : m_trucks(trucks), m_distances(distances), m_nodes(nodes) {
+Graph::Graph(int nodeNb, Node *nodes, int **distances, vector<Truck> trucks) : m_trucks(trucks), m_distances(distances), m_nodes(nodes), m_nodeNb(nodeNb) {
     //Nothing
+}
+
+Graph::~Graph() {
+    for (int i = 0; i < m_nodeNb; ++i) {
+        delete(m_distances[i]);
+    }
+    delete(m_distances);
+    delete(m_nodes);
+    m_trucks.clear();
+    m_nodeNb = 0;
 }
 
 int** Graph::getDistances() {return m_distances;}

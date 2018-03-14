@@ -16,19 +16,23 @@ class Truck;
 
 class Graph {
     private:
+        int m_nodeNb;
         Node* m_nodes;
         int** m_distances;
         vector<Truck> m_trucks;
 
     public:
-        Graph(int nodesNb);
-        Graph(Node nodes[], int** distances);
-        Graph(Node nodes[], int** distances, vector<Truck> trucks);
+        Graph(int nodeNb);
+        Graph(int nodeNb, Node nodes[], int** distances);
+        Graph(int nodeNb, Node nodes[], int** distances, vector<Truck> trucks);
+        ~Graph();
 
+        int getNodeNb();
         Node* getNodes();
         int** getDistances();
         int getDistance(Node start, Node end);
         vector<Truck> getTrucks();
+        void setNodeNb(int nodeNb);
         void setNodes(Node nodes[]);
         void setDistances(int** distances);
         void setDistances(Node start, Node end, int value);
