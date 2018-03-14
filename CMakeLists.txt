@@ -3,4 +3,7 @@ project(CVRP)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(CVRP src/main.cpp src/Node.cpp include/Node.h)
+add_executable(CVRP
+        include/Node.h
+        src/main.cpp
+        src/Node.cpp)

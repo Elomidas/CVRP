@@ -4,6 +4,6 @@
 
 #include "include/Node.h"
 
-public Node(const unsigned int ) {
+Node::Node(const unsigned int ) {
 
 }
