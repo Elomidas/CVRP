@@ -12,6 +12,8 @@ using namespace std;
 
 #include "Vector";
 
+class Truck;
+
 class Graph {
     private:
         Node* m_nodes;
@@ -25,9 +27,11 @@ class Graph {
 
         Node* getNodes();
         int** getDistances();
+        int getDistance(Node start, Node end);
         vector<Truck> getTrucks();
         void setNodes(Node nodes[]);
         void setDistances(int** distances);
+        void setDistances(Node start, Node end, int value);
         void setTrucks(vector<Truck> trucks);
 
 };
