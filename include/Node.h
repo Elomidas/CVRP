@@ -13,6 +13,7 @@ protected :
     bool m_used;
 
 public :
+    Node();
     Node(const unsigned int id, const unsigned int quantity);
     void setId(const unsigned int id);
     void setQuantity(const unsigned int quantity);
