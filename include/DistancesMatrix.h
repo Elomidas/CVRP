@@ -16,6 +16,8 @@ public:
     void setDistance(unsigned int firstNodeIndex, unsigned int secondNodeIndex, const unsigned long &distance);
     const unsigned long getDistance(unsigned int firstNodeIndex, unsigned int secondNodeIndex) const;
 
+    static int test(unsigned long (*)(unsigned int, unsigned int), unsigned int);
+
 private:
     void sortIndices(unsigned int &first, unsigned int &second) const;
     DistanceNode *m_distances;

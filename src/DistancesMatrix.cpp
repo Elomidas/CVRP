@@ -69,3 +69,32 @@ const unsigned long DistancesMatrix::getDistance(const unsigned int firstNodeInd
     sortIndices(first, second);
     return m_distances[first].getDistance(second);
 }
+
+/**
+ * Check that each function of this class is correctly running. Shall be launch with valgrind.
+ * @param computeDistance   Pointer on a function that compute distance between two nodes. 
+ *                          Function has to take two unsigned int as parameters and return an unsigned long.
+ *                          Function has to be determinist.
+ *                          You must have f(i,j)=f(j,i).
+ * @param numberOfNodes     Number of nodes in the graph
+ * @return  0 if function ends without error
+ */
+int DistancesMatrix::test(unsigned long (*computeDistance)(const unsigned int, const unsigned int), const unsigned int size) {
+    auto *matrix = new DistancesMatrix(size);
+    assert(matrix->getNumberOfNodes() == size);
+    //Matrix filling
+    for(unsigned int i(0); i < size; i++) {
+        for(unsigned int j(0); j < i; j++) {
+            matrix->setDistance(j, i, computeDistance(i, j));
+        }
+    }
+    //Data retrieving check
+    for(unsigned int i(0); i < size; i++) {
+        for(unsigned int j(0); j < i; j++) {
+            assert(matrix->getDistance(i, j) == matrix->getDistance(j, i));
+            assert(matrix->getDistance(i, j) == computeDistance(i, j));
+        }
+    }
+    delete matrix;
+    return 0;
+}
