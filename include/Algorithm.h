@@ -6,7 +6,7 @@
 #define CVRP_ALGORITHM_H
 
 
-virtual class Algorithm {
+class Algorithm {
 private:
 
 public:

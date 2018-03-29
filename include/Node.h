@@ -14,13 +14,13 @@ protected :
 
 public :
     Node();
-    Node(const unsigned int id, const unsigned int quantity);
-    void setId(const unsigned int id);
-    void setQuantity(const unsigned int quantity);
-    void setUsed(const bool used);
-    unsigned int getId();
-    unsigned int getQuantity();
-    bool getUsed();
+    Node(unsigned int, unsigned int);
+    void setId(unsigned int);
+    void setQuantity(unsigned int);
+    void setUsed(bool);
+    unsigned int getId() const;
+    unsigned int getQuantity() const;
+    bool getUsed() const;
 
 };
 

@@ -5,12 +5,11 @@
 #ifndef CVRP_GRAPH_H
 #define CVRP_GRAPH_H
 
-using namespace std;
+#include <vector>
 
-#include "Node.h";
-#include "Truck.h";
-
-#include "Vector";
+#include "Node.h"
+#include "Truck.h"
+#include "DistancesMatrix.h"
 
 class Truck;
 
@@ -18,25 +17,25 @@ class Graph {
     private:
         int m_nodeNb;
         Node* m_nodes;
-        int** m_distances;
-        vector<Truck> m_trucks;
+        DistancesMatrix m_distances;
+        std::vector<Truck> m_trucks;
 
     public:
         Graph(int nodeNb);
         Graph(int nodeNb, Node nodes[], int** distances);
-        Graph(int nodeNb, Node nodes[], int** distances, vector<Truck> trucks);
+        Graph(int nodeNb, Node nodes[], int** distances, std::vector<Truck> trucks);
         ~Graph();
 
         int getNodeNb();
         Node* getNodes();
-        int** getDistances();
-        int getDistance(Node start, Node end);
-        vector<Truck> getTrucks();
+        DistancesMatrix& getDistances();
+        unsigned long getDistance(Node start, Node end);
+        std::vector<Truck> getTrucks();
         void setNodeNb(int nodeNb);
         void setNodes(Node nodes[]);
         void setDistances(int** distances);
         void setDistances(Node start, Node end, int value);
-        void setTrucks(vector<Truck> trucks);
+        void setTrucks(std::vector<Truck> trucks);
 
 };
 
