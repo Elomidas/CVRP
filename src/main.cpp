@@ -1,10 +1,25 @@
 #include <iostream>
+#include <cassert>
 #include "../include/DistancesMatrix.h"
+
+unsigned long computeDistance(unsigned int i, unsigned int j);
+bool testDistancesMatrix();
+void testProject();
+
+int main() {
+    testProject();
+    return 0;
+}
+
+bool testDistancesMatrix() {
+    return DistancesMatrix::test(&computeDistance, 70);
+}
 
 unsigned long computeDistance(unsigned int i, unsigned int j) {
     return i + j;
 }
 
-int main() {
-    return DistancesMatrix::test(&computeDistance, 70);
+void testProject() {
+    assert(testDistancesMatrix());
+
 }
