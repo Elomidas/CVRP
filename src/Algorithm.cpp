@@ -3,3 +3,9 @@
 //
 
 #include "../include/Algorithm.h"
+
+#define _DEFAULT_INPUT "data/data01.txt"
+
+Algorithm::Algorithm() {
+
+}

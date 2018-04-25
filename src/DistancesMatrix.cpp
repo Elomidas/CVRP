@@ -3,7 +3,8 @@
 //
 
 #include <cassert>
-#include <iostream>
+#include <cmath>
+
 #include "../include/DistancesMatrix.h"
 
 /**
@@ -71,6 +72,21 @@ const unsigned long DistancesMatrix::getDistance(const unsigned int firstNodeInd
 }
 
 /**
+ * Compute the distances between all nodes, thanks to their coordinates.
+ * @param nodes List of all the nodes
+ */
+void DistancesMatrix::generateDistanceFromCoordinates(const Node* nodes) {
+    Node n1, n2;
+    for(unsigned int i(0); i < m_numberOfNodes; i++) {
+        n1 = nodes[i];
+        for(unsigned int j(0); j < i; j++) {
+            n2 = nodes[j];
+            m_distances[i].setDistance(j, computeDistance(n1, n2));
+        }
+    }
+}
+
+/**
  * Check that each function of this class is correctly running. Shall be launch with valgrind.
  * Check all functions from this class and all functions from class DistanceNode.
  * @param computeDistance   Pointer on a function that compute distance between two nodes. 
@@ -99,4 +115,8 @@ bool DistancesMatrix::test(unsigned long (*computeDistance)(const unsigned int, 
     }
     delete matrix;
     return true;
+}
+
+const unsigned long DistancesMatrix::computeDistance(const Node& n1, const Node& n2) {
+    return (unsigned long)(sqrt(pow(n1.getX() - n2.getX(), 2) + pow(n1.getY() - n2.getY(), 2)));
 }

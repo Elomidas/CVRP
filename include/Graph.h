@@ -6,6 +6,7 @@
 #define CVRP_GRAPH_H
 
 #include <vector>
+#include <string>
 
 #include "Node.h"
 #include "Truck.h"
@@ -19,11 +20,13 @@ class Graph {
         Node* m_nodes;
         DistancesMatrix m_distances;
         std::vector<Truck> m_trucks;
+        static void splitLine(std::string&, unsigned int[]) const;
 
     public:
-        Graph(int nodeNb);
-        Graph(int nodeNb, Node nodes[], int** distances);
-        Graph(int nodeNb, Node nodes[], int** distances, std::vector<Truck> trucks);
+        static Graph getGraph(const std::string&);
+        Graph(unsigned int);
+        Graph(const unsigned int, const Node[], const int**);
+        Graph(const unsigned int, const Node[], const int**, const std::vector<Truck>&);
         ~Graph();
 
         int getNodeNb();
@@ -34,7 +37,7 @@ class Graph {
         void setNodeNb(int nodeNb);
         void setNodes(Node nodes[]);
         void setDistances(int** distances);
-        void setDistances(Node start, Node end, int value);
+        void setDistances(const Node&, const Node&, const unsigned long&);
         void setTrucks(std::vector<Truck> trucks);
 
 };

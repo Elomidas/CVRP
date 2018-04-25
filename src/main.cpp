@@ -7,6 +7,7 @@ bool testDistancesMatrix();
 void testProject();
 
 int main() {
+    std::cout << "Main CVRP" << std::endl;
     testProject();
     return 0;
 }
@@ -21,5 +22,4 @@ unsigned long computeDistance(unsigned int i, unsigned int j) {
 
 void testProject() {
     assert(testDistancesMatrix());
-
 }
