@@ -29,7 +29,7 @@ namespace graph {
     private:
         void sortIndices(unsigned int &first, unsigned int &second) const;
 
-        DistanceNode *m_distancesNodes;
+        DistanceNode **m_distancesNodes;
         unsigned int m_numberOfNodes;
 
         static const double computeDistance(const Node &, const Node &);

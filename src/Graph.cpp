@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include <fstream>
-#include <cstdlib>
 #include <utility>
 #include "../include/Graph.h"
 
@@ -27,12 +26,11 @@ Graph::Graph(std::queue<Node> &nodes) :
 }
 
 Graph::~Graph() {
-    std::cout << m_nodeNb << std::endl;
     if(m_nodes != nullptr) {
         delete[] m_nodes;
         m_nodes = nullptr;
     }
-    if(m_trucks.size() > 0) {
+    if(!m_trucks.empty()) {
         m_trucks.clear();
     }
     m_nodeNb = 0;

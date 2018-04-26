@@ -15,7 +15,6 @@ namespace graph {
         double *m_distances;
         unsigned int m_nodeIndex;
         unsigned int m_size;
-        bool deleted;
 
     public:
         DistanceNode();

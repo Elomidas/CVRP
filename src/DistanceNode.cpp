@@ -11,17 +11,16 @@ using namespace graph;
 /**
  * Default constructor
  */
-DistanceNode::DistanceNode() : m_nodeIndex(0), m_size(1), m_distances(nullptr) {
-    m_distances = new double[1];
-    deleted  = false;
+DistanceNode::DistanceNode() : m_nodeIndex(0), m_size(0) {
+    //Nothing
 }
 
-DistanceNode::DistanceNode(unsigned int size) : m_nodeIndex(size - 1), m_size(size), m_distances(nullptr) {
-    m_distances = new double[size];
+DistanceNode::DistanceNode(unsigned int size) : m_nodeIndex(size - 1) {
+    m_size = size;
+    m_distances = new double[m_size];
     for(unsigned int i(0); i < size; i++) {
         m_distances[i] = 0;
     }
-    deleted = false;
 }
 
 /**
@@ -29,9 +28,9 @@ DistanceNode::DistanceNode(unsigned int size) : m_nodeIndex(size - 1), m_size(si
  */
 DistanceNode::~DistanceNode() {
     if(m_distances != nullptr) {
-        //TODO : Remove memory leak
-        //delete[] m_distances;
+        delete[] m_distances;
         m_distances = nullptr;
+        m_size = 0;
     }
 }
 

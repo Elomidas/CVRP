@@ -7,8 +7,9 @@
 
 
 #include "Graph.h"
+#include "Algorithm.h"
 
-class GeneticAlgorithm {
+class GeneticAlgorithm : public Algorithm {
 public:
 
 };

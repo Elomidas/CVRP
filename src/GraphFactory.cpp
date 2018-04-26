@@ -19,7 +19,7 @@ std::queue<graph::Node> GraphFactory::readFile(const std::string &path) {
         while(getline(file, line)) {
             unsigned int parts[] = {0,0,0,0};
             splitLine(line, parts);
-            std::cout << "Node : " << parts[0] << "," << parts[3] << "," << parts[1] << "," << parts[2] << std::endl;
+            //std::cout << "Node : " << parts[0] << "," << parts[3] << "," << parts[1] << "," << parts[2] << std::endl;
             nodes.push(graph::Node(parts[0], parts[3], parts[1], parts[2]));
         }
         file.close();
@@ -67,18 +67,15 @@ unsigned int GraphFactory::atoi(const std::string &number) {
 }
 
 void GraphFactory::test(const std::string &path) {
-    std::cout << "t1" << std::endl;
     std::queue<graph::Node> queue = readFile(path);
-    std::cout << "t2" << std::endl;
     auto *g = new graph::Graph(queue);
-    std::cout << "t3" << std::endl;
     std::clog << "Tests phase" << std::endl;
     for(unsigned int i(0); i < 5; i++) {
         std::clog << "i = " << i << std::endl;
         for(unsigned int j(0); j < i; j++) {
-            std::cout << g->getDistance(i, j) << ", ";
+            std::clog << g->getDistance(i, j) << ", ";
         }
-        std::cout << std::endl;
+        std::clog << std::endl;
     }
     delete g;
 }

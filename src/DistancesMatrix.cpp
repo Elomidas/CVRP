@@ -15,10 +15,9 @@ using namespace graph;
  * @param numberOfNodes Number of nodes in the graph
  */
 DistancesMatrix::DistancesMatrix(const unsigned int numberOfNodes) : m_numberOfNodes(numberOfNodes) {
-    m_distancesNodes = new DistanceNode[m_numberOfNodes];
+    m_distancesNodes = new DistanceNode*[m_numberOfNodes];
     for(unsigned int i(0); i < m_numberOfNodes; i++) {
-        DistanceNode d(i+1);
-        m_distancesNodes[i] = d;
+        m_distancesNodes[i] = new DistanceNode(i+1);
     }
 }
 
@@ -27,6 +26,9 @@ DistancesMatrix::DistancesMatrix(const unsigned int numberOfNodes) : m_numberOfN
  */
 DistancesMatrix::~DistancesMatrix() {
     if(m_distancesNodes != nullptr) {
+        for(unsigned int i(0); i < m_numberOfNodes; i++) {
+            delete m_distancesNodes[i];
+        }
         delete[] m_distancesNodes;
         m_distancesNodes = nullptr;
     }
@@ -64,7 +66,7 @@ void DistancesMatrix::setDistance(const unsigned int firstNodeIndex,
                                   const unsigned long &distance) {
     unsigned int first(firstNodeIndex), second(secondNodeIndex);
     sortIndices(first, second);
-    m_distancesNodes[first].setDistance(second, distance);
+    m_distancesNodes[first]->setDistance(second, distance);
 }
 
 /**
@@ -77,7 +79,7 @@ const double& DistancesMatrix::getDistance(const unsigned int firstNodeIndex,
                                                   const unsigned int secondNodeIndex) const {
     unsigned int first(firstNodeIndex), second(secondNodeIndex);
     sortIndices(first, second);
-    return m_distancesNodes[first].getDistance(second);
+    return m_distancesNodes[first]->getDistance(second);
 }
 
 /**
@@ -92,8 +94,8 @@ void DistancesMatrix::generateDistanceFromCoordinates(const Node* nodes) {
         for(unsigned int j(0); j < i; j++) {
             n2 = nodes[j];
             d = computeDistance(n1, n2);
-            m_distancesNodes[i].setDistance(j, d);
-            assert(d == m_distancesNodes[i].getDistance(j));
+            m_distancesNodes[i]->setDistance(j, d);
+            assert(d == m_distancesNodes[i]->getDistance(j));
         }
     }
 }
