@@ -28,6 +28,9 @@ public :
     unsigned int getX() const {return m_x;}
     unsigned int getY() const {return m_y;}
 
+    void setX(unsigned int i);
+
+    void SetY(unsigned int i);
 };
 
 

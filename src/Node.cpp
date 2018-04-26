@@ -56,3 +56,11 @@ void Node::setUsed(Truck *step) {
     m_used = step;
 }
 
+void Node::setX(unsigned int i) {
+    m_x = i;
+}
+
+void Node::SetY(unsigned int i) {
+    m_y = i;
+}
+
