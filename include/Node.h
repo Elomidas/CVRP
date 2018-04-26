@@ -6,29 +6,45 @@
 #define CVRP_NODE_H
 
 
-#include "Truck.h"
+namespace graph {
 
-class Node {
-protected :
-    unsigned int m_id;
-    unsigned int m_quantity;
-    Truck *m_used;
-    unsigned int m_x, m_y;
+    class Node {
 
-public :
-    Node();
-    Node(unsigned int, unsigned int);
-    Node(unsigned int, unsigned int, unsigned int, unsigned int);
-    void setId(unsigned int);
-    void setQuantity(unsigned int);
-    void setUsed(Truck*);
-    unsigned int getId() const;
-    unsigned int getQuantity() const;
-    bool getUsed() const;
-    unsigned int getX() const {return m_x;}
-    unsigned int getY() const {return m_y;}
+    protected :
+        unsigned int m_id;
+        unsigned int m_quantity;
+        //TODO : add m_used
+        //void *m_used;
+        unsigned int m_x, m_y;
 
-};
+    public :
+        Node();
 
+        Node(unsigned int, unsigned int);
+
+        Node(unsigned int, unsigned int, unsigned int, unsigned int);
+
+        Node(const Node&);
+
+        void setId(unsigned int);
+
+        void setQuantity(unsigned int);
+
+        //void setUsed(void*);
+
+        unsigned int getId() const;
+
+        unsigned int getQuantity() const;
+
+        bool getUsed() const;
+
+        //void* getUser() const;
+
+        unsigned int getX() const { return m_x; }
+
+        unsigned int getY() const { return m_y; }
+
+    };
+}
 
 #endif //CVRP_NODE_H

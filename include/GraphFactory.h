@@ -6,17 +6,18 @@
 #define CVRP_GRAPHFACTORY_H
 
 #include <string>
+#include <queue>
 
 #include "Graph.h"
 
 class GraphFactory {
 public:
-    static Graph createGraph(const std::string&);
+    static std::queue<graph::Node> readFile(const std::string&);
+    static void test(const std::string&);
 
 private:
-    struct Data {
-
-    };
+    static void splitLine(std::string &, unsigned int*);
+    static unsigned int atoi(const std::string &);
 };
 
 

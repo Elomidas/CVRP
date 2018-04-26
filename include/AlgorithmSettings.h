@@ -7,17 +7,17 @@
 
 #include <string>
 
-virtual class AlgorithmSettings {
+class AlgorithmSettings {
 protected:
     std::string m_configurationFile;
 
 public:
     AlgorithmSettings();
-
     explicit AlgorithmSettings(const std::string&);
+    ~AlgorithmSettings();
 
-    virtual void loadSettings();
-    virtual void loadSettings(const std::string&);
+    virtual void loadSettings() {};
+    virtual void loadSettings(const std::string&) {};
 };
 
 

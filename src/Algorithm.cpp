@@ -3,9 +3,11 @@
 //
 
 #include "../include/Algorithm.h"
+#include "../include/GraphFactory.h"
 
 #define _DEFAULT_INPUT "data/data01.txt"
 
-Algorithm::Algorithm() {
-
+Algorithm::Algorithm() : m_graph(0) {
+    std::queue<graph::Node> queue = GraphFactory::readFile("data/data01.txt");
+    m_graph = graph::Graph(queue);
 }

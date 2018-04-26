@@ -5,7 +5,7 @@
 #ifndef CVRP_GRAPH_H
 #define CVRP_GRAPH_H
 
-#include <vector>
+#include <queue>
 #include <string>
 
 #include "Node.h"
@@ -14,33 +14,43 @@
 
 class Truck;
 
-class Graph {
+namespace graph {
+    class Graph {
     private:
-        int m_nodeNb;
-        Node* m_nodes;
+        unsigned int m_nodeNb;
+        Node *m_nodes;
         DistancesMatrix m_distances;
         std::vector<Truck> m_trucks;
-        static void splitLine(std::string&, unsigned int[]) const;
 
     public:
-        static Graph getGraph(const std::string&);
-        Graph(unsigned int);
-        Graph(const unsigned int, const Node[], const int**);
-        Graph(const unsigned int, const Node[], const int**, const std::vector<Truck>&);
+        explicit Graph(unsigned int);
+
+        explicit Graph(std::queue<Node> &);
+
         ~Graph();
 
         int getNodeNb();
-        Node* getNodes();
-        DistancesMatrix& getDistances();
-        unsigned long getDistance(Node start, Node end);
+
+        Node *getNodes();
+
+        DistancesMatrix &getDistances();
+
+        const double& getDistance(const Node &, const Node &) const;
+
+        const double& getDistance(unsigned int, unsigned int) const;
+
         std::vector<Truck> getTrucks();
-        void setNodeNb(int nodeNb);
+
         void setNodes(Node nodes[]);
-        void setDistances(int** distances);
-        void setDistances(const Node&, const Node&, const unsigned long&);
+
+        void setDistances(int **distances);
+
+        void setDistances(const Node &, const Node &, const unsigned long &);
+
         void setTrucks(std::vector<Truck> trucks);
 
-};
+    };
+}
 
 
 #endif //CVRP_GRAPH_H

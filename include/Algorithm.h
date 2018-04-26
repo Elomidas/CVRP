@@ -10,10 +10,10 @@
 #include "Graph.h"
 #include "AlgorithmSettings.h"
 
-virtual class Algorithm {
+class Algorithm {
 
 protected:
-    Graph m_graph;
+    graph::Graph m_graph;
     std::string m_inputFile;
     AlgorithmSettings m_settings;
 

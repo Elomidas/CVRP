@@ -9,9 +9,9 @@
  * Constructor
  * @param node Node on the truck's path
  */
-TruckStep::TruckStep(Node &node) : m_next(nullptr), m_node(node) {
+TruckStep::TruckStep(graph::Node &node) : m_next(nullptr), m_node(node) {
     assert(!m_node.getUsed());
-    m_node.setUsed(true);
+    //m_node.setUsed(nullptr);
 }
 
 
@@ -20,7 +20,7 @@ TruckStep::TruckStep(Node &node) : m_next(nullptr), m_node(node) {
  */
 TruckStep::~TruckStep() {
     delete m_next;
-    m_node.setUsed(false);
+    //m_node.setUsed(nullptr);
 }
 
 /**
@@ -35,7 +35,7 @@ unsigned int TruckStep::getId() const {
  * Add a node at the end of the truck's path.
  * @param node Node's to add
  */
-void TruckStep::add(Node &node) {
+void TruckStep::add(graph::Node &node) {
     if(hasNext()) {
         m_next->add(node);
     } else {
@@ -49,7 +49,7 @@ void TruckStep::add(Node &node) {
  * @param index Index of where to add the node
  * @param node  Node to add
  */
-void TruckStep::addByIndex(unsigned int index, Node &node) {
+void TruckStep::addByIndex(unsigned int index, graph::Node &node) {
     if(hasNext() && (index > 0)) {
         m_next->addByIndex(index - 1, node);
     } else {
@@ -77,7 +77,7 @@ TruckStep* TruckStep::getNext() const {
     return m_next;
 }
 
-Node& TruckStep::getNode() {
+graph::Node& TruckStep::getNode() {
     return m_node;
 }
 
@@ -96,7 +96,7 @@ bool TruckStep::hasNext() const {
  * @param distancesMatrix   Matrix containing the distances between nodes
  * @return Distance the truck has to drive from this step to the end of its path.
  */
-unsigned long TruckStep::getDistance(const Node &origin, const DistancesMatrix &distancesMatrix) const {
+unsigned long TruckStep::getDistance(const graph::Node &origin, const graph::DistancesMatrix &distancesMatrix) const {
     if(hasNext()) {
         return distancesMatrix.getDistance(getId(), m_next->getId()) + m_next->getDistance(origin, distancesMatrix);
     }
@@ -179,7 +179,7 @@ unsigned int TruckStep::delIndex(const unsigned int index) {
  * @param node Node that will replace the old one
  * @return Deleted node's capacity
  */
-unsigned int TruckStep::replaceNext(Node &node) {
+unsigned int TruckStep::replaceNext(graph::Node &node) {
     TruckStep *old = m_next;
     unsigned int load(m_next->getLoad());
     m_next = new TruckStep(node);
@@ -196,7 +196,7 @@ unsigned int TruckStep::replaceNext(Node &node) {
  * @param node  Node to add on the truck's path
  * @return Deleted node's capacity
  */
-unsigned int TruckStep::replaceById(const unsigned int id, Node &node) {
+unsigned int TruckStep::replaceById(const unsigned int id, graph::Node &node) {
     if(hasNext()){
         if(m_next->getId() == id) {
             return replaceNext(node);
@@ -213,7 +213,7 @@ unsigned int TruckStep::replaceById(const unsigned int id, Node &node) {
  * @param node  Node to add on the truck's path
  * @return Deleted node's capacity
  */
-unsigned int TruckStep::replaceByIndex(unsigned int index, Node &node) {
+unsigned int TruckStep::replaceByIndex(unsigned int index, graph::Node &node) {
     if(hasNext()){
         if(index == 1) {
             return replaceNext(node);

@@ -4,11 +4,13 @@
 
 #include "../include/Node.h"
 
+using namespace graph;
+
 /**
  * Default constructor
  */
 Node::Node() : m_id(0), m_quantity(0), m_x(0), m_y(0) {
-    m_used = nullptr;
+    //m_used = nullptr;
 }
 
 /**
@@ -17,7 +19,7 @@ Node::Node() : m_id(0), m_quantity(0), m_x(0), m_y(0) {
  * @param quantity  Quantity of products on this node
  */
 Node::Node(const unsigned int id, const unsigned int quantity) : m_id(id), m_quantity(quantity), m_x(0), m_y(0) {
-    m_used = nullptr;
+    //m_used = nullptr;
 }
 
 /**
@@ -29,7 +31,12 @@ Node::Node(const unsigned int id, const unsigned int quantity) : m_id(id), m_qua
  */
 Node::Node(const unsigned int id, const unsigned int quantity, const unsigned int x, const unsigned int y) :
         m_id(id), m_quantity(quantity), m_x(x), m_y(y) {
-    m_used = nullptr;
+    //m_used = nullptr;
+}
+
+Node::Node(const graph::Node &old) :
+        m_id(old.getId()), m_quantity(old.getQuantity()), m_x(old.getX()), m_y(old.getY()) {
+    //m_used = old.getUser();
 }
 
 unsigned int Node::getId() const {
@@ -49,10 +56,15 @@ void Node::setQuantity(const unsigned int quantity) {
 }
 
 bool Node::getUsed() const {
-    return (m_used != nullptr);
+    //return (m_used != nullptr);
+    return true;
+}
+/*
+void* Node::getUser() const {
+    return  m_used;
 }
 
-void Node::setUsed(Truck *step) {
+void Node::setUsed(void *step) {
     m_used = step;
 }
-
+*/

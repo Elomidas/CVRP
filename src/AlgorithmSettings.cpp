@@ -10,6 +10,10 @@ AlgorithmSettings::AlgorithmSettings() : m_configurationFile(_DEFAULT_CONFIGURAT
     //Nothing
 }
 
-AlgorithmSettings::AlgorithmSettings(const std::string&) : m_configurationFile(_DEFAULT_CONFIGURATION_FILE) {
+AlgorithmSettings::AlgorithmSettings(const std::string &path) : m_configurationFile(path) {
+    //Nothing
+}
+
+AlgorithmSettings::~AlgorithmSettings() {
     //Nothing
 }

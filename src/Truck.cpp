@@ -9,9 +9,9 @@
  * Constructor
  * @param origin Node used as truck's path's origin
  */
-Truck::Truck(Node &origin) : m_currentLoad(0), m_size(0) {
+Truck::Truck(graph::Node &origin) : m_currentLoad(0), m_size(0) {
     //Make sure that origin isn't mark as used in order to allow TruckStep's construction
-    origin.setUsed(false);
+    //origin.setUsed(nullptr);
     m_origin = new TruckStep(origin);
 }
 
@@ -20,9 +20,9 @@ Truck::Truck(Node &origin) : m_currentLoad(0), m_size(0) {
  */
 Truck::~Truck() {
     //Make sure that origin is always marked as used
-    Node &node = m_origin->getNode();
+    graph::Node &node = m_origin->getNode();
     delete m_origin;
-    node.setUsed(true);
+    //node.setUsed(this);
 }
 
 /**
@@ -30,7 +30,7 @@ Truck::~Truck() {
  * @param distancesMatrix Matrix containing distances between all nodes
  * @return Truck's path's distance
  */
-unsigned long Truck::getDistance(const DistancesMatrix &distancesMatrix) const {
+unsigned long Truck::getDistance(const graph::DistancesMatrix &distancesMatrix) const {
     return m_origin->getDistance(m_origin->getNode(), distancesMatrix);
 }
 
@@ -55,7 +55,7 @@ unsigned int Truck::getComputedLoad() {
  * Add a new node at the end of truck's path
  * @param node Node to add
  */
-void Truck::addState(Node &node) {
+void Truck::addState(graph::Node &node) {
     m_origin->add(node);
     m_currentLoad += node.getQuantity();
     m_size++;
@@ -66,7 +66,7 @@ void Truck::addState(Node &node) {
  * @param index Index at which adding the node
  * @param node  Node to add on truck's path
  */
-void Truck::addStateByIndex(const unsigned int index, Node &node) {
+void Truck::addStateByIndex(const unsigned int index, graph::Node &node) {
     m_origin->addByIndex(index, node);
     m_currentLoad += node.getQuantity();
     m_size++;
@@ -96,7 +96,7 @@ void Truck::removeStateByIndex(const unsigned int index) {
  * @param id    Id of the node to replace
  * @param node  Node to add onto truck's path
  */
-void Truck::replaceStateById(const unsigned int id, Node &node) {
+void Truck::replaceStateById(const unsigned int id, graph::Node &node) {
     unsigned int delta(m_origin->replaceById(id, node));
     if(delta != 0) {
         m_currentLoad -= delta;
@@ -109,7 +109,7 @@ void Truck::replaceStateById(const unsigned int id, Node &node) {
  * @param index Index of the node to delete.
  * @param node  Node to add to the path.
  */
-void Truck::replaceStateByIndex(const unsigned int index, Node &node) {
+void Truck::replaceStateByIndex(const unsigned int index, graph::Node &node) {
     assert(index > 0);
     assert(index <= m_size);
     m_currentLoad -= m_origin->replaceByIndex(index, node);
@@ -130,7 +130,7 @@ int Truck::hasNode(const unsigned int id) const {
  * @param node Node to search
  * @return -1 if node isn't on the path, its index else
  */
-int Truck::hasNode(const Node &node) const {
+int Truck::hasNode(const graph::Node &node) const {
     return hasNode(node.getId());
 }
 

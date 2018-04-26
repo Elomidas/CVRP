@@ -10,28 +10,29 @@
 #include "DistancesMatrix.h"
 
 class TruckStep {
+
 public:
-    explicit TruckStep(Node &);
+    TruckStep(graph::Node &);
     ~TruckStep();
     bool hasNext() const;
     TruckStep* getNext() const;
-    Node& getNode();
-    void setNext(TruckStep *);
+    graph::Node& getNode();
+    void setNext(TruckStep*);
     unsigned int getId() const;
     int hasNode(unsigned int) const;
     unsigned int getLoad() const;
-    unsigned long getDistance(const Node &, const DistancesMatrix &) const;
-    void add(Node &);
-    void addByIndex(unsigned int, Node &);
+    unsigned long getDistance(const graph::Node&, const graph::DistancesMatrix&) const;
+    void add(graph::Node&);
+    void addByIndex(unsigned int, graph::Node&);
     unsigned int delById(unsigned int);
     unsigned int delIndex(unsigned int);
-    unsigned int replaceById(unsigned int, Node &);
-    unsigned int replaceByIndex(unsigned int, Node &);
+    unsigned int replaceById(unsigned int, graph::Node&);
+    unsigned int replaceByIndex(unsigned int, graph::Node&);
 
 private:
-    unsigned int replaceNext(Node &);
+    unsigned int replaceNext(graph::Node&);
     unsigned int delNext();
-    Node &m_node;
+    graph::Node &m_node;
     TruckStep *m_next;
 
 };

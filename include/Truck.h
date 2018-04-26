@@ -11,19 +11,19 @@
 
 class Truck {
 public:
-    explicit Truck(Node &);
+    explicit Truck(graph::Node &);
     ~Truck();
-    unsigned long getDistance(const DistancesMatrix &) const;
+    unsigned long getDistance(const graph::DistancesMatrix &) const;
     unsigned int getTruckLoad() const;
     unsigned int getComputedLoad();
-    void addState(Node &);
-    void addStateByIndex(unsigned int, Node &);
+    void addState(graph::Node &);
+    void addStateByIndex(unsigned int, graph::Node &);
     void removeStateById(unsigned int);
     void removeStateByIndex(unsigned int);
-    void replaceStateById(unsigned int, Node &);
-    void replaceStateByIndex(unsigned int, Node &);
+    void replaceStateById(unsigned int, graph::Node &);
+    void replaceStateByIndex(unsigned int, graph::Node &);
     int hasNode(unsigned int) const;
-    int hasNode(const Node &) const;
+    int hasNode(const graph::Node &) const;
     static unsigned int getCapacity();
 
 private:

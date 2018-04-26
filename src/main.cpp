@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cassert>
 #include "../include/DistancesMatrix.h"
+#include "../include/GraphFactory.h"
 
 unsigned long computeDistance(unsigned int i, unsigned int j);
 bool testDistancesMatrix();
@@ -12,8 +13,13 @@ int main() {
     return 0;
 }
 
+bool testGraph() {
+    GraphFactory::test("../data/data01.txt");
+    return true;
+}
+
 bool testDistancesMatrix() {
-    return DistancesMatrix::test(&computeDistance, 70);
+    return graph::DistancesMatrix::test(&computeDistance, 70);
 }
 
 unsigned long computeDistance(unsigned int i, unsigned int j) {
@@ -21,5 +27,6 @@ unsigned long computeDistance(unsigned int i, unsigned int j) {
 }
 
 void testProject() {
-    assert(testDistancesMatrix());
+    //assert(testDistancesMatrix());
+    assert(testGraph());
 }
