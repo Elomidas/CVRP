@@ -5,21 +5,30 @@
 #ifndef CVRP_DISTANCENODE_H
 #define CVRP_DISTANCENODE_H
 
+namespace graph {
+    class DistanceNode {
+    private:
+        double &getDistanceReference(unsigned int nodeIndex);
 
-class DistanceNode {
-private:
-    unsigned long& getDistanceReference(unsigned int nodeIndex);
-    unsigned long *m_distances;
-    unsigned int m_nodeIndex;
-    static unsigned int m_quantity;
+        const double &getDistanceReference(unsigned int nodeIndex) const;
 
-public:
-    static void setQuantity(unsigned int quantity) {m_quantity = quantity;};
-    DistanceNode();
-    ~DistanceNode();
-    unsigned long getDistance(unsigned int nodeIndex);
-    void setDistance(unsigned int nodeIndex, unsigned long distance);
-};
+        double *m_distances;
+        unsigned int m_nodeIndex;
+        unsigned int m_size;
+        bool deleted;
+
+    public:
+        DistanceNode();
+
+        explicit DistanceNode(unsigned int size);
+
+        ~DistanceNode();
+
+        const double &getDistance(unsigned int nodeIndex) const;
+
+        void setDistance(unsigned int nodeIndex, const double &distance);
+    };
+}
 
 
 #endif //CVRP_DISTANCENODE_H

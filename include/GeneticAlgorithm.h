@@ -10,7 +10,6 @@
 
 class GeneticAlgorithm {
 public:
-    GeneticAlgorithm(Graph)
 
 };
 

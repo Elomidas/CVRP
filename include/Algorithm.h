@@ -9,11 +9,14 @@
 
 #include "Graph.h"
 #include "AlgorithmSettings.h"
+#include "Node.h"
 
-virtual class Algorithm {
+using namespace graph;
+
+class Algorithm {
 
 protected:
-    Graph m_graph;
+    graph::Graph m_graph;
     std::string m_inputFile;
     AlgorithmSettings m_settings;
 
