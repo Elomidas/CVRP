@@ -12,8 +12,7 @@ namespace graph {
     protected :
         unsigned int m_id;
         unsigned int m_quantity;
-        //TODO : add m_used
-        //void *m_used;
+        unsigned int m_used;
         unsigned int m_x, m_y;
 
     public :
@@ -29,7 +28,7 @@ namespace graph {
 
         void setQuantity(unsigned int);
 
-        //void setUsed(void*);
+        void setUsed(unsigned int);
 
         unsigned int getId() const;
 
@@ -37,7 +36,7 @@ namespace graph {
 
         bool getUsed() const;
 
-        //void* getUser() const;
+        unsigned int getUser() const;
 
         unsigned int getX() const { return m_x; }
 

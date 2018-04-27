@@ -30,13 +30,13 @@ Node::Node(const unsigned int id, const unsigned int quantity) : m_id(id), m_qua
  * @param y         Position Y of the node
  */
 Node::Node(const unsigned int id, const unsigned int quantity, const unsigned int x, const unsigned int y) :
-        m_id(id), m_quantity(quantity), m_x(x), m_y(y) {
-    //m_used = nullptr;
+        m_id(id), m_quantity(quantity), m_x(x), m_y(y), m_used(0) {
+    //Nothing
 }
 
 Node::Node(const graph::Node &old) :
-        m_id(old.getId()), m_quantity(old.getQuantity()), m_x(old.getX()), m_y(old.getY()) {
-    //m_used = old.getUser();
+        m_id(old.getId()), m_quantity(old.getQuantity()), m_x(old.getX()), m_y(old.getY()), m_used(old.getUser()) {
+    //Nothing
 }
 
 unsigned int Node::getId() const {
@@ -55,16 +55,26 @@ void Node::setQuantity(const unsigned int quantity) {
     m_quantity = quantity;
 }
 
+/**
+ *
+ * @return booléen indiquant si le noeud est récolté par un camion ou non
+ */
 bool Node::getUsed() const {
-    //return (m_used != nullptr);
-    return true;
+    return (m_used != 0);
 }
-/*
-void* Node::getUser() const {
+
+/**
+ *
+ * @return numéro du camion le récoltant, 0 si non utilisé
+ */
+unsigned int Node::getUser() const {
     return  m_used;
 }
 
-void Node::setUsed(void *step) {
+/**
+ *
+ * @param step camion assigné au noeud
+ */
+void Node::setUsed(const unsigned int step) {
     m_used = step;
 }
-*/

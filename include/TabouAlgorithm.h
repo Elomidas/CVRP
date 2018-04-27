@@ -10,18 +10,22 @@
 
 using namespace std;
 
+
 class TabouAlgorithm : Algorithm{
 private:
-    vector<Node> m_x;
     Node m_xmin;
-    std::vector<int> m_T;
+    vector<int> m_T;
     double m_fmin;
     const int m_nmax;
 
 public:
     TabouAlgorithm();
-    ~TabouAlgorithm();
-    virtual void lancerAlgo();
+
+    ~TabouAlgorithm() override;
+
+    void lancerAlgo() override;
+
+    vector<Node> getVoisinage(Node act);
 };
 
 

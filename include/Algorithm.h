@@ -24,11 +24,18 @@ protected:
 
 public:
     Algorithm();
-    Algorithm(const std::string&, const std::string&);
+
+    //Algorithm(const std::string&, const std::string&);
+
+    virtual ~Algorithm();
 
     void setInputFile(const std::string&);
+
     void setConfigurationFile(const std::string&);
-    void lancerAlgo();
+
+    void reverse(Node n1, Node n2);
+
+    virtual void lancerAlgo();
 
 };
 
