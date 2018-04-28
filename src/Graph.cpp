@@ -59,3 +59,7 @@ void Graph::setNodes(Node *nodes) {m_nodes = nodes;}
 void Graph::setTrucks(std::vector <Truck> trucks) {
     m_trucks = std::move(trucks);
 }
+
+int Graph::getNodeNb() {
+    return m_nodeNb;
+}
