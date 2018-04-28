@@ -39,3 +39,13 @@ const std::vector<Graph> Algorithm::getVoisinage(const std::vector< std::pair<No
     return std::vector<Graph>();
     //TODO fonction à faire
 }
+
+const double Algorithm::funcFitness(const Graph) {
+    return 0;
+    //TODO définir la fonction fitness
+}
+
+const std::pair<Node, Node> Algorithm::getDifference(const Graph, const Graph) {
+    return std::pair<Node, Node>();
+    //TODO définir la fonction
+}
