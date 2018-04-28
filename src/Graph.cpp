@@ -25,6 +25,14 @@ Graph::Graph(std::queue<Node> &nodes) :
     m_distances.generateDistanceFromCoordinates(m_nodes);
 }
 
+Graph::Graph(const Graph &source) : m_nodeNb(source.getNodeNb()), m_distances(source.m_distances) {
+    m_nodes = new Node[m_nodeNb];
+    for(int i=0; i<getNodeNb();i++){
+        m_nodes[i] = Node(source.getNodes()[i]);
+    }
+    m_trucks = source.m_trucks;
+}
+
 Graph::~Graph() {
     if(m_nodes != nullptr) {
         delete[] m_nodes;
@@ -46,7 +54,7 @@ const double& Graph::getDistance(const unsigned int start, const unsigned int en
     return m_distances.getDistance(start, end);
 }
 
-Node* Graph::getNodes() {return m_nodes;}
+Node* Graph::getNodes() const {return m_nodes;}
 
 std::vector<Truck> Graph::getTrucks() {return m_trucks;}
 
@@ -60,6 +68,22 @@ void Graph::setTrucks(std::vector <Truck> trucks) {
     m_trucks = std::move(trucks);
 }
 
-int Graph::getNodeNb() {
+unsigned int Graph::getNodeNb() const {
     return m_nodeNb;
 }
+
+Graph Graph::copyGraph() {
+    Graph copy = Graph(getNodeNb());
+
+    Node* tab_nodes = new Node[getNodeNb()];
+    for(int i=0 ; i<getNodeNb() ; i++){
+        tab_nodes[i] = getNodes()[i];
+    }
+    copy.setNodes(tab_nodes);
+
+
+
+    return copy;
+}
+
+

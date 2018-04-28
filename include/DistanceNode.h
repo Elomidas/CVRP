@@ -21,6 +21,8 @@ namespace graph {
 
         explicit DistanceNode(unsigned int size);
 
+        explicit DistanceNode(const DistanceNode &);
+
         ~DistanceNode();
 
         const double &getDistance(unsigned int nodeIndex) const;

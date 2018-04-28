@@ -27,11 +27,13 @@ namespace graph {
 
         explicit Graph(std::queue<Node> &);
 
+        explicit Graph(const Graph&); // pour faire une copie
+
         ~Graph();
 
-        int getNodeNb();
+        unsigned int getNodeNb()const;
 
-        Node *getNodes();
+        Node *getNodes() const;
 
         DistancesMatrix &getDistances();
 
@@ -48,6 +50,8 @@ namespace graph {
         void setDistances(const Node &, const Node &, const unsigned long &);
 
         void setTrucks(std::vector<Truck> trucks);
+
+        Graph copyGraph();
 
     };
 }

@@ -15,6 +15,10 @@ Truck::Truck(graph::Node &origin) : m_currentLoad(0), m_size(0) {
     m_origin = new TruckStep(origin);
 }
 
+Truck::Truck(const Truck &source) : m_currentLoad(source.m_currentLoad), m_size(source.m_size){
+    m_origin = new TruckStep(*source.m_origin);
+}
+
 /**
  * Destructor
  */

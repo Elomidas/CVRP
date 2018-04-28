@@ -12,14 +12,14 @@ TabouAlgorithm::TabouAlgorithm() : m_xmin(0), m_nmax(10), m_T(), m_fmin(0) {
 
 void TabouAlgorithm::lancerAlgo() {
     Graph xo = getRandomSolution();
-    m_xmin = xo;
+    m_xmin = xo.copyGraph();
     m_fmin = funcFitness(m_xmin);
     int i=0;
     std::vector<Graph> C;
     do{
         C = getVoisinage(m_T);
         if(!C.empty()){
-            Graph y = C.at(0);
+            Graph y = C.at(0).copyGraph();
             double f_y = funcFitness(y);
             for(int j=1;j<C.size();j++){
                 if(funcFitness(C.at(j)) < f_y){
@@ -33,13 +33,13 @@ void TabouAlgorithm::lancerAlgo() {
                 m_T.push_back(diff);
             if(f_y < m_fmin){
                 m_fmin = f_y;
-                m_xmin = y;
+                m_xmin = y.copyGraph();
             }
         }
         i++;
     }
     while(!C.empty() && (i < m_nmax));
-    std::cout << m_xmin.getNodeNb() << std::endl;
+    //std::cout << m_xmin.getNodeNb() << std::endl;
 }
 
 TabouAlgorithm::~TabouAlgorithm() {

@@ -14,6 +14,10 @@ TruckStep::TruckStep(graph::Node &node) : m_next(nullptr), m_node(node) {
     //m_node.setUsed(nullptr);
 }
 
+TruckStep::TruckStep(const TruckStep &source) : m_node(source.m_node) {
+    m_next = new TruckStep(source.m_next->m_node);
+}
+
 
 /**
  * Destructor

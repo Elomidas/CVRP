@@ -42,6 +42,10 @@ namespace graph {
 
         unsigned int getY() const { return m_y; }
 
+        void setX(unsigned int x) {m_x = x};
+
+        void setY(unsigned int y) {m_y = y};
+
     };
 }
 

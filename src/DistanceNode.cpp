@@ -23,6 +23,14 @@ DistanceNode::DistanceNode(unsigned int size) : m_nodeIndex(size - 1) {
     }
 }
 
+DistanceNode::DistanceNode(const DistanceNode &source) : m_nodeIndex(source.m_nodeIndex) {
+    m_size = source.m_size;
+    m_distances = new double[m_size];
+    for(unsigned int i(0); i < m_size; i++) {
+        m_distances[i] = source.m_distances[i];
+    }
+}
+
 /**
  * Destructor
  */

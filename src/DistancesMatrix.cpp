@@ -21,6 +21,13 @@ DistancesMatrix::DistancesMatrix(const unsigned int numberOfNodes) : m_numberOfN
     }
 }
 
+DistancesMatrix::DistancesMatrix(const DistancesMatrix &source) : m_numberOfNodes(source.getNumberOfNodes()) {
+    m_distancesNodes = new DistanceNode*[m_numberOfNodes];
+    for(unsigned int i(0); i < m_numberOfNodes; i++) {
+        m_distancesNodes[i] = new DistanceNode(*source.m_distancesNodes[i]);
+    }
+}
+
 /**
  * Destructor
  */

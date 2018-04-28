@@ -12,6 +12,7 @@
 class Truck {
 public:
     explicit Truck(graph::Node &);
+    explicit Truck(const Truck &);
     ~Truck();
     unsigned long getDistance(const graph::DistancesMatrix &) const;
     unsigned int getTruckLoad() const;

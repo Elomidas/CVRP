@@ -14,6 +14,8 @@ namespace graph {
     public:
         explicit DistancesMatrix(unsigned int numberOfNodes);
 
+        explicit DistancesMatrix(const DistancesMatrix &);
+
         ~DistancesMatrix();
 
         unsigned int getNumberOfNodes() const;

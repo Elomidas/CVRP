@@ -13,6 +13,7 @@ class TruckStep {
 
 public:
     TruckStep(graph::Node &);
+    TruckStep(const TruckStep &);
     ~TruckStep();
     bool hasNext() const;
     TruckStep* getNext() const;
