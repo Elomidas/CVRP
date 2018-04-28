@@ -6,13 +6,12 @@
 #define CVRP_GRAPHFACTORY_H
 
 #include <string>
-#include <queue>
 
 #include "Graph.h"
 
 class GraphFactory {
 public:
-    static std::queue<graph::Node> readFile(const std::string&);
+    static std::vector<graph::Node> readFile(const std::string&);
     static void test(const std::string&);
 
 private:

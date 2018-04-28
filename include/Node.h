@@ -12,7 +12,7 @@ namespace graph {
     protected :
         unsigned int m_id;
         unsigned int m_quantity;
-        unsigned int m_used;
+        unsigned int m_user;
         unsigned int m_x, m_y;
 
     public :
@@ -22,7 +22,7 @@ namespace graph {
 
         Node(unsigned int, unsigned int, unsigned int, unsigned int);
 
-        Node(const Node&);
+        Node(const Node &);
 
         void setId(unsigned int);
 
@@ -41,6 +41,8 @@ namespace graph {
         unsigned int getX() const { return m_x; }
 
         unsigned int getY() const { return m_y; }
+
+        void display() const;
 
     };
 }

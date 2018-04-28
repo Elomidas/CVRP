@@ -8,18 +8,26 @@
 
 using namespace graph;
 
+unsigned long DistanceNode::m_compteur = 0;
+
 /**
  * Default constructor
  */
-DistanceNode::DistanceNode() : m_nodeIndex(0), m_size(0) {
-    //Nothing
+DistanceNode::DistanceNode() = default;
+
+DistanceNode::DistanceNode(unsigned int size) : m_size(size), m_nodeIndex(size - 1), m_distances(), m_count(m_compteur) {
+    m_compteur++;
+    for(unsigned int i(0); i < m_size; i++) {
+        m_distances.emplace_back(0.0);
+    }
 }
 
-DistanceNode::DistanceNode(unsigned int size) : m_nodeIndex(size - 1) {
-    m_size = size;
-    m_distances = new double[m_size];
-    for(unsigned int i(0); i < size; i++) {
-        m_distances[i] = 0;
+DistanceNode::DistanceNode(const DistanceNode &old) : m_size(old.m_size), m_nodeIndex(old.m_nodeIndex),
+                                                      m_distances(), m_count(m_compteur) {
+    m_compteur++;
+    for(unsigned int i(0); i < m_size; i++) {
+        std::clog << "[" << m_nodeIndex << "," << i << "] : " << old.getDistance(i) << std::endl;
+        m_distances.emplace_back(old.getDistance(i));
     }
 }
 
@@ -27,10 +35,8 @@ DistanceNode::DistanceNode(unsigned int size) : m_nodeIndex(size - 1) {
  * Destructor
  */
 DistanceNode::~DistanceNode() {
-    if(m_distances != nullptr) {
-        delete[] m_distances;
-        m_distances = nullptr;
-        m_size = 0;
+    if(!m_distances.empty()) {
+        m_distances.clear();
     }
 }
 
@@ -40,12 +46,8 @@ DistanceNode::~DistanceNode() {
  * @param nodeIndex Index of the node which one measure the distance
  * @return Distance between the nodes
  */
-double& DistanceNode::getDistanceReference(const unsigned int nodeIndex) {
-    assert(nodeIndex < m_nodeIndex);
-    return m_distances[nodeIndex];
-}
-const double& DistanceNode::getDistanceReference(const unsigned int nodeIndex) const {
-    assert(nodeIndex < m_nodeIndex);
+const double DistanceNode::getDistance(const unsigned int nodeIndex) const {
+    assert(nodeIndex <= m_nodeIndex);
     return m_distances[nodeIndex];
 }
 
@@ -55,14 +57,6 @@ const double& DistanceNode::getDistanceReference(const unsigned int nodeIndex) c
  * @param distance Distance between the nodes
  */
 void DistanceNode::setDistance(const unsigned int nodeIndex, const double &distance) {
-    getDistanceReference(nodeIndex) = distance;
-}
-
-/**
- * Get the distance between two nodes
- * @param nodeIndex Index of the second Node
- * @return Distance between the nodes.
- */
-const double& DistanceNode::getDistance(const unsigned int nodeIndex) const {
-    return getDistanceReference(nodeIndex);
+    assert(nodeIndex <= m_nodeIndex);
+    m_distances[nodeIndex] = distance;
 }

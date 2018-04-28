@@ -7,20 +7,35 @@
 
 /**
  * Constructor
- * @param node Node on the truck's path
+ * @param node      Node on the truck's path
+ * @param truckId   ID of the truck having this step
  */
-TruckStep::TruckStep(graph::Node &node) : m_next(nullptr), m_node(node) {
+TruckStep::TruckStep(graph::Node &node, const unsigned int truckId) :
+        m_next(nullptr), m_node(node), m_truckId(truckId) {
     assert(!m_node.getUsed());
-    //m_node.setUsed(nullptr);
+    m_node.setUsed(truckId);
 }
 
+/**
+ * Copy constructor
+ * @param old       Old TruckStep to copy
+ * @param nodes     New nodes
+ * @param truckId   ID of the truck having this step
+ */
+TruckStep::TruckStep(const TruckStep &old, std::vector<graph::Node> &nodes, unsigned int truckId) :
+        m_next(nullptr), m_node(nodes[old.getId()]), m_truckId(truckId) {
+    m_node.setUsed(truckId);
+    if(old.hasNext()) {
+        m_next = new TruckStep(*(old.getNext()), nodes, m_truckId);
+    }
+}
 
 /**
  * Destructor
  */
 TruckStep::~TruckStep() {
     delete m_next;
-    //m_node.setUsed(nullptr);
+    m_node.setUsed(0);
 }
 
 /**
@@ -39,7 +54,7 @@ void TruckStep::add(graph::Node &node) {
     if(hasNext()) {
         m_next->add(node);
     } else {
-        m_next = new TruckStep(node);
+        m_next = new TruckStep(node, m_truckId);
     }
 }
 
@@ -53,7 +68,7 @@ void TruckStep::addByIndex(unsigned int index, graph::Node &node) {
     if(hasNext() && (index > 0)) {
         m_next->addByIndex(index - 1, node);
     } else {
-        setNext(new TruckStep(node));
+        setNext(new TruckStep(node, m_truckId));
     }
 }
 
@@ -96,7 +111,7 @@ bool TruckStep::hasNext() const {
  * @param distancesMatrix   Matrix containing the distances between nodes
  * @return Distance the truck has to drive from this step to the end of its path.
  */
-unsigned long TruckStep::getDistance(const graph::Node &origin, const graph::DistancesMatrix &distancesMatrix) const {
+double TruckStep::getDistance(const graph::Node &origin, const graph::DistancesMatrix &distancesMatrix) const {
     if(hasNext()) {
         return distancesMatrix.getDistance(getId(), m_next->getId()) + m_next->getDistance(origin, distancesMatrix);
     }
@@ -182,7 +197,7 @@ unsigned int TruckStep::delIndex(const unsigned int index) {
 unsigned int TruckStep::replaceNext(graph::Node &node) {
     TruckStep *old = m_next;
     unsigned int load(m_next->getLoad());
-    m_next = new TruckStep(node);
+    m_next = new TruckStep(node, m_truckId);
     m_next->setNext(old->getNext());
     old->m_next = nullptr;
     delete old;
@@ -221,4 +236,22 @@ unsigned int TruckStep::replaceByIndex(unsigned int index, graph::Node &node) {
         return m_next->replaceByIndex(index-1, node);
     }
     return 0;
+}
+
+/**
+ * @return Number of steps on the path (without the last one, same as the first)
+ */
+unsigned int TruckStep::getSize() const {
+    if(m_next != nullptr) {
+        return 1 + m_next->getSize();
+    }
+    return 1;
+}
+
+std::vector<unsigned int> TruckStep::toVector(std::vector<unsigned int> &result) const {
+    result.push_back(m_node.getId());
+    if(hasNext()) {
+        return m_next->toVector(result);
+    }
+    return result;
 }

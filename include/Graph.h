@@ -11,43 +11,50 @@
 #include "Node.h"
 #include "Truck.h"
 #include "DistancesMatrix.h"
+#include "Solution.h"
 
 class Truck;
 
 namespace graph {
     class Graph {
     private:
-        unsigned int m_nodeNb;
-        Node *m_nodes;
+        unsigned int m_nodeNb, m_truckNb, m_truckNbMin;
+        unsigned long m_qTotal;
+        std::vector<Node> m_nodes;
         DistancesMatrix m_distances;
-        std::vector<Truck> m_trucks;
+        Truck **m_trucks;
+        void computeTruckNbMin();
 
     public:
+        Graph(const Graph &);
+
         explicit Graph(unsigned int);
 
-        explicit Graph(std::queue<Node> &);
+        explicit Graph(std::vector<Node> &);
 
         ~Graph();
 
-        int getNodeNb();
+        const unsigned int getNodeNb() const;
 
-        Node *getNodes();
+        const std::vector<Node> getNodes() const;
 
         DistancesMatrix &getDistances();
 
-        const double& getDistance(const Node &, const Node &) const;
+        const double getDistance(unsigned int, unsigned int) const;
 
-        const double& getDistance(unsigned int, unsigned int) const;
-
-        std::vector<Truck> getTrucks();
-
+        Truck** getTrucks();
+/*
         void setNodes(Node nodes[]);
 
         void setDistances(int **distances);
-
+*/
         void setDistances(const Node &, const Node &, const unsigned long &);
 
-        void setTrucks(std::vector<Truck> trucks);
+        void setTrucks(Truck **trucks);
+
+        bool isSolution() const;
+
+        Solution getSolution() const;
 
     };
 }

@@ -2,6 +2,7 @@
 // Created by elomidas on 14/03/18.
 //
 
+#include <iostream>
 #include "../include/Node.h"
 
 using namespace graph;
@@ -9,9 +10,9 @@ using namespace graph;
 /**
  * Default constructor
  */
-Node::Node() : m_id(0), m_quantity(0), m_x(0), m_y(0) {
-    //m_used = nullptr;
-}
+Node::Node() = default;
+
+Node::Node(const graph::Node &old) = default;
 
 /**
  * Constructor with parameters
@@ -19,7 +20,7 @@ Node::Node() : m_id(0), m_quantity(0), m_x(0), m_y(0) {
  * @param quantity  Quantity of products on this node
  */
 Node::Node(const unsigned int id, const unsigned int quantity) : m_id(id), m_quantity(quantity), m_x(0), m_y(0) {
-    //m_used = nullptr;
+    //m_user = nullptr;
 }
 
 /**
@@ -30,13 +31,17 @@ Node::Node(const unsigned int id, const unsigned int quantity) : m_id(id), m_qua
  * @param y         Position Y of the node
  */
 Node::Node(const unsigned int id, const unsigned int quantity, const unsigned int x, const unsigned int y) :
-        m_id(id), m_quantity(quantity), m_x(x), m_y(y), m_used(0) {
+        m_id(id), m_quantity(quantity), m_x(x), m_y(y), m_user(0) {
     //Nothing
 }
 
-Node::Node(const graph::Node &old) :
-        m_id(old.getId()), m_quantity(old.getQuantity()), m_x(old.getX()), m_y(old.getY()), m_used(old.getUser()) {
-    //Nothing
+void Node::display() const {
+    std::clog << "Node details : {"
+              << m_id << ","
+              << m_quantity << ","
+              << m_x << ","
+              << m_y << ","
+              << m_user << "}" << std::endl;
 }
 
 unsigned int Node::getId() const {
@@ -60,7 +65,7 @@ void Node::setQuantity(const unsigned int quantity) {
  * @return booléen indiquant si le noeud est récolté par un camion ou non
  */
 bool Node::getUsed() const {
-    return (m_used != 0);
+    return (m_user != 0);
 }
 
 /**
@@ -68,7 +73,7 @@ bool Node::getUsed() const {
  * @return numéro du camion le récoltant, 0 si non utilisé
  */
 unsigned int Node::getUser() const {
-    return  m_used;
+    return  m_user;
 }
 
 /**
@@ -76,5 +81,5 @@ unsigned int Node::getUser() const {
  * @param step camion assigné au noeud
  */
 void Node::setUsed(const unsigned int step) {
-    m_used = step;
+    m_user = step;
 }

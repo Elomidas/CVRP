@@ -10,17 +10,17 @@
 
 #include "../include/GraphFactory.h"
 
-std::queue<graph::Node> GraphFactory::readFile(const std::string &path) {
+std::vector<graph::Node> GraphFactory::readFile(const std::string &path) {
     std::ifstream file(path);
     if(file) {
-        std::queue<graph::Node> nodes;
+        std::vector<graph::Node> nodes;
         std::string line;
         getline(file, line);
         while(getline(file, line)) {
             unsigned int parts[] = {0,0,0,0};
             splitLine(line, parts);
             //std::cout << "Node : " << parts[0] << "," << parts[3] << "," << parts[1] << "," << parts[2] << std::endl;
-            nodes.push(graph::Node(parts[0], parts[3], parts[1], parts[2]));
+            nodes.emplace_back(graph::Node(parts[0], parts[3], parts[1], parts[2]));
         }
         file.close();
         std::clog << std::endl << "File size : " << nodes.size() << std::endl;
@@ -67,17 +67,34 @@ unsigned int GraphFactory::atoi(const std::string &number) {
 }
 
 void GraphFactory::test(const std::string &path) {
-    std::queue<graph::Node> queue = readFile(path);
-    auto *g = new graph::Graph(queue);
-    std::clog << "Tests phase" << std::endl;
+    std::vector<graph::Node> vector = readFile(path);
+    auto graph1 = new graph::Graph(vector);
+    std::clog << std::endl << "Tests phase" << std::endl;
     for(unsigned int i(0); i < 5; i++) {
         std::clog << "i = " << i << std::endl;
         for(unsigned int j(0); j < i; j++) {
-            std::clog << g->getDistance(i, j) << ", ";
+            double d = graph1->getDistance(i, j);
+            std::clog << d << ", ";
         }
         std::clog << std::endl;
     }
-    delete g;
+
+    std::clog << std::endl << "Copy phase" << std::endl;
+
+    graph::Graph graph2(*graph1);
+
+    std::clog << std::endl << "First deletion" << std::endl;
+
+    delete graph1;
+
+    std::clog << "Tests phase 2" << std::endl;
+    for(unsigned int i(0); i < 5; i++) {
+        std::clog << "i = " << i << std::endl;
+        for(unsigned int j(0); j < i; j++) {
+            std::clog << graph2.getDistance(i, j) << ", ";
+        }
+        std::clog << std::endl;
+    }
 }
 
 

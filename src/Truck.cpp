@@ -9,10 +9,20 @@
  * Constructor
  * @param origin Node used as truck's path's origin
  */
-Truck::Truck(graph::Node &origin) : m_currentLoad(0), m_size(0) {
+Truck::Truck(graph::Node &origin, const unsigned int index) : m_currentLoad(0), m_size(0), m_index(index) {
     //Make sure that origin isn't mark as used in order to allow TruckStep's construction
-    //origin.setUsed(nullptr);
-    m_origin = new TruckStep(origin);
+    origin.setUsed(0);
+    m_origin = new TruckStep(origin, m_index);
+}
+
+/**
+ * Copy constructor
+ * @param old   Old Truck to copy
+ * @param nodes New Nodes
+ */
+Truck::Truck(const Truck &old, std::vector<graph::Node> &nodes) :
+        m_currentLoad(old.m_currentLoad), m_size(old.m_size), m_index(old.m_index) {
+    m_origin = new TruckStep(*(old.m_origin), nodes, m_index);
 }
 
 /**
@@ -22,7 +32,7 @@ Truck::~Truck() {
     //Make sure that origin is always marked as used
     graph::Node &node = m_origin->getNode();
     delete m_origin;
-    //node.setUsed(this);
+    node.setUsed(m_index);
 }
 
 /**
@@ -140,5 +150,22 @@ int Truck::hasNode(const graph::Node &node) const {
  */
 unsigned int Truck::getCapacity() {
     return m_capacity;
+}
+
+bool Truck::isValid() {
+    return (getComputedLoad() <= m_capacity);
+}
+
+unsigned int Truck::getSize() const {
+    return m_origin->getSize();
+}
+
+std::vector<unsigned int> Truck::toVector() const {
+    std::vector<unsigned int> result;
+    if(m_origin != nullptr) {
+        m_origin->toVector(result);
+    }
+    result.push_back(m_origin->getId());
+    return result;
 }
 

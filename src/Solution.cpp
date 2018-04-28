@@ -1,0 +1,51 @@
+//
+// Created by elomidas on 28/04/18.
+//
+
+#include <climits>
+#include <cstdlib>
+
+#include "../include/Solution.h"
+
+Solution::Solution() : m_paths(), m_cost(LONG_MAX) {
+    //Nothing
+}
+
+Solution::~Solution() {
+    if(!m_paths.empty()) {
+        for(unsigned long i(m_paths.size() - 1); i >= 0; i--) {
+            if(!m_paths[i].empty()) {
+                m_paths[i].clear();
+            }
+        }
+        m_paths.clear();
+    }
+}
+
+const unsigned long& Solution::getCost() const {
+    return m_cost;
+}
+
+void Solution::addPath(const std::vector<unsigned int> &path) {
+    m_paths.push_back(path);
+}
+
+void Solution::setCost(const unsigned long &cost) {
+    m_cost = cost;
+}
+
+std::string Solution::toString() const {
+    std::string result;
+    for(unsigned long i(0); i < m_paths.size(); i++) {
+        result += "Truck " + std::to_string(i+1) + " : \n";
+        for(unsigned long j(0); j < m_paths[i].size(); i++) {
+            if(j != 0) {
+                result =+ " -> ";
+            }
+            result += std::to_string(m_paths[i][j]);
+        }
+        result += "\n";
+    }
+    result += "Solution's cost : " + std::to_string(m_cost);
+    return result;
+}
