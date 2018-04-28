@@ -17,33 +17,18 @@ namespace graph {
 
     public :
         Node();
-
+        Node(const Node &);
         Node(unsigned int, unsigned int);
-
         Node(unsigned int, unsigned int, unsigned int, unsigned int);
 
-        Node(const Node &);
-
-        void setId(unsigned int);
-
-        void setQuantity(unsigned int);
-
         void setUsed(unsigned int);
-
         unsigned int getId() const;
-
         unsigned int getQuantity() const;
-
         bool getUsed() const;
-
         unsigned int getUser() const;
-
         unsigned int getX() const { return m_x; }
-
         unsigned int getY() const { return m_y; }
-
         void display() const;
-
     };
 }
 

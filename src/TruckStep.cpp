@@ -92,6 +92,10 @@ TruckStep* TruckStep::getNext() const {
     return m_next;
 }
 
+/**
+ * Get the Node linked to this step
+ * @return Node linked to this step
+ */
 graph::Node& TruckStep::getNode() {
     return m_node;
 }
@@ -248,6 +252,11 @@ unsigned int TruckStep::getSize() const {
     return 1;
 }
 
+/**
+ * Add the rest of the path to the vector.
+ * @param result Vector representing the beginning of the path.
+ * @return Vector representing the path
+ */
 std::vector<unsigned int> TruckStep::toVector(std::vector<unsigned int> &result) const {
     result.push_back(m_node.getId());
     if(hasNext()) {

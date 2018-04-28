@@ -22,6 +22,10 @@ DistancesMatrix::DistancesMatrix(const unsigned int numberOfNodes) :
     }
 }
 
+/**
+ * Copy constructor
+ * @param old DistanceMatrix to copy
+ */
 DistancesMatrix::DistancesMatrix(const DistancesMatrix &old) :
         m_numberOfNodes(old.m_numberOfNodes), m_distancesNodes() {
     for(unsigned int i(0); i < m_numberOfNodes; i++) {
@@ -137,6 +141,12 @@ bool DistancesMatrix::test(unsigned long (*computeDistance)(const unsigned int, 
     return true;
 }
 
+/**
+ * Compute the cartesian distance between two Nodes
+ * @param n1 First Node
+ * @param n2 Second Node
+ * @return Cartesian distance between the Nodes
+ */
 const double DistancesMatrix::computeDistance(const Node& n1, const Node& n2) {
     double x1(n1.getX()),
             x2(n2.getX()),

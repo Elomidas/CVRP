@@ -8,13 +8,14 @@
 
 #include "Algorithm.h"
 
-using namespace std;
-
 
 class TabouAlgorithm : Algorithm{
 private:
-    Node m_xmin;
-    vector<int> m_T;
+    Graph m_xmin;
+    /**
+     * les deux noeuds utilisés pour la transformation élémentaire
+     */
+    std::vector< std::pair<Node,Node> > m_T;
     double m_fmin;
     const int m_nmax;
 
@@ -25,7 +26,6 @@ public:
 
     void lancerAlgo() override;
 
-    vector<Node> getVoisinage(Node act);
 };
 
 

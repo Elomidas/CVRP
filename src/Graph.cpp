@@ -20,7 +20,7 @@ Graph::Graph(const unsigned int nodeNb) : m_nodeNb(nodeNb), m_distances(nodeNb),
 
 /**
  * Constructor from a queue of Nodes
- * @param nodes Queue of Graph's Nodes
+ * @param nodes vector of all the Nodes in the Graph
  */
 Graph::Graph(std::vector<Node> &nodes) :
         m_trucks(), m_nodeNb(static_cast<unsigned int>(nodes.size())), m_nodes(),
@@ -58,6 +58,9 @@ Graph::Graph(const Graph &g) :
     std::clog << "Graph copied" << std::endl;
 }
 
+/**
+ * Destructor
+ */
 Graph::~Graph() {
     if(!m_nodes.empty()) {
         m_nodes.clear();
@@ -73,39 +76,18 @@ Graph::~Graph() {
     }
 }
 
-DistancesMatrix& Graph::getDistances() {
-    return m_distances;
-}
-
 const double Graph::getDistance(const unsigned int start, const unsigned int end) const {
     return m_distances.getDistance(start, end);
 }
 
-const std::vector<Node> Graph::getNodes() const {return m_nodes;}
-
-Truck** Graph::getTrucks() {
-    return m_trucks;
-}
-
-void Graph::setDistances(const Node& start, const Node& end, const unsigned long &value) {
-    m_distances.setDistance(start.getId(), end.getId(), value);
-}
-
-/*
-void Graph::setNodes(Node *nodes) {
-    m_nodes = nodes;
-}
+/**
+ * Check if the graph can be a solution (all Nodes are on a Truck's path and none of the Trucks overcome its capacity.
+ * @return true if this graph is a solution, false else.
  */
-
-void Graph::setTrucks(Truck **trucks) {
-    m_trucks = trucks;
-}
-
 bool Graph::isSolution() const {
     //Check if all nodes are used
     for(unsigned int i(0); i < m_nodeNb; i++) {
         if(!m_nodes[i].getUsed()) {
-            std::clog << "Node " << i << " isn't used." << std::endl;
             return false;
         }
     }
@@ -118,6 +100,9 @@ bool Graph::isSolution() const {
     return true;
 }
 
+/**
+ * Find the minimum amount of Trucks needed for this graph.
+ */
 void Graph::computeTruckNbMin() {
     //Add one truck to be sure to be able to operate some changes
     m_truckNbMin = static_cast<unsigned int>((m_qTotal / Truck::getCapacity()) + 1);
@@ -129,10 +114,18 @@ void Graph::computeTruckNbMin() {
     }
 }
 
+/**
+ * Get the number of Nodes in the Graph
+ * @return Number of Nodes in the Graph
+ */
 const unsigned int Graph::getNodeNb() const {
     return m_nodeNb;
 }
 
+/**
+ * Return a Solution object representing the Graph if it's a possible Solution.
+ * @return Solution object representing the Graph.
+ */
 Solution Graph::getSolution() const {
     assert(isSolution());
     Solution s;
@@ -144,3 +137,5 @@ Solution Graph::getSolution() const {
     s.setCost(cost);
     return s;
 }
+
+

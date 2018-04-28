@@ -2,15 +2,21 @@
 // Created by elomidas on 28/04/18.
 //
 
-#include <climits>
 #include <cstdlib>
+#include <cfloat>
 
 #include "../include/Solution.h"
 
-Solution::Solution() : m_paths(), m_cost(LONG_MAX) {
+/**
+ * Create an empty solution with the highest cost possible
+ */
+Solution::Solution() : m_paths(), m_cost(DBL_MAX) {
     //Nothing
 }
 
+/**
+ * Destructor
+ */
 Solution::~Solution() {
     if(!m_paths.empty()) {
         for(unsigned long i(m_paths.size() - 1); i >= 0; i--) {
@@ -22,18 +28,34 @@ Solution::~Solution() {
     }
 }
 
-const unsigned long& Solution::getCost() const {
+/**
+ * Get Solution's cost
+ * @return Cost of this Solution
+ */
+const unsigned double& Solution::getCost() const {
     return m_cost;
 }
 
+/**
+ * Add a path to this Solution
+ * @param path Path to add
+ */
 void Solution::addPath(const std::vector<unsigned int> &path) {
     m_paths.push_back(path);
 }
 
-void Solution::setCost(const unsigned long &cost) {
+/**
+ * Set Solution's cost
+ * @param cost Solution's cost
+ */
+void Solution::setCost(const unsigned double &cost) {
     m_cost = cost;
 }
 
+/**
+ * Get a string representation of the Solution
+ * @return String representing the Solution
+ */
 std::string Solution::toString() const {
     std::string result;
     for(unsigned long i(0); i < m_paths.size(); i++) {

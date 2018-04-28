@@ -15,7 +15,8 @@ public:
     explicit Truck(const Truck &, std::vector<graph::Node> &);
     explicit Truck(graph::Node &, unsigned int);
     ~Truck();
-    unsigned long getDistance(const graph::DistancesMatrix &) const;
+
+    unsigned double getDistance(const graph::DistancesMatrix &) const;
     unsigned int getTruckLoad() const;
     unsigned int getComputedLoad();
     void addState(graph::Node &);

@@ -15,6 +15,11 @@ unsigned long DistanceNode::m_compteur = 0;
  */
 DistanceNode::DistanceNode() = default;
 
+/**
+ * Constructor with the number of Nodes in the graph
+ * All distances will be set to 0
+ * @param size Number of Nodes in the Graph
+ */
 DistanceNode::DistanceNode(unsigned int size) : m_size(size), m_nodeIndex(size - 1), m_distances(), m_count(m_compteur) {
     m_compteur++;
     for(unsigned int i(0); i < m_size; i++) {
@@ -22,6 +27,10 @@ DistanceNode::DistanceNode(unsigned int size) : m_size(size), m_nodeIndex(size -
     }
 }
 
+/**
+ * Copy constructor
+ * @param old Graph to copy
+ */
 DistanceNode::DistanceNode(const DistanceNode &old) : m_size(old.m_size), m_nodeIndex(old.m_nodeIndex),
                                                       m_distances(), m_count(m_compteur) {
     m_compteur++;

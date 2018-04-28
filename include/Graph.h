@@ -27,33 +27,13 @@ namespace graph {
 
     public:
         Graph(const Graph &);
-
         explicit Graph(unsigned int);
-
         explicit Graph(std::vector<Node> &);
-
         ~Graph();
 
         const unsigned int getNodeNb() const;
-
-        const std::vector<Node> getNodes() const;
-
-        DistancesMatrix &getDistances();
-
         const double getDistance(unsigned int, unsigned int) const;
-
-        Truck** getTrucks();
-/*
-        void setNodes(Node nodes[]);
-
-        void setDistances(int **distances);
-*/
-        void setDistances(const Node &, const Node &, const unsigned long &);
-
-        void setTrucks(Truck **trucks);
-
         bool isSolution() const;
-
         Solution getSolution() const;
 
     };

@@ -16,6 +16,7 @@ public:
     explicit TruckStep(graph::Node &, unsigned int);
     explicit TruckStep(const TruckStep &, std::vector<graph::Node> &, unsigned int);
     ~TruckStep();
+
     bool hasNext() const;
     TruckStep* getNext() const;
     graph::Node& getNode();

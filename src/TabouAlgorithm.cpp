@@ -5,38 +5,41 @@
 #include <iostream>
 #include "../include/TabouAlgorithm.h"
 
-using namespace std;
 
-TabouAlgorithm::TabouAlgorithm() : m_xmin(), m_nmax(0), m_T(), m_fmin(0) {
+TabouAlgorithm::TabouAlgorithm() : m_xmin(0), m_nmax(10), m_T(), m_fmin(0) {
     //Nothing
 }
 
 void TabouAlgorithm::lancerAlgo() {
+    Graph xo = getRandomSolution();
+    m_xmin = xo.copyGraph();
+    m_fmin = funcFitness(m_xmin);
     int i=0;
-    Node xo = m_graph.getNodes()[0];
-    m_xmin = xo;
-    vector<Node> C;
+    std::vector<Graph> C;
     do{
-        for(unsigned int j=0;j<C.size();j++)
-            C.push_back(C.at(j));
+        C = getVoisinage(m_T);
         if(!C.empty()){
-
+            Graph y = C.at(0).copyGraph();
+            double f_y = funcFitness(y);
+            for(int j=1;j<C.size();j++){
+                if(funcFitness(C.at(j)) < f_y){
+                    y = C.at(j);
+                    f_y = funcFitness(y);
+                }
+            }
+            double delta_f = f_y - funcFitness(m_graph);
+            std::pair<Node,Node> diff = getDifference(y, m_graph);
+            if(delta_f >= 0)
+                m_T.push_back(diff);
+            if(f_y < m_fmin){
+                m_fmin = f_y;
+                m_xmin = y.copyGraph();
+            }
         }
         i++;
     }
-    while(!C.empty() || (i = m_nmax));
-    cout << m_xmin.getId();
-}
-
-/**
- *
- * @param act noeud actuel
- * @return tous les noeuds appartenant au voisinage du noeud actuel
- */
-vector<Node> TabouAlgorithm::getVoisinage(Node act) {
-    vector<Node> ret;
-    ret.push_back(act);
-    return ret;
+    while(!C.empty() && (i < m_nmax));
+    //std::cout << m_xmin.getNodeNb() << std::endl;
 }
 
 TabouAlgorithm::~TabouAlgorithm() {

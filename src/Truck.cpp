@@ -8,6 +8,7 @@
 /**
  * Constructor
  * @param origin Node used as truck's path's origin
+ * @param index  Truck's index
  */
 Truck::Truck(graph::Node &origin, const unsigned int index) : m_currentLoad(0), m_size(0), m_index(index) {
     //Make sure that origin isn't mark as used in order to allow TruckStep's construction
@@ -40,7 +41,7 @@ Truck::~Truck() {
  * @param distancesMatrix Matrix containing distances between all nodes
  * @return Truck's path's distance
  */
-unsigned long Truck::getDistance(const graph::DistancesMatrix &distancesMatrix) const {
+unsigned double Truck::getDistance(const graph::DistancesMatrix &distancesMatrix) const {
     return m_origin->getDistance(m_origin->getNode(), distancesMatrix);
 }
 
@@ -152,14 +153,26 @@ unsigned int Truck::getCapacity() {
     return m_capacity;
 }
 
+/**
+ * Check that this Truck doesn't have more items than it should.
+ * @return true if this Truck is valid, false else.
+ */
 bool Truck::isValid() {
     return (getComputedLoad() <= m_capacity);
 }
 
+/**
+ * Get the number of steps on this Truck's path (without the last, that is the same as the first)
+ * @return Number of steps on the Truck's path.
+ */
 unsigned int Truck::getSize() const {
     return m_origin->getSize();
 }
 
+/**
+ * Get a vector representing the Truck's path
+ * @return Vector representing the Truck's path
+ */
 std::vector<unsigned int> Truck::toVector() const {
     std::vector<unsigned int> result;
     if(m_origin != nullptr) {

@@ -27,5 +27,25 @@ void Algorithm::lancerAlgo() {
  */
 
 void Algorithm::reverse(Node n1, Node n2) {
+    //TODO fonction à faire
+}
 
+const Graph Algorithm::getRandomSolution() {
+    return Graph(0);
+    //TODO fonction à faire
+}
+
+const std::vector<Graph> Algorithm::getVoisinage(const std::vector< std::pair<Node,Node> > listeTabou = std::vector< std::pair<Node,Node> >()) {
+    return std::vector<Graph>();
+    //TODO fonction à faire
+}
+
+const double Algorithm::funcFitness(const Graph) {
+    return 0;
+    //TODO définir la fonction fitness
+}
+
+const std::pair<Node, Node> Algorithm::getDifference(const Graph, const Graph) {
+    return std::pair<Node, Node>();
+    //TODO définir la fonction
 }

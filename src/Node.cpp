@@ -12,6 +12,10 @@ using namespace graph;
  */
 Node::Node() = default;
 
+/**
+ * Copy constructor
+ * @param old
+ */
 Node::Node(const graph::Node &old) = default;
 
 /**
@@ -19,8 +23,9 @@ Node::Node(const graph::Node &old) = default;
  * @param id        Node's id
  * @param quantity  Quantity of products on this node
  */
-Node::Node(const unsigned int id, const unsigned int quantity) : m_id(id), m_quantity(quantity), m_x(0), m_y(0) {
-    //m_user = nullptr;
+Node::Node(const unsigned int id, const unsigned int quantity) : m_id(id), m_quantity(quantity), m_x(0), m_y(0),
+                                                                 m_user(0) {
+    //Nothing
 }
 
 /**
@@ -35,6 +40,9 @@ Node::Node(const unsigned int id, const unsigned int quantity, const unsigned in
     //Nothing
 }
 
+/**
+ * Display Node's details.
+ */
 void Node::display() const {
     std::clog << "Node details : {"
               << m_id << ","
@@ -44,41 +52,41 @@ void Node::display() const {
               << m_user << "}" << std::endl;
 }
 
+/**
+ * Get Node's ID.
+ * @return ID of this Node.
+ */
 unsigned int Node::getId() const {
     return m_id;
 }
 
-void Node::setId(const unsigned int id) {
-    m_id = id;
-}
-
+/**
+ * Get the quantity associated with this Node.
+ * @return Get Node's quantity
+ */
 unsigned int Node::getQuantity() const {
     return m_quantity;
 }
 
-void Node::setQuantity(const unsigned int quantity) {
-    m_quantity = quantity;
-}
-
 /**
- *
- * @return booléen indiquant si le noeud est récolté par un camion ou non
+ * Check if this Node is already on a Truck's path
+ * @return true if the Node is on a Truck's path, false else.
  */
 bool Node::getUsed() const {
     return (m_user != 0);
 }
 
 /**
- *
- * @return numéro du camion le récoltant, 0 si non utilisé
+ * Return the ID of the Truck on which path is this Node (ID >= 1)
+ * @return ID of the Truck going through this node, 0 if there isn't any.
  */
 unsigned int Node::getUser() const {
     return  m_user;
 }
 
 /**
- *
- * @param step camion assigné au noeud
+ * Assign a Truck ID or 0 to this Node
+ * @param step Truck's ID
  */
 void Node::setUsed(const unsigned int step) {
     m_user = step;

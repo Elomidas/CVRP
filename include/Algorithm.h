@@ -35,6 +35,14 @@ public:
 
     void reverse(Node n1, Node n2);
 
+    const Graph getRandomSolution();
+
+    const std::vector<Graph> getVoisinage(const std::vector< std::pair<Node,Node> >);
+
+    const double funcFitness(const Graph);
+
+    const std::pair<Node, Node> getDifference(const Graph, const Graph);
+
     virtual void lancerAlgo();
 
 };
