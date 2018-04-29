@@ -37,7 +37,7 @@ namespace graph {
 
         std::vector<Truck> getTrucks() const { return m_trucks; };
 
-        const Truck getTruck(unsigned int i) const { return m_trucks[i]; };
+        Truck getTruck(unsigned int i) const { return m_trucks[i]; };
 
         void setNode(unsigned int i, Node node) { m_nodes[i] = node; }
 

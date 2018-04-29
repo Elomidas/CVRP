@@ -44,9 +44,6 @@ void TabouAlgorithm::lancerAlgo() {
 }
 
 TabouAlgorithm::~TabouAlgorithm() {
-    delete m_xmin;
-    for(std::pair<unsigned int, unsigned int> pair : m_T){
-        delete pair;
-    }
+
 }
 
