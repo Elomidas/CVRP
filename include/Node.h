@@ -12,40 +12,23 @@ namespace graph {
     protected :
         unsigned int m_id;
         unsigned int m_quantity;
-        unsigned int m_used;
+        unsigned int m_user;
         unsigned int m_x, m_y;
 
     public :
         Node();
-
+        Node(const Node &);
         Node(unsigned int, unsigned int);
-
         Node(unsigned int, unsigned int, unsigned int, unsigned int);
 
-        Node(const Node&);
-
-        void setId(unsigned int);
-
-        void setQuantity(unsigned int);
-
         void setUsed(unsigned int);
-
         unsigned int getId() const;
-
         unsigned int getQuantity() const;
-
         bool getUsed() const;
-
         unsigned int getUser() const;
-
         unsigned int getX() const { return m_x; }
-
         unsigned int getY() const { return m_y; }
-
-        void setX(unsigned int x) {m_x = x};
-
-        void setY(unsigned int y) {m_y = y};
-
+        void display() const;
     };
 }
 

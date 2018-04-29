@@ -14,17 +14,22 @@ using namespace graph;
  * Constructor
  * @param numberOfNodes Number of nodes in the graph
  */
-DistancesMatrix::DistancesMatrix(const unsigned int numberOfNodes) : m_numberOfNodes(numberOfNodes) {
-    m_distancesNodes = new DistanceNode*[m_numberOfNodes];
+DistancesMatrix::DistancesMatrix(const unsigned int numberOfNodes) :
+        m_numberOfNodes(numberOfNodes), m_distancesNodes() {
     for(unsigned int i(0); i < m_numberOfNodes; i++) {
-        m_distancesNodes[i] = new DistanceNode(i+1);
+        DistanceNode d(i+1);
+        m_distancesNodes.emplace_back(d);
     }
 }
 
-DistancesMatrix::DistancesMatrix(const DistancesMatrix &source) : m_numberOfNodes(source.getNumberOfNodes()) {
-    m_distancesNodes = new DistanceNode*[m_numberOfNodes];
+/**
+ * Copy constructor
+ * @param old DistanceMatrix to copy
+ */
+DistancesMatrix::DistancesMatrix(const DistancesMatrix &old) :
+        m_numberOfNodes(old.m_numberOfNodes), m_distancesNodes() {
     for(unsigned int i(0); i < m_numberOfNodes; i++) {
-        m_distancesNodes[i] = new DistanceNode(*source.m_distancesNodes[i]);
+        m_distancesNodes.emplace_back(DistanceNode(old.m_distancesNodes[i]));
     }
 }
 
@@ -32,12 +37,8 @@ DistancesMatrix::DistancesMatrix(const DistancesMatrix &source) : m_numberOfNode
  * Destructor
  */
 DistancesMatrix::~DistancesMatrix() {
-    if(m_distancesNodes != nullptr) {
-        for(unsigned int i(0); i < m_numberOfNodes; i++) {
-            delete m_distancesNodes[i];
-        }
-        delete[] m_distancesNodes;
-        m_distancesNodes = nullptr;
+    if(!m_distancesNodes.empty()) {
+        m_distancesNodes.clear();
     }
 }
 
@@ -73,7 +74,7 @@ void DistancesMatrix::setDistance(const unsigned int firstNodeIndex,
                                   const unsigned long &distance) {
     unsigned int first(firstNodeIndex), second(secondNodeIndex);
     sortIndices(first, second);
-    m_distancesNodes[first]->setDistance(second, distance);
+    m_distancesNodes[first].setDistance(second, distance);
 }
 
 /**
@@ -82,18 +83,19 @@ void DistancesMatrix::setDistance(const unsigned int firstNodeIndex,
  * @param secondNodeIndex   Second node's index
  * @return Distance between the nodes
  */
-const double& DistancesMatrix::getDistance(const unsigned int firstNodeIndex,
+const double DistancesMatrix::getDistance(const unsigned int firstNodeIndex,
                                                   const unsigned int secondNodeIndex) const {
     unsigned int first(firstNodeIndex), second(secondNodeIndex);
     sortIndices(first, second);
-    return m_distancesNodes[first]->getDistance(second);
+    double v = m_distancesNodes[first].getDistance(second);
+    return v;
 }
 
 /**
  * Compute the distances between all nodes, thanks to their coordinates.
  * @param nodes List of all the nodes
  */
-void DistancesMatrix::generateDistanceFromCoordinates(const Node* nodes) {
+void DistancesMatrix::generateDistanceFromCoordinates(const std::vector<Node> &nodes) {
     Node n1, n2;
     double d;
     for(unsigned int i(0); i < m_numberOfNodes; i++) {
@@ -101,8 +103,9 @@ void DistancesMatrix::generateDistanceFromCoordinates(const Node* nodes) {
         for(unsigned int j(0); j < i; j++) {
             n2 = nodes[j];
             d = computeDistance(n1, n2);
-            m_distancesNodes[i]->setDistance(j, d);
-            assert(d == m_distancesNodes[i]->getDistance(j));
+            std::clog << "=> [" << i << "," << j << "] : " << d << std::endl;
+            m_distancesNodes[i].setDistance(j, d);
+            assert(d == m_distancesNodes[i].getDistance(j));
         }
     }
 }
@@ -138,6 +141,12 @@ bool DistancesMatrix::test(unsigned long (*computeDistance)(const unsigned int, 
     return true;
 }
 
+/**
+ * Compute the cartesian distance between two Nodes
+ * @param n1 First Node
+ * @param n2 Second Node
+ * @return Cartesian distance between the Nodes
+ */
 const double DistancesMatrix::computeDistance(const Node& n1, const Node& n2) {
     double x1(n1.getX()),
             x2(n2.getX()),

@@ -6,15 +6,17 @@
 #define CVRP_TRUCKSTEP_H
 
 
+#include <vector>
 #include "Node.h"
 #include "DistancesMatrix.h"
 
 class TruckStep {
 
 public:
-    TruckStep(graph::Node &);
-    TruckStep(const TruckStep &);
+    explicit TruckStep(graph::Node &, unsigned int);
+    explicit TruckStep(const TruckStep &, std::vector<graph::Node> &, unsigned int);
     ~TruckStep();
+
     bool hasNext() const;
     TruckStep* getNext() const;
     graph::Node& getNode();
@@ -22,19 +24,22 @@ public:
     unsigned int getId() const;
     int hasNode(unsigned int) const;
     unsigned int getLoad() const;
-    unsigned long getDistance(const graph::Node&, const graph::DistancesMatrix&) const;
+    double getDistance(const graph::Node&, const graph::DistancesMatrix&) const;
+    unsigned int getSize() const;
     void add(graph::Node&);
     void addByIndex(unsigned int, graph::Node&);
     unsigned int delById(unsigned int);
     unsigned int delIndex(unsigned int);
     unsigned int replaceById(unsigned int, graph::Node&);
     unsigned int replaceByIndex(unsigned int, graph::Node&);
+    std::vector<unsigned int> toVector(std::vector<unsigned int> &) const;
 
 private:
     unsigned int replaceNext(graph::Node&);
     unsigned int delNext();
     graph::Node &m_node;
     TruckStep *m_next;
+    unsigned int m_truckId;
 
 };
 

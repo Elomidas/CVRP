@@ -10,17 +10,21 @@
 
 #include "../include/GraphFactory.h"
 
-std::queue<graph::Node> GraphFactory::readFile(const std::string &path) {
+/**
+ * Create a Graph from a source file
+ * @param path  Path to the file (example : "../data/data01.txt")
+ * @return      Graph corresponding to the given file
+ */
+std::vector<graph::Node> GraphFactory::readFile(const std::string &path) {
     std::ifstream file(path);
     if(file) {
-        std::queue<graph::Node> nodes;
+        std::vector<graph::Node> nodes;
         std::string line;
         getline(file, line);
         while(getline(file, line)) {
             unsigned int parts[] = {0,0,0,0};
             splitLine(line, parts);
-            //std::cout << "Node : " << parts[0] << "," << parts[3] << "," << parts[1] << "," << parts[2] << std::endl;
-            nodes.push(graph::Node(parts[0], parts[3], parts[1], parts[2]));
+            nodes.emplace_back(graph::Node(parts[0], parts[3], parts[1], parts[2]));
         }
         file.close();
         std::clog << std::endl << "File size : " << nodes.size() << std::endl;
@@ -32,7 +36,11 @@ std::queue<graph::Node> GraphFactory::readFile(const std::string &path) {
     }
 }
 
-
+/**
+ * Retrieve informations from a file's line
+ * @param line  Line from the file.
+ * @param res   List of the intels retrieved.
+ */
 void GraphFactory::splitLine(std::string &line, unsigned int *res) {
     std::string delimiter = ";";
     unsigned int i;
@@ -44,14 +52,17 @@ void GraphFactory::splitLine(std::string &line, unsigned int *res) {
     res[i] = atoi(line);
 }
 
+/**
+ * Convert a string into an unsigned int.
+ * @param number String to convert.
+ * @return Unsigned int obtained.
+ */
 unsigned int GraphFactory::atoi(const std::string &number) {
     char *endptr;
     long val;
 
     errno = 0;
     val = strtol(number.c_str(), &endptr, 10);
-
-    /* Check for various possible errors */
 
     if ((errno == ERANGE && (val == LONG_MAX || val == LONG_MIN))
         || (errno != 0 && val == 0)) {
@@ -66,18 +77,35 @@ unsigned int GraphFactory::atoi(const std::string &number) {
     return static_cast<unsigned int>(val);
 }
 
+/**
+ * Function used to read a file, create the Graph and copy it to check new constructors.
+ * @param path Path to the file to read.
+ */
 void GraphFactory::test(const std::string &path) {
-    std::queue<graph::Node> queue = readFile(path);
-    auto *g = new graph::Graph(queue);
-    std::clog << "Tests phase" << std::endl;
+    std::vector<graph::Node> vector = readFile(path);
+    auto graph1 = new graph::Graph(vector);=
     for(unsigned int i(0); i < 5; i++) {
-        std::clog << "i = " << i << std::endl;
         for(unsigned int j(0); j < i; j++) {
-            std::clog << g->getDistance(i, j) << ", ";
+            double d = graph1->getDistance(i, j);
+            std::clog << d << ", ";
         }
         std::clog << std::endl;
     }
-    delete g;
+
+    graph::Graph graph2(*graph1);
+
+    delete graph1;
+
+    /* Read the copy after deleting the source
+     * Check if all object are duplicate and assure there isn't any memory conflict.
+     */
+
+    for(unsigned int i(0); i < 5; i++) {
+        for(unsigned int j(0); j < i; j++) {
+            std::clog << graph2.getDistance(i, j) << ", ";
+        }
+        std::clog << std::endl;
+    }
 }
 
 

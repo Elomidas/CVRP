@@ -5,29 +5,26 @@
 #ifndef CVRP_DISTANCENODE_H
 #define CVRP_DISTANCENODE_H
 
+#include <vector>
+
 namespace graph {
     class DistanceNode {
     private:
-        double &getDistanceReference(unsigned int nodeIndex);
-
-        const double &getDistanceReference(unsigned int nodeIndex) const;
-
-        double *m_distances;
+        std::vector<double> m_distances;
         unsigned int m_nodeIndex;
         unsigned int m_size;
+        unsigned long m_count;
+        static unsigned long m_compteur;
 
     public:
         DistanceNode();
-
+        DistanceNode(const DistanceNode &);
         explicit DistanceNode(unsigned int size);
-
-        explicit DistanceNode(const DistanceNode &);
-
         ~DistanceNode();
 
-        const double &getDistance(unsigned int nodeIndex) const;
-
+        const double getDistance(unsigned int nodeIndex) const;
         void setDistance(unsigned int nodeIndex, const double &distance);
+        unsigned int getIndex() const {return m_nodeIndex;};
     };
 }
 

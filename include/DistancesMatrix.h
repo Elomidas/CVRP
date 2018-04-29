@@ -12,27 +12,21 @@
 namespace graph {
     class DistancesMatrix {
     public:
+        DistancesMatrix(const DistancesMatrix &);
         explicit DistancesMatrix(unsigned int numberOfNodes);
-
-        explicit DistancesMatrix(const DistancesMatrix &);
-
         ~DistancesMatrix();
 
         unsigned int getNumberOfNodes() const;
-
         void setDistance(unsigned int firstNodeIndex, unsigned int secondNodeIndex, const unsigned long &distance);
-
-        const double& getDistance(unsigned int firstNodeIndex, unsigned int secondNodeIndex) const;
-
-        void generateDistanceFromCoordinates(const Node *);
-
+        const double getDistance(unsigned int firstNodeIndex, unsigned int secondNodeIndex) const;
+        void generateDistanceFromCoordinates(const std::vector<Node> &);
         static bool test(unsigned long (*)(unsigned int, unsigned int), unsigned int);
 
     private:
-        void sortIndices(unsigned int &first, unsigned int &second) const;
-
-        DistanceNode **m_distancesNodes;
+        std::vector<DistanceNode> m_distancesNodes;
         unsigned int m_numberOfNodes;
+
+        void sortIndices(unsigned int &first, unsigned int &second) const;
 
         static const double computeDistance(const Node &, const Node &);
     };

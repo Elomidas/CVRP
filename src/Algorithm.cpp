@@ -7,9 +7,9 @@
 
 #define _DEFAULT_INPUT "data/data01.txt"
 
-Algorithm::Algorithm() : m_graph(0) {
-    std::queue<graph::Node> queue = GraphFactory::readFile("data/data01.txt");
-    m_graph = graph::Graph(queue);
+Algorithm::Algorithm() : m_graph((unsigned int)0) {
+    std::vector<graph::Node> vector = GraphFactory::readFile("data/data01.txt");
+    m_graph = graph::Graph(vector);
 }
 
 Algorithm::~Algorithm() {
