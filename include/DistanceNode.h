@@ -13,8 +13,6 @@ namespace graph {
         std::vector<double> m_distances;
         unsigned int m_nodeIndex;
         unsigned int m_size;
-        unsigned long m_count;
-        static unsigned long m_compteur;
 
     public:
         DistanceNode();

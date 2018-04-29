@@ -11,15 +11,15 @@
 
 class Solution {
 private:
-    unsigned double m_cost;
+    double m_cost;
     std::vector< std::vector< unsigned int > > m_paths;
 
 public:
     Solution();
     ~Solution();
     void addPath(const std::vector<unsigned int>&);
-    void setCost(const unsigned double &);
-    const unsigned double & getCost() const;
+    void setCost(const double &);
+    const double & getCost() const;
     std::string toString() const;
 
 };

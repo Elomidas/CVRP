@@ -83,7 +83,10 @@ unsigned int GraphFactory::atoi(const std::string &number) {
  */
 void GraphFactory::test(const std::string &path) {
     std::vector<graph::Node> vector = readFile(path);
-    auto graph1 = new graph::Graph(vector);=
+    auto graph1 = new graph::Graph(vector);
+
+    std::clog << std::endl << "Distances in first graph" << std::endl;
+
     for(unsigned int i(0); i < 5; i++) {
         for(unsigned int j(0); j < i; j++) {
             double d = graph1->getDistance(i, j);
@@ -94,7 +97,12 @@ void GraphFactory::test(const std::string &path) {
 
     graph::Graph graph2(*graph1);
 
+    std::clog << std::endl << "Delete first graph" << std::endl << std::endl;
+
     delete graph1;
+
+
+    std::clog << "Distances in second graph" << std::endl;
 
     /* Read the copy after deleting the source
      * Check if all object are duplicate and assure there isn't any memory conflict.
@@ -106,6 +114,8 @@ void GraphFactory::test(const std::string &path) {
         }
         std::clog << std::endl;
     }
+
+    std::clog << std::endl << "Test passed" << std::endl << std::endl;
 }
 
 

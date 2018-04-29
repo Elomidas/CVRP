@@ -31,7 +31,6 @@ Graph::Graph(std::vector<Node> &nodes) :
         m_nodes.emplace_back(nodes[i]);
         m_qTotal += m_nodes.back().getQuantity();
     }
-    m_nodes[20].display();
     computeTruckNbMin();
     m_distances.generateDistanceFromCoordinates(m_nodes);
 }
@@ -48,7 +47,6 @@ Graph::Graph(const Graph &g) :
     for(unsigned int i(0); i < m_nodeNb; i++) {
         m_nodes.emplace_back(g.m_nodes[i]);
     }
-    m_nodes[20].display();
     //Trucks copy
     //TODO
     m_trucks = new Truck*[m_truckNb];

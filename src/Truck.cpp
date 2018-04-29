@@ -41,7 +41,7 @@ Truck::~Truck() {
  * @param distancesMatrix Matrix containing distances between all nodes
  * @return Truck's path's distance
  */
-unsigned double Truck::getDistance(const graph::DistancesMatrix &distancesMatrix) const {
+double Truck::getDistance(const graph::DistancesMatrix &distancesMatrix) const {
     return m_origin->getDistance(m_origin->getNode(), distancesMatrix);
 }
 

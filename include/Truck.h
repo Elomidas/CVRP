@@ -16,7 +16,7 @@ public:
     explicit Truck(graph::Node &, unsigned int);
     ~Truck();
 
-    unsigned double getDistance(const graph::DistancesMatrix &) const;
+    double getDistance(const graph::DistancesMatrix &) const;
     unsigned int getTruckLoad() const;
     unsigned int getComputedLoad();
     void addState(graph::Node &);
