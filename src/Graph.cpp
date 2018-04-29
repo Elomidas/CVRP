@@ -6,6 +6,7 @@
 #include <fstream>
 #include <utility>
 #include <cassert>
+#include <random>
 #include "../include/Graph.h"
 
 using namespace graph;
@@ -149,6 +150,75 @@ void Graph::setTrucksNumber(unsigned int number) {
             m_trucks.emplace_back(Truck(m_nodes[0], i + 1));
         }
     }
+}
+
+/**
+ * Build a random solution
+ */
+void Graph::buildRandomSolution() {
+    std::random_device rd;     // only used once to initialise (seed) engine
+    std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
+    std::uniform_int_distribution<unsigned int> uni(0,m_truckNb-1); // guaranteed unbiased
+
+    std::vector<unsigned int> truckIDs;
+    std::vector< std::uniform_int_distribution<unsigned int> > ranges;
+    unsigned int currentRangeIndex;
+
+    for(unsigned int i(0); i < m_truckNb; i++) {
+        truckIDs.emplace_back(i);
+        ranges.emplace_back(std::uniform_int_distribution<unsigned int>(0, m_truckNb - (i+1)));
+    }
+
+    for(unsigned int i(1); i < m_nodeNb; i++) {
+        unsigned int rand;
+        bool stop(false);
+        std::vector<unsigned int> ids(truckIDs);
+        currentRangeIndex = 0;
+        do {
+            rand = ranges[currentRangeIndex](rng);
+            rand = ids[rand];
+            std::clog << "(index, truck) => (" << i << ", " << rand << ")" << std::endl;
+            if(m_trucks[rand].getAvailableCapacity() > m_nodes[i].getQuantity()) {
+                stop = true;
+            } else {
+                std::clog << "Not enough space" << std::endl;
+                unsigned int j(0);
+                for(j = 0; (j < ids.size()) && (ids[j] != rand); j++);
+                if(j < ids.size()) {
+                    ids.erase(ids.begin() + j);
+                    currentRangeIndex++;
+                }
+            }
+        } while(!stop);
+        m_trucks[rand].addState(m_nodes[i]);
+    }
+
+    assert(isSolution());
+}
+
+/**
+ * Add a Node to a Truck path
+ * @param node  Node id
+ * @param truck Truck id (first is 0)
+ */
+void Graph::addNodeToTruck(unsigned int node, unsigned int truck) {
+    assert(node < m_nodeNb);
+    assert(truck < m_truckNb);
+    m_trucks[truck].addState(m_nodes[node]);
+}
+
+/**
+ * Add a Node to a Truck path at the given index
+ * @param node  Node id
+ * @param truck Truck id (first is 0)
+ * @param index Index on which add the Node
+ */
+void Graph::addNodeToTruck(unsigned int node, unsigned int truck, unsigned int index) {
+    assert(node < m_nodeNb);
+    assert(truck > 0);
+    assert(truck <= m_truckNb);
+    m_trucks[truck-1].addState(m_nodes[node]);
+    m_trucks[truck-1].addStateByIndex(index,m_nodes[node]);
 }
 
 

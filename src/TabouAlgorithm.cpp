@@ -11,7 +11,8 @@ TabouAlgorithm::TabouAlgorithm() : m_xmin(), m_nmax(10), m_T(), m_fmin(0) {
 }
 
 void TabouAlgorithm::lancerAlgo() {
-    Solution x = getRandomSolution();
+    m_graph.buildRandomSolution();
+    Solution x = m_graph.getSolution();
     x.toString();
     m_xmin = Solution(x);
     m_fmin = m_xmin.getCost();
@@ -44,9 +45,8 @@ void TabouAlgorithm::lancerAlgo() {
 }
 
 TabouAlgorithm::~TabouAlgorithm() {
-    delete m_xmin;
-    for(std::pair<unsigned int, unsigned int> pair : m_T){
-        delete pair;
+    if(!m_T.empty()) {
+        m_T.clear();
     }
 }
 

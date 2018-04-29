@@ -12,7 +12,6 @@
  */
 TruckStep::TruckStep(graph::Node &node, const unsigned int truckId) :
         m_next(nullptr), m_node(node), m_truckId(truckId) {
-    assert(!m_node.getUsed());
     m_node.setUsed(m_truckId);
 }
 
@@ -47,7 +46,6 @@ TruckStep::TruckStep(const TruckStep &old) :
  */
 TruckStep::~TruckStep() {
     delete m_next;
-    m_node.setUsed(0);
 }
 
 /**

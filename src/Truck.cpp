@@ -197,3 +197,7 @@ std::vector<unsigned int> Truck::toVector() const {
     return result;
 }
 
+unsigned int Truck::getAvailableCapacity() const {
+    return m_capacity - m_currentLoad;
+}
+

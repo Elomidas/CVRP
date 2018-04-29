@@ -13,9 +13,7 @@ Algorithm::Algorithm() : m_graph((unsigned int)0) {
     m_graph = graph::Graph(vector);
 }
 
-Algorithm::~Algorithm() {
-    //Nothing
-}
+Algorithm::~Algorithm() = default;
 
 void Algorithm::lancerAlgo() {
     //Nothing
@@ -39,22 +37,6 @@ void Algorithm::reverse(Node n1, Node n2) {
  * ==== Fuctions used in algorithms
  *
  */
-Solution Algorithm::getRandomSolution() {
-     //TODO à tester
-    for(unsigned int i(0);i<m_graph.getNodeNb();i++){
-        unsigned int capacity_left=Truck::getCapacity();
-        int truck_nb_saved = -1;
-        for(unsigned int id_truck(0);id_truck<m_graph.getTrucksNb();id_truck++){
-            if(m_graph.getTruck(id_truck).getCapacity() - m_graph.getTruck(id_truck).getTruckLoad() - m_graph.getNodes()[i].getQuantity() < capacity_left){
-                truck_nb_saved = id_truck;
-                capacity_left = m_graph.getTruck(i).getCapacity() - m_graph.getTruck(i).getTruckLoad()- m_graph.getNodes()[i].getQuantity();
-            }
-        }
-        if(truck_nb_saved != -1)
-            m_graph.getTruck((unsigned int)truck_nb_saved).addState(m_graph.getNodes()[i]);
-    }
-    return m_graph.getSolution();
-}
 
 const std::vector<Solution> Algorithm::getVoisinage(const Solution solution, const std::vector< std::pair<unsigned int,unsigned int> > listeTabou = std::vector< std::pair<unsigned int,unsigned int> >()) {
     //TODO fonction à faire
