@@ -30,6 +30,14 @@ void Algorithm::reverse(Node n1, Node n2) {
     //TODO fonction à faire
 }
 
+
+
+
+/*
+ *
+ * ==== Fuctions used in algorithms
+ *
+ */
 const Graph Algorithm::getRandomSolution() {
     return Graph(0);
     //TODO fonction à faire
