@@ -46,6 +46,11 @@ namespace graph {
         void addNodeToTruck(unsigned int, unsigned int, unsigned int);
         void invertNodes(unsigned int, unsigned int);
 
+        void deleteNodeToTruck(unsigned int node, unsigned int truck);
+
+        void deleteNodeToTruckByIndex(unsigned int index, unsigned int truck);
+
+        void invertNodesByIndex(unsigned int node1, unsigned int node2, unsigned int index1, unsigned int index2);
     };
 }
 

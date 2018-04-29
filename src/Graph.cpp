@@ -203,8 +203,9 @@ void Graph::buildRandomSolution() {
  */
 void Graph::addNodeToTruck(unsigned int node, unsigned int truck) {
     assert(node < m_nodeNb);
-    assert(truck < m_truckNb);
-    m_trucks[truck].addState(m_nodes[node]);
+    assert(truck > 0);
+    assert(truck <= m_truckNb);
+    m_trucks[truck-1].addState(m_nodes[node]);
 }
 
 /**
@@ -215,10 +216,41 @@ void Graph::addNodeToTruck(unsigned int node, unsigned int truck) {
  */
 void Graph::addNodeToTruck(unsigned int node, unsigned int truck, unsigned int index) {
     assert(node < m_nodeNb);
+    assert(index < m_nodes.size());
     assert(truck > 0);
     assert(truck <= m_truckNb);
     m_trucks[truck-1].addState(m_nodes[node]);
     m_trucks[truck-1].addStateByIndex(index,m_nodes[node]);
+}
+
+void Graph::deleteNodeToTruck(unsigned int node, unsigned int truck){
+    assert(node < m_nodeNb);
+    assert(truck > 0);
+    assert(truck <= m_truckNb);
+    m_trucks[truck-1].removeStateById(node);
+}
+
+void Graph::deleteNodeToTruckByIndex(unsigned int index, unsigned int truck){
+    assert(index < m_nodes.size());
+    assert(truck > 0);
+    assert(truck <= m_truckNb);
+    m_trucks[truck-1].removeStateByIndex(index);
+}
+
+void Graph::invertNodes(unsigned int node1, unsigned int node2) {
+    assert(node1 < m_nodeNb);
+    assert(node2 < m_nodeNb);
+    Node tmp = Node(m_nodes[node1]);
+    m_trucks[m_nodes[node1].getUser()].replaceStateById(node1, m_nodes[node2]);
+    m_trucks[m_nodes[node2].getUser()].replaceStateById(node2, tmp);
+}
+
+void Graph::invertNodesByIndex(unsigned int node1, unsigned int node2, unsigned int index1, unsigned int index2) {
+    assert(node1 < m_nodes.size());
+    assert(node2 < m_nodes.size());
+    Node tmp = Node(m_nodes[node1]);
+    m_trucks[m_nodes[node1].getUser()].replaceStateByIndex(index1, m_nodes[node2]);
+    m_trucks[m_nodes[node2].getUser()].replaceStateByIndex(index2, tmp);
 }
 
 

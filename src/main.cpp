@@ -37,6 +37,30 @@ bool testAlgoTabou(){
     return true;
 }
 
+bool testOperationsEl(){
+    std::vector<graph::Node> vector = GraphFactory::readFile("../data/data01.txt");
+    Graph graph(vector);
+    graph.buildRandomSolution();
+    std::cout << std::endl << std::endl;
+    Solution res = graph.getSolution();
+    std::cout << res.toString() << std::endl << std::endl;
+
+    int num, cam, index;
+    std::cin >> num >> cam;
+
+    graph.deleteNodeToTruck(num, cam);
+    res = graph.getSolution();
+    std::cout << res.toString() << std::endl << std::endl;
+
+    graph.addNodeToTruck(num, cam);
+    res = graph.getSolution();
+    std::cout << res.toString() << std::endl << std::endl;
+
+
+    std::clog << "End of test" <<std::endl;
+    return true;
+}
+
 unsigned long computeDistance(unsigned int i, unsigned int j) {
     return i + j;
 }
@@ -45,5 +69,6 @@ void testProject() {
     //assert(testDistancesMatrix());
     //assert(testGraph());
     //assert(testAlgoTabou());
-    assert(testRandomSolution());
+    //assert(testRandomSolution());
+    assert(testOperationsEl());
 }

@@ -12,10 +12,12 @@ TabouAlgorithm::TabouAlgorithm() : m_xmin(), m_nmax(10), m_T(), m_fmin(0) {
 
 void TabouAlgorithm::lancerAlgo() {
     m_graph.buildRandomSolution();
-    Solution x = m_graph.getSolution();
-    x.toString();
-    m_xmin = Solution(x);
-    m_fmin = m_xmin.getCost();
+    Graph x = Graph(m_graph);
+    //m_xmin = x.getSolution();
+    //m_fmin = m_xmin.getCost();
+    //m_xmin.toString();
+    //std::cout << m_fmin;
+    /*
     int i=0;
     std::vector<Solution> C;
     do{
@@ -42,6 +44,7 @@ void TabouAlgorithm::lancerAlgo() {
     }
     while(!C.empty() && (i < m_nmax));
     //std::cout << m_xmin.getNodeNb() << std::endl;
+    */
 }
 
 TabouAlgorithm::~TabouAlgorithm() {
