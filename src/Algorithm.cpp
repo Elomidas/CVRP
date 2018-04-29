@@ -21,13 +21,14 @@ void Algorithm::lancerAlgo() {
     //Nothing
 }
 
+
 /*
  *
  * ==== Transformations élémentaires
  *
  */
 
-void Algorithm::reverse(Solution solution, unsigned int n1, unsigned int n2) {
+void Algorithm::reverse(Solution &solution, unsigned int n1, unsigned int n2) {
     //TODO à tester
     int tmp_value = -1;
     unsigned int tmp_num_path = 0;
@@ -67,7 +68,6 @@ void Algorithm::reverse(Solution solution, unsigned int n1, unsigned int n2) {
 
 
 
-
 /*
  *
  * ==== Fuctions used in algorithms
@@ -92,7 +92,19 @@ Solution Algorithm::getRandomSolution() {
 
 const std::vector<Solution> Algorithm::getVoisinage(const Solution solution, const std::vector< std::pair<unsigned int,unsigned int> > listeTabou = std::vector< std::pair<unsigned int,unsigned int> >()) {
     //TODO fonction à faire
-
+    std::vector<Solution> voisinage = std::vector<Solution>();
+    for(unsigned int i(0); i<=solution.getPaths().size()/2;i++){
+        for(unsigned int j(0); j<=solution.getPaths()[i].size()/2;j++){
+            std::pair<unsigned int,unsigned int> test_tabou = std::make_pair(i ,j);
+            /*
+            if(std::find(listeTabou.begin(), listeTabou.end(), test_tabou) != test_tabou){
+                Solution tmp = Solution(solution);
+                reverse(tmp, i, j);
+                voisinage.push_back(tmp);
+            }
+             */
+        }
+    }
     return std::vector<Solution>();
 }
 

@@ -33,7 +33,7 @@ public:
 
     void setConfigurationFile(const std::string&);
 
-    void reverse(Solution solution, unsigned int n1, unsigned int n2);
+    void reverse(Solution &solution, unsigned int n1, unsigned int n2);
 
     Solution getRandomSolution();
 
