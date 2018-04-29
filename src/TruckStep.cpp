@@ -169,7 +169,7 @@ unsigned int TruckStep::getLoad() const {
  */
 unsigned int TruckStep::delNext() {
     TruckStep *truckStep = m_next;
-    unsigned int load(m_next->getLoad());
+    unsigned int load(m_next->m_node.getQuantity());
     TruckStep *tmp = m_next->m_next;
     m_next->m_next = nullptr;
     m_next = tmp;
@@ -213,7 +213,7 @@ unsigned int TruckStep::delIndex(const unsigned int index) {
  */
 unsigned int TruckStep::replaceNext(graph::Node &node) {
     TruckStep *old = m_next;
-    unsigned int load(m_next->getLoad());
+    unsigned int load(m_next->m_node.getQuantity());
     m_next = new TruckStep(node, m_truckId);
     m_next->setNext(old->getNext());
     old->m_next = nullptr;

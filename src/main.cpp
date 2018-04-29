@@ -5,6 +5,7 @@
 #include "../include/TabouAlgorithm.h"
 
 unsigned long computeDistance(unsigned int i, unsigned int j);
+
 void testProject();
 
 int main() {
@@ -58,12 +59,12 @@ bool testOperationsEl(){
     graph.addNodeToTruck(num, cam);
     res = graph.getSolution();
     std::cout << res.toString() << std::endl << std::endl;
-/*
-    int num1, num2;
+
+    int num1(15), num2(13);
     graph.invertNodes(num1, num2);
     res = graph.getSolution();
     std::cout << res.toString() << std::endl << std::endl;
-*/
+
 
     std::clog << "End of test" <<std::endl;
     return true;

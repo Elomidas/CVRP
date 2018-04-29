@@ -238,17 +238,17 @@ void Graph::deleteNodeToTruckByIndex(unsigned int index, unsigned int truck){
 void Graph::invertNodes(unsigned int node1, unsigned int node2) {
     assert(node1 < m_nodeNb);
     assert(node2 < m_nodeNb);
-    Node tmp = Node(m_nodes[node1]);
-    m_trucks[m_nodes[node1].getUser()].replaceStateById(node1, m_nodes[node2]);
-    m_trucks[m_nodes[node2].getUser()].replaceStateById(node2, tmp);
+    unsigned int tmp = m_nodes[node2].getUser();
+    m_trucks[m_nodes[node1].getUser()-1].replaceStateById(node1, m_nodes[node2]);
+    m_trucks[tmp-1].replaceStateById(node2, m_nodes[node1]);
 }
 
 void Graph::invertNodesByIndex(unsigned int node1, unsigned int node2, unsigned int index1, unsigned int index2) {
     assert(node1 < m_nodes.size());
     assert(node2 < m_nodes.size());
-    Node tmp = Node(m_nodes[node1]);
-    m_trucks[m_nodes[node1].getUser()].replaceStateByIndex(index1, m_nodes[node2]);
-    m_trucks[m_nodes[node2].getUser()].replaceStateByIndex(index2, tmp);
+    unsigned int truck2(m_nodes[node2].getUser());
+    m_trucks[m_nodes[node1].getUser()-1].replaceStateByIndex(index1, m_nodes[node2]);
+    m_trucks[truck2-1].replaceStateByIndex(index2, m_nodes[node1]);
 }
 
 
