@@ -21,8 +21,9 @@ public:
     void addPath(const std::vector<unsigned int>&);
     void setCost(const double &);
     const double & getCost() const;
-    std::string toString() const;
-
+    const std::string toString() const;
+    unsigned long getPathNumber() const {return m_paths.size();};
+    const std::vector<unsigned int>& getPath(unsigned int) const;
 };
 
 

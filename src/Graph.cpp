@@ -7,6 +7,7 @@
 #include <utility>
 #include <cassert>
 #include <random>
+
 #include "../include/Graph.h"
 
 using namespace graph;
@@ -156,17 +157,15 @@ void Graph::setTrucksNumber(unsigned int number) {
  * Build a random solution
  */
 void Graph::buildRandomSolution() {
-    std::random_device rd;     // only used once to initialise (seed) engine
-    std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
-    std::uniform_int_distribution<unsigned int> uni(0,m_truckNb-1); // guaranteed unbiased
-
     std::vector<unsigned int> truckIDs;
-    std::vector< std::uniform_int_distribution<unsigned int> > ranges;
+    std::vector< std::uniform_int_distribution<int> > ranges;
     unsigned int currentRangeIndex;
+
+    std::srand(static_cast<unsigned int>(time(0)));
 
     for(unsigned int i(0); i < m_truckNb; i++) {
         truckIDs.emplace_back(i);
-        ranges.emplace_back(std::uniform_int_distribution<unsigned int>(0, m_truckNb - (i+1)));
+        ranges.emplace_back(std::uniform_int_distribution<int>(0, m_truckNb-i));
     }
 
     for(unsigned int i(1); i < m_nodeNb; i++) {
@@ -175,13 +174,11 @@ void Graph::buildRandomSolution() {
         std::vector<unsigned int> ids(truckIDs);
         currentRangeIndex = 0;
         do {
-            rand = ranges[currentRangeIndex](rng);
+            rand = static_cast<unsigned int>(std::rand() % ids.size());
             rand = ids[rand];
-            std::clog << "(index, truck) => (" << i << ", " << rand << ")" << std::endl;
             if(m_trucks[rand].getAvailableCapacity() > m_nodes[i].getQuantity()) {
                 stop = true;
             } else {
-                std::clog << "Not enough space" << std::endl;
                 unsigned int j(0);
                 for(j = 0; (j < ids.size()) && (ids[j] != rand); j++);
                 if(j < ids.size()) {
@@ -194,6 +191,7 @@ void Graph::buildRandomSolution() {
     }
 
     assert(isSolution());
+
 }
 
 /**
@@ -251,6 +249,21 @@ void Graph::invertNodesByIndex(unsigned int node1, unsigned int node2, unsigned 
     Node tmp = Node(m_nodes[node1]);
     m_trucks[m_nodes[node1].getUser()].replaceStateByIndex(index1, m_nodes[node2]);
     m_trucks[m_nodes[node2].getUser()].replaceStateByIndex(index2, tmp);
+}
+
+
+void Graph::loadSolution(const Solution &solution) {
+    if(!m_trucks.empty()) {
+        m_trucks.clear();
+    }
+    for(unsigned int i(0); i < solution.getPathNumber(); i++) {
+        std::vector<unsigned int> indices = solution.getPath(i);
+        m_trucks.emplace_back(Truck(m_nodes[0], i+1));
+        //We don't handle first and last indices because it's the origin
+        for(unsigned int j(1); j < indices.size() - 1; j++) {
+            addNodeToTruck(indices[j], i+1);
+        }
+    }
 }
 
 

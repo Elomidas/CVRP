@@ -26,8 +26,11 @@ bool testRandomSolution() {
     std::vector<graph::Node> vector = GraphFactory::readFile("../data/data01.txt");
     Graph graph(vector);
     graph.buildRandomSolution();
-    assert(graph.isSolution());
-    std::clog << "Solution :" << std::endl << graph.getSolution().toString() << std::endl;
+    Solution solution = graph.getSolution();
+    std::clog << "Solution :" << std::endl << solution.toString() << std::endl;
+    Graph second(vector);
+    second.loadSolution(solution);
+    std::clog << "Solution 2 :" << std::endl << second.getSolution().toString() << std::endl;
     return true;
 }
 
@@ -53,6 +56,11 @@ bool testOperationsEl(){
     std::cout << res.toString() << std::endl << std::endl;
 
     graph.addNodeToTruck(num, cam);
+    res = graph.getSolution();
+    std::cout << res.toString() << std::endl << std::endl;
+
+    int num1, num2;
+    graph.invertNodes(num1, num2);
     res = graph.getSolution();
     std::cout << res.toString() << std::endl << std::endl;
 
