@@ -28,8 +28,42 @@ void Algorithm::lancerAlgo() {
  *
  */
 
-void Algorithm::reverse(Node n1, Node n2) {
-    //TODO fonction à faire
+void Algorithm::reverse(Solution solution, unsigned int n1, unsigned int n2) {
+    //TODO à tester
+    unsigned int tmp_value = NULL;
+    unsigned int tmp_num_path = 0;
+    unsigned int tmp_index = 0;
+    unsigned int i =0 ,j = 0;
+    for(std::vector<unsigned int> path : solution.getPaths()){
+        for(unsigned int node : path){
+            if(node == n1){
+                if(tmp_value == NULL){
+                    tmp_value = n1;
+                    tmp_num_path = i;
+                    tmp_index = j;
+                }
+                else{
+                    solution.getPaths()[i][j] = n1;
+                    solution.getPaths()[tmp_num_path][tmp_index] = tmp_value;
+                    return;
+                }
+            }
+            else if(node == n2){
+                if(tmp_value == NULL){
+                    tmp_value =n2;
+                    tmp_num_path = i;
+                    tmp_index = j;
+                }
+                else{
+                    solution.getPaths()[i][j] = n2;
+                    solution.getPaths()[tmp_num_path][tmp_index] = tmp_value;
+                    return;
+                }
+            }
+            j++;
+        }
+        i++;
+    }
 }
 
 
