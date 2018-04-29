@@ -13,7 +13,7 @@
 TruckStep::TruckStep(graph::Node &node, const unsigned int truckId) :
         m_next(nullptr), m_node(node), m_truckId(truckId) {
     assert(!m_node.getUsed());
-    m_node.setUsed(truckId);
+    m_node.setUsed(m_truckId);
 }
 
 /**
@@ -24,9 +24,21 @@ TruckStep::TruckStep(graph::Node &node, const unsigned int truckId) :
  */
 TruckStep::TruckStep(const TruckStep &old, std::vector<graph::Node> &nodes, unsigned int truckId) :
         m_next(nullptr), m_node(nodes[old.getId()]), m_truckId(truckId) {
-    m_node.setUsed(truckId);
+    m_node.setUsed(m_truckId);
     if(old.hasNext()) {
         m_next = new TruckStep(*(old.getNext()), nodes, m_truckId);
+    }
+}
+
+/**
+ * Copy constructor
+ * @param old TruckStep to copy
+ */
+TruckStep::TruckStep(const TruckStep &old) :
+        m_next(nullptr), m_node(old.m_node), m_truckId(old.m_truckId) {
+    m_node.setUsed(m_truckId);
+    if(old.hasNext()) {
+        m_next = new TruckStep(*(old.getNext()));
     }
 }
 

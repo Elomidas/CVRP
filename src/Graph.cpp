@@ -14,8 +14,9 @@ using namespace graph;
  * Constructor with just a nodes'number
  * @param nodeNb Number of Nodes in the Graph
  */
-Graph::Graph(const unsigned int nodeNb) : m_nodeNb(nodeNb), m_distances(nodeNb), m_qTotal(nodeNb), m_nodes() {
-    m_trucks = nullptr;
+Graph::Graph(const unsigned int nodeNb) : m_nodeNb(nodeNb), m_distances(nodeNb), m_qTotal(nodeNb),
+                                          m_nodes(), m_trucks() {
+    //Nothing
 }
 
 /**
@@ -25,7 +26,6 @@ Graph::Graph(const unsigned int nodeNb) : m_nodeNb(nodeNb), m_distances(nodeNb),
 Graph::Graph(std::vector<Node> &nodes) :
         m_trucks(), m_nodeNb(static_cast<unsigned int>(nodes.size())), m_nodes(),
         m_distances(static_cast<unsigned int>(nodes.size())), m_qTotal(0) {
-    m_trucks = nullptr;
     std::clog << "Create Graph from a " << m_nodeNb << " Node queue" << std::endl;
     for(unsigned int i(0); i < m_nodeNb; i++) {
         m_nodes.emplace_back(nodes[i]);
@@ -41,17 +41,15 @@ Graph::Graph(std::vector<Node> &nodes) :
  */
 Graph::Graph(const Graph &g) :
         m_nodeNb(g.m_nodeNb), m_qTotal(g.m_qTotal), m_distances(g.m_distances),
-        m_truckNbMin(g.m_truckNbMin), m_truckNb(g.m_truckNb), m_nodes() {
+        m_truckNbMin(g.m_truckNbMin), m_truckNb(g.m_truckNb), m_nodes(), m_trucks() {
     std::clog << std::endl << "Copy graph" << std::endl;
     //Nodes copy
     for(unsigned int i(0); i < m_nodeNb; i++) {
         m_nodes.emplace_back(g.m_nodes[i]);
     }
     //Trucks copy
-    //TODO
-    m_trucks = new Truck*[m_truckNb];
     for(unsigned int i(0); i < m_truckNb; i++) {
-        m_trucks[i] = new Truck(*g.m_trucks[i], m_nodes);
+        m_trucks.emplace_back(Truck(g.m_trucks[i], m_nodes));
     }
     std::clog << "Graph copied" << std::endl;
 }
@@ -60,17 +58,11 @@ Graph::Graph(const Graph &g) :
  * Destructor
  */
 Graph::~Graph() {
+    if(!m_trucks.empty()) {
+        m_trucks.clear();
+    }
     if(!m_nodes.empty()) {
         m_nodes.clear();
-    }
-    if(m_trucks != nullptr) {
-        for(unsigned int i(0); i < m_truckNb; i++) {
-            delete m_trucks[i];
-            m_trucks[i] = nullptr;
-        }
-        delete[] m_trucks;
-        m_trucks = nullptr;
-        m_truckNb = 0;
     }
 }
 
@@ -91,7 +83,7 @@ bool Graph::isSolution() const {
     }
     //Check that all trucks are correct
     for(unsigned int i(0); i < m_truckNb; i++) {
-        if(!m_trucks[i]->isValid()) {
+        if(!m_trucks[i].isValid()) {
             return false;
         }
     }
@@ -102,14 +94,18 @@ bool Graph::isSolution() const {
  * Find the minimum amount of Trucks needed for this graph.
  */
 void Graph::computeTruckNbMin() {
-    //Add one truck to be sure to be able to operate some changes
-    m_truckNbMin = static_cast<unsigned int>((m_qTotal / Truck::getCapacity()) + 1);
-    m_truckNb = m_truckNbMin;
-    m_trucks = new Truck*[m_truckNb];
-    for(unsigned int i(0); i < m_truckNb; i++) {
-        //Trucks have id >= 1
-        m_trucks[i] = new Truck(m_nodes[0], i+1);
+    /* In order to be sure to have enough space for any elementary transformation, we had enough Trucks to
+     * handle all Nodes capacity plus the max Nodes'capacity. By doing this, we're sure to be able to move any Node.
+     */
+    unsigned long total(m_qTotal);
+    unsigned int maxQtt(0);
+    for(unsigned int i(0); i  < m_nodeNb; i++) {
+        maxQtt = (m_nodes[i].getQuantity() > maxQtt) ? m_nodes[i].getQuantity() : maxQtt;
     }
+    total += maxQtt;
+    m_truckNbMin = static_cast<unsigned int>((total / Truck::getCapacity()) + ((total % Truck::getCapacity()) > 0));
+
+    setTrucksNumber(m_truckNbMin);
 }
 
 /**
@@ -129,11 +125,30 @@ Solution Graph::getSolution() const {
     Solution s;
     unsigned long cost(0);
     for(unsigned int i(0); i < m_truckNb; i++) {
-        s.addPath(m_trucks[i]->toVector());
-        cost += m_trucks[i]->getDistance(m_distances);
+        s.addPath(m_trucks[i].toVector());
+        cost += m_trucks[i].getDistance(m_distances);
     }
     s.setCost(cost);
     return s;
+}
+
+/**
+ * Set the number of Trucks we're going to use
+ * @param number
+ */
+void Graph::setTrucksNumber(unsigned int number) {
+    assert(number >= m_truckNbMin);
+    m_truckNb = number;
+
+    if(m_trucks.size() != number) {
+        if (!m_trucks.empty()) {
+            m_trucks.clear();
+        }
+
+        for (unsigned int i(0); i < m_truckNb; i++) {
+            m_trucks.emplace_back(Truck(m_nodes[0], i + 1));
+        }
+    }
 }
 
 

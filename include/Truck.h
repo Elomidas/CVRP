@@ -12,6 +12,7 @@
 
 class Truck {
 public:
+    Truck(const Truck &);
     explicit Truck(const Truck &, std::vector<graph::Node> &);
     explicit Truck(graph::Node &, unsigned int);
     ~Truck();
@@ -28,7 +29,7 @@ public:
     int hasNode(unsigned int) const;
     int hasNode(const graph::Node &) const;
     static unsigned int getCapacity();
-    bool isValid();
+    bool isValid() const;
     unsigned int getSize() const;
     std::vector<unsigned int> toVector() const;
 
