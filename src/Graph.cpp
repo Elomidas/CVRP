@@ -126,7 +126,7 @@ Solution Graph::getSolution() const {
     assert(isSolution());
     Solution s;
     unsigned long cost(0);
-    for(unsigned int i(0); i < m_truckNb; i++) {
+    for(unsigned int i(0); i < m_trucks.size(); i++) {
         s.addPath(m_trucks[i].toVector());
         cost += m_trucks[i].getDistance(m_distances);
     }
@@ -245,9 +245,8 @@ void Graph::invertNodes(unsigned int node1, unsigned int node2) {
 void Graph::invertNodesByIndex(unsigned int node1, unsigned int node2, unsigned int index1, unsigned int index2) {
     assert(node1 < m_nodes.size());
     assert(node2 < m_nodes.size());
-    Node tmp = Node(m_nodes[node1]);
     m_trucks[m_nodes[node1].getUser()-1].replaceStateByIndex(index1, m_nodes[node2]);
-    m_trucks[m_nodes[node2].getUser()-1].replaceStateByIndex(index2, tmp);
+    m_trucks[m_nodes[node2].getUser()-1].replaceStateByIndex(index2, m_nodes[node1]);
 }
 
 

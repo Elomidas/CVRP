@@ -46,6 +46,7 @@ TruckStep::TruckStep(const TruckStep &old) :
  */
 TruckStep::~TruckStep() {
     delete m_next;
+    m_next = nullptr;
 }
 
 /**
@@ -169,7 +170,9 @@ unsigned int TruckStep::getLoad() const {
 unsigned int TruckStep::delNext() {
     TruckStep *truckStep = m_next;
     unsigned int load(m_next->getLoad());
-    m_next = m_next->getNext();
+    TruckStep *tmp = m_next->m_next;
+    m_next->m_next = nullptr;
+    m_next = tmp;
     delete truckStep;
     return load;
 }
