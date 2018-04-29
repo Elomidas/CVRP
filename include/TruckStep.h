@@ -13,6 +13,7 @@
 class TruckStep {
 
 public:
+    TruckStep(const TruckStep &);
     explicit TruckStep(graph::Node &, unsigned int);
     explicit TruckStep(const TruckStep &, std::vector<graph::Node> &, unsigned int);
     ~TruckStep();

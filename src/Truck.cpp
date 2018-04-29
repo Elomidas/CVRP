@@ -10,7 +10,9 @@
  * @param origin Node used as truck's path's origin
  * @param index  Truck's index
  */
-Truck::Truck(graph::Node &origin, const unsigned int index) : m_currentLoad(0), m_size(0), m_index(index) {
+Truck::Truck(graph::Node &origin, const unsigned int index) : m_currentLoad(0), m_size(0), m_index(index),
+                                                              m_origin(nullptr)
+{
     //Make sure that origin isn't mark as used in order to allow TruckStep's construction
     origin.setUsed(0);
     m_origin = new TruckStep(origin, m_index);
@@ -27,13 +29,26 @@ Truck::Truck(const Truck &old, std::vector<graph::Node> &nodes) :
 }
 
 /**
+ * Copy constructor
+ * @param old Truck to copy
+ */
+Truck::Truck(const Truck &old) :
+        m_currentLoad(old.m_currentLoad), m_size(old.m_size), m_index(old.m_index) {
+    m_origin = new TruckStep(*(old.m_origin));
+}
+
+/**
  * Destructor
  */
 Truck::~Truck() {
     //Make sure that origin is always marked as used
-    graph::Node &node = m_origin->getNode();
-    delete m_origin;
-    node.setUsed(m_index);
+    if(m_origin != nullptr) {
+        graph::Node origin = m_origin->getNode();
+        unsigned int user = origin.getUser();
+        delete m_origin;
+        m_origin = nullptr;
+        origin.setUsed(user);
+    }
 }
 
 /**
@@ -157,8 +172,8 @@ unsigned int Truck::getCapacity() {
  * Check that this Truck doesn't have more items than it should.
  * @return true if this Truck is valid, false else.
  */
-bool Truck::isValid() {
-    return (getComputedLoad() <= m_capacity);
+bool Truck::isValid() const {
+    return (getTruckLoad() <= m_capacity);
 }
 
 /**
