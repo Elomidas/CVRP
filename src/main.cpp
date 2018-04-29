@@ -48,7 +48,6 @@ bool testOperationsEl(){
     std::cout << std::endl << std::endl;
     Solution res = graph.getSolution();
     std::cout << res.toString() << std::endl << std::endl;
-
     int num, cam, index;
     std::cin >> num >> cam;
 
@@ -61,6 +60,7 @@ bool testOperationsEl(){
     std::cout << res.toString() << std::endl << std::endl;
 
     int num1(15), num2(13);
+    std::cin >> num1 >> num2;
     graph.invertNodes(num1, num2);
     res = graph.getSolution();
     std::cout << res.toString() << std::endl << std::endl;
