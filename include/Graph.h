@@ -32,20 +32,19 @@ namespace graph {
         ~Graph();
 
         const unsigned int getTrucksNb() const { return m_truckNb; };
-
-        std::vector<Node> getNodes() const { return m_nodes; };
-
-        std::vector<Truck> getTrucks() const { return m_trucks; };
-
-        Truck getTruck(unsigned int i) const { return m_trucks[i]; };
-
+        const std::vector<Node> getNodes() const { return m_nodes; };
+        const std::vector<Truck> getTrucks() const { return m_trucks; };
+        const Truck getTruck(unsigned int i) const { return m_trucks[i]; };
         void setNode(unsigned int i, Node node) { m_nodes[i] = node; }
-
         const unsigned int getNodeNb() const;
         const double getDistance(unsigned int, unsigned int) const;
         void setTrucksNumber(unsigned int);
         bool isSolution() const;
         Solution getSolution() const;
+        void buildRandomSolution();
+        void addNodeToTruck(unsigned int, unsigned int);
+        void addNodeToTruck(unsigned int, unsigned int, unsigned int);
+        void invertNodes(unsigned int, unsigned int);
 
     };
 }

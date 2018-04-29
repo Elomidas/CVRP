@@ -5,7 +5,6 @@
 #include "../include/TabouAlgorithm.h"
 
 unsigned long computeDistance(unsigned int i, unsigned int j);
-bool testDistancesMatrix();
 void testProject();
 
 int main() {
@@ -23,6 +22,15 @@ bool testDistancesMatrix() {
     return graph::DistancesMatrix::test(&computeDistance, 70);
 }
 
+bool testRandomSolution() {
+    std::vector<graph::Node> vector = GraphFactory::readFile("../data/data01.txt");
+    Graph graph(vector);
+    graph.buildRandomSolution();
+    assert(graph.isSolution());
+    std::clog << "Solution :" << std::endl << graph.getSolution().toString() << std::endl;
+    return true;
+}
+
 bool testAlgoTabou(){
     TabouAlgorithm tabou = TabouAlgorithm();
     tabou.lancerAlgo();
@@ -36,5 +44,6 @@ unsigned long computeDistance(unsigned int i, unsigned int j) {
 void testProject() {
     //assert(testDistancesMatrix());
     //assert(testGraph());
-    assert(testAlgoTabou());
+    //assert(testAlgoTabou());
+    assert(testRandomSolution());
 }

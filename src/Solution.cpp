@@ -19,9 +19,9 @@ Solution::Solution() : m_paths(), m_cost(DBL_MAX) {
  */
 Solution::~Solution() {
     if(!m_paths.empty()) {
-        for(unsigned long i(m_paths.size() - 1); i >= 0; i--) {
-            if(!m_paths[i].empty()) {
-                m_paths[i].clear();
+        for (auto &m_path : m_paths) {
+            if(!m_path.empty()) {
+                m_path.clear();
             }
         }
         m_paths.clear();
@@ -60,9 +60,9 @@ std::string Solution::toString() const {
     std::string result;
     for(unsigned long i(0); i < m_paths.size(); i++) {
         result += "Truck " + std::to_string(i+1) + " : \n";
-        for(unsigned long j(0); j < m_paths[i].size(); i++) {
+        for(unsigned long j(0); j < m_paths[i].size(); j++) {
             if(j != 0) {
-                result =+ " -> ";
+                result += " -> ";
             }
             result += std::to_string(m_paths[i][j]);
         }

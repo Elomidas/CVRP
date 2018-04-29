@@ -20,6 +20,7 @@ public:
     double getDistance(const graph::DistancesMatrix &) const;
     unsigned int getTruckLoad() const;
     unsigned int getComputedLoad();
+    unsigned int getAvailableCapacity() const;
     void addState(graph::Node &);
     void addStateByIndex(unsigned int, graph::Node &);
     void removeStateById(unsigned int);
