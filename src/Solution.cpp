@@ -4,6 +4,7 @@
 
 #include <cstdlib>
 #include <cfloat>
+#include <cassert>
 
 #include "../include/Solution.h"
 
@@ -56,7 +57,7 @@ void Solution::setCost(const double &cost) {
  * Get a string representation of the Solution
  * @return String representing the Solution
  */
-std::string Solution::toString() const {
+const std::string Solution::toString() const {
     std::string result;
     for(unsigned long i(0); i < m_paths.size(); i++) {
         result += "Truck " + std::to_string(i+1) + " : \n";
@@ -70,4 +71,9 @@ std::string Solution::toString() const {
     }
     result += "Solution's cost : " + std::to_string(m_cost);
     return result;
+}
+
+const std::vector<unsigned int>& Solution::getPath(const unsigned int index) const {
+    assert(index < m_paths.size());
+    return m_paths[index];
 }

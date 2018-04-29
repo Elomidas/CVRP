@@ -31,6 +31,7 @@ namespace graph {
         explicit Graph(std::vector<Node> &);
         ~Graph();
 
+        void loadSolution(const Solution &);
         const unsigned int getTrucksNb() const { return m_truckNb; };
         const std::vector<Node> getNodes() const { return m_nodes; };
         const std::vector<Truck> getTrucks() const { return m_trucks; };
