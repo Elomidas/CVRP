@@ -126,7 +126,7 @@ Solution Graph::getSolution() const {
     assert(isSolution());
     Solution s;
     unsigned long cost(0);
-    for(unsigned int i(0); i < m_truckNb; i++) {
+    for(unsigned int i(0); i < m_trucks.size(); i++) {
         s.addPath(m_trucks[i].toVector());
         cost += m_trucks[i].getDistance(m_distances);
     }

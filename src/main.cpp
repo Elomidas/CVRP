@@ -58,12 +58,12 @@ bool testOperationsEl(){
     graph.addNodeToTruck(num, cam);
     res = graph.getSolution();
     std::cout << res.toString() << std::endl << std::endl;
-
+/*
     int num1, num2;
     graph.invertNodes(num1, num2);
     res = graph.getSolution();
     std::cout << res.toString() << std::endl << std::endl;
-
+*/
 
     std::clog << "End of test" <<std::endl;
     return true;
