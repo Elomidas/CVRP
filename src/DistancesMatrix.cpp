@@ -103,7 +103,6 @@ void DistancesMatrix::generateDistanceFromCoordinates(const std::vector<Node> &n
         for(unsigned int j(0); j < i; j++) {
             n2 = nodes[j];
             d = computeDistance(n1, n2);
-            std::clog << "=> [" << i << "," << j << "] : " << d << std::endl;
             m_distancesNodes[i].setDistance(j, d);
             assert(d == m_distancesNodes[i].getDistance(j));
         }

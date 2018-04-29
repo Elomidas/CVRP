@@ -19,7 +19,7 @@ void TabouAlgorithm::lancerAlgo() {
     do{
         C = getVoisinage(m_T);
         if(!C.empty()){
-            Graph y = Graph(C.at(0));
+            Graph y(C.at(0));
             double f_y = funcFitness(y);
             for(int j=1;j<C.size();j++){
                 if(funcFitness(C.at(j)) < f_y){

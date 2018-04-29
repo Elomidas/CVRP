@@ -32,7 +32,7 @@ Solution::~Solution() {
  * Get Solution's cost
  * @return Cost of this Solution
  */
-const unsigned double& Solution::getCost() const {
+const double& Solution::getCost() const {
     return m_cost;
 }
 
@@ -48,7 +48,7 @@ void Solution::addPath(const std::vector<unsigned int> &path) {
  * Set Solution's cost
  * @param cost Solution's cost
  */
-void Solution::setCost(const unsigned double &cost) {
+void Solution::setCost(const double &cost) {
     m_cost = cost;
 }
 

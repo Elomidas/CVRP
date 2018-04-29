@@ -8,8 +8,6 @@
 
 using namespace graph;
 
-unsigned long DistanceNode::m_compteur = 0;
-
 /**
  * Default constructor
  */
@@ -20,8 +18,7 @@ DistanceNode::DistanceNode() = default;
  * All distances will be set to 0
  * @param size Number of Nodes in the Graph
  */
-DistanceNode::DistanceNode(unsigned int size) : m_size(size), m_nodeIndex(size - 1), m_distances(), m_count(m_compteur) {
-    m_compteur++;
+DistanceNode::DistanceNode(unsigned int size) : m_size(size), m_nodeIndex(size - 1), m_distances() {
     for(unsigned int i(0); i < m_size; i++) {
         m_distances.emplace_back(0.0);
     }
@@ -32,10 +29,8 @@ DistanceNode::DistanceNode(unsigned int size) : m_size(size), m_nodeIndex(size -
  * @param old Graph to copy
  */
 DistanceNode::DistanceNode(const DistanceNode &old) : m_size(old.m_size), m_nodeIndex(old.m_nodeIndex),
-                                                      m_distances(), m_count(m_compteur) {
-    m_compteur++;
+                                                      m_distances() {
     for(unsigned int i(0); i < m_size; i++) {
-        std::clog << "[" << m_nodeIndex << "," << i << "] : " << old.getDistance(i) << std::endl;
         m_distances.emplace_back(old.getDistance(i));
     }
 }
