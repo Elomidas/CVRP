@@ -12,22 +12,23 @@ TabouAlgorithm::TabouAlgorithm() : m_xmin(), m_nmax(10), m_T(), m_fmin(0) {
 
 void TabouAlgorithm::lancerAlgo() {
     Solution x = getRandomSolution();
-    m_xmin = x;
-    m_fmin = funcFitness(m_xmin);
+    x.toString();
+    m_xmin = Solution(x);
+    m_fmin = m_xmin.getCost();
     int i=0;
     std::vector<Solution> C;
     do{
         C = getVoisinage(x, m_T);
         if(!C.empty()){
             Solution y(C.at(0));
-            double f_y = funcFitness(y);
+            double f_y = y.getCost();
             for(int j=1;j<C.size();j++){
-                if(funcFitness(C.at(j)) < f_y){
-                    y = C.at(j);
-                    f_y = funcFitness(y);
+                if(C[j].getCost() < f_y){
+                    y = C[j];
+                    f_y = y.getCost();
                 }
             }
-            double delta_f = f_y - funcFitness(x);
+            double delta_f = f_y - x.getCost();
             std::pair<Node,Node> diff = getDifference(y, x);
             if(delta_f >= 0)
                 m_T.push_back(diff);
@@ -43,6 +44,10 @@ void TabouAlgorithm::lancerAlgo() {
 }
 
 TabouAlgorithm::~TabouAlgorithm() {
-    // TODO vérifier de delete le contenu de la liste m_T (pas encore défini)
+    for(std::pair<Node, Node> node : m_T){
+        delete node.first;
+        delete node.second;
+        delete node;
+    }
 }
 

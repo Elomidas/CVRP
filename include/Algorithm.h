@@ -39,8 +39,6 @@ public:
 
     const std::vector<Solution> getVoisinage(const Solution, const std::vector< std::pair<Node,Node> >);
 
-    const double funcFitness(const Solution);
-
     const std::pair<Node, Node> getDifference(const Solution, const Solution);
 
     virtual void lancerAlgo();

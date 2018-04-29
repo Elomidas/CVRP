@@ -4,16 +4,18 @@
 
 #include "../include/Algorithm.h"
 #include "../include/GraphFactory.h"
+#include <iostream>
 
 #define _DEFAULT_INPUT "data/data01.txt"
 
 Algorithm::Algorithm() : m_graph((unsigned int)0) {
-    std::vector<graph::Node> vector = GraphFactory::readFile("data/data01.txt");
+    std::vector<graph::Node> vector = GraphFactory::readFile("../data/data01.txt");
     m_graph = graph::Graph(vector);
 }
 
 Algorithm::~Algorithm() {
-    //Nothing ATM
+    delete m_graph;
+    delete m_settings;
 }
 
 void Algorithm::lancerAlgo() {
@@ -39,20 +41,28 @@ void Algorithm::reverse(Node n1, Node n2) {
  *
  */
 Solution Algorithm::getRandomSolution() {
-     return m_graph.getSolution();
+     //TODO à tester
+    for(unsigned int i(0);i<m_graph.getNodeNb();i++){
+        unsigned int capacity_left=Truck::getCapacity();
+        int truck_nb_saved = -1;
+        for(unsigned int id_truck(0);id_truck<m_graph.getTrucksNb();id_truck++){
+            if(m_graph.getTruck(id_truck)->getCapacity() - m_graph.getTruck(id_truck)->getComputedLoad() - m_graph.getNodes()[i].getQuantity() < capacity_left){
+                truck_nb_saved = id_truck;
+                capacity_left = m_graph.getTruck(i)->getCapacity() - m_graph.getTruck(i)->getComputedLoad()- m_graph.getNodes()[i].getQuantity();
+            }
+        }
+        if(truck_nb_saved != -1)
+            m_graph.getTruck((unsigned int)truck_nb_saved)->addState(m_graph.getNodes()[i]);
+    }
+    return m_graph.getSolution();
 }
 
 const std::vector<Solution> Algorithm::getVoisinage(const Solution solution, const std::vector< std::pair<Node,Node> > listeTabou = std::vector< std::pair<Node,Node> >()) {
-    return std::vector<Solution>();
     //TODO fonction à faire
-}
-
-const double Algorithm::funcFitness(const Solution solution) {
-    return 0;
-    //TODO définir la fonction fitness
+    return std::vector<Solution>();
 }
 
 const std::pair<Node, Node> Algorithm::getDifference(const Solution s1, const Solution s2) {
-    return std::pair<Node, Node>();
     //TODO définir la fonction
+    return std::pair<Node, Node>();
 }

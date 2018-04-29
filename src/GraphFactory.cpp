@@ -9,6 +9,7 @@
 #include <queue>
 
 #include "../include/GraphFactory.h"
+#include "../include/TabouAlgorithm.h"
 
 /**
  * Create a Graph from a source file
