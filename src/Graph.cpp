@@ -238,9 +238,16 @@ void Graph::deleteNodeToTruckByIndex(unsigned int index, unsigned int truck){
 void Graph::invertNodes(unsigned int node1, unsigned int node2) {
     assert(node1 < m_nodeNb);
     assert(node2 < m_nodeNb);
-    unsigned int tmp = m_nodes[node2].getUser();
-    m_trucks[m_nodes[node1].getUser()-1].replaceStateById(node1, m_nodes[node2]);
-    m_trucks[tmp-1].replaceStateById(node2, m_nodes[node1]);
+    if(m_nodes[node1].getUser() == m_nodes[node2].getUser()){
+        assert(m_trucks[m_nodes[node1].getUser()-1].hasNode(node1) >= 0);
+        assert(m_trucks[m_nodes[node2].getUser()-1].hasNode(node2) >= 0);
+        invertNodesByIndex(node1, node2, (unsigned int)m_trucks[m_nodes[node1].getUser()-1].hasNode(node1), (unsigned int)m_trucks[m_nodes[node1].getUser()-1].hasNode(node2));
+    }
+    else{
+        unsigned int tmp = m_nodes[node2].getUser();
+        m_trucks[m_nodes[node1].getUser()-1].replaceStateById(node1, m_nodes[node2]);
+        m_trucks[tmp-1].replaceStateById(node2, m_nodes[node1]);
+    }
 }
 
 void Graph::invertNodesByIndex(unsigned int node1, unsigned int node2, unsigned int index1, unsigned int index2) {

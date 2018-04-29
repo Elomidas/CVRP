@@ -48,6 +48,7 @@ bool testOperationsEl(){
     std::cout << std::endl << std::endl;
     Solution res = graph.getSolution();
     std::cout << res.toString() << std::endl << std::endl;
+21
     int num, cam, index;
     std::cin >> num >> cam;
 
