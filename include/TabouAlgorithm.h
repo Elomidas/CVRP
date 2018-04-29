@@ -15,7 +15,7 @@ private:
     /**
      * les deux noeuds utilisés pour la transformation élémentaire
      */
-    std::vector< std::pair<Node,Node> > m_T;
+    std::vector< std::pair<unsigned int, unsigned int> > m_T;
     double m_fmin;
     const int m_nmax;
 

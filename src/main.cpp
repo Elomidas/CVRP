@@ -2,6 +2,7 @@
 #include <cassert>
 #include "../include/DistancesMatrix.h"
 #include "../include/GraphFactory.h"
+#include "../include/TabouAlgorithm.h"
 
 unsigned long computeDistance(unsigned int i, unsigned int j);
 bool testDistancesMatrix();
@@ -22,11 +23,18 @@ bool testDistancesMatrix() {
     return graph::DistancesMatrix::test(&computeDistance, 70);
 }
 
+bool testAlgoTabou(){
+    TabouAlgorithm tabou = TabouAlgorithm();
+    tabou.lancerAlgo();
+    return true;
+}
+
 unsigned long computeDistance(unsigned int i, unsigned int j) {
     return i + j;
 }
 
 void testProject() {
     //assert(testDistancesMatrix());
-    assert(testGraph());
+    //assert(testGraph());
+    assert(testAlgoTabou());
 }
