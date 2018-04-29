@@ -6,20 +6,20 @@
 #include "../include/TabouAlgorithm.h"
 
 
-TabouAlgorithm::TabouAlgorithm() : m_xmin(0), m_nmax(10), m_T(), m_fmin(0) {
+TabouAlgorithm::TabouAlgorithm() : m_xmin(), m_nmax(10), m_T(), m_fmin(0) {
     //Nothing
 }
 
 void TabouAlgorithm::lancerAlgo() {
-    Graph xo = getRandomSolution();
-    m_xmin = Graph(xo);
+    Solution x = getRandomSolution();
+    m_xmin = x;
     m_fmin = funcFitness(m_xmin);
     int i=0;
-    std::vector<Graph> C;
+    std::vector<Solution> C;
     do{
-        C = getVoisinage(m_T);
+        C = getVoisinage(x, m_T);
         if(!C.empty()){
-            Graph y(C.at(0));
+            Solution y(C.at(0));
             double f_y = funcFitness(y);
             for(int j=1;j<C.size();j++){
                 if(funcFitness(C.at(j)) < f_y){
@@ -27,13 +27,13 @@ void TabouAlgorithm::lancerAlgo() {
                     f_y = funcFitness(y);
                 }
             }
-            double delta_f = f_y - funcFitness(m_graph);
-            std::pair<Node,Node> diff = getDifference(y, m_graph);
+            double delta_f = f_y - funcFitness(x);
+            std::pair<Node,Node> diff = getDifference(y, x);
             if(delta_f >= 0)
                 m_T.push_back(diff);
             if(f_y < m_fmin){
                 m_fmin = f_y;
-                m_xmin = Graph(y);
+                m_xmin = Solution(y);
             }
         }
         i++;

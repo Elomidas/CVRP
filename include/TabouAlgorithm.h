@@ -11,7 +11,7 @@
 
 class TabouAlgorithm : Algorithm{
 private:
-    Graph m_xmin;
+    Solution m_xmin;
     /**
      * les deux noeuds utilisés pour la transformation élémentaire
      */

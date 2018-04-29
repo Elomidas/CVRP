@@ -35,13 +35,13 @@ public:
 
     void reverse(Node n1, Node n2);
 
-    const Graph getRandomSolution();
+    Solution getRandomSolution();
 
-    const std::vector<Graph> getVoisinage(const std::vector< std::pair<Node,Node> >);
+    const std::vector<Solution> getVoisinage(const Solution, const std::vector< std::pair<Node,Node> >);
 
-    const double funcFitness(const Graph);
+    const double funcFitness(const Solution);
 
-    const std::pair<Node, Node> getDifference(const Graph, const Graph);
+    const std::pair<Node, Node> getDifference(const Solution, const Solution);
 
     virtual void lancerAlgo();
 

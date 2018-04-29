@@ -38,22 +38,21 @@ void Algorithm::reverse(Node n1, Node n2) {
  * ==== Fuctions used in algorithms
  *
  */
-const Graph Algorithm::getRandomSolution() {
-    return Graph(0);
+Solution Algorithm::getRandomSolution() {
+     return m_graph.getSolution();
+}
+
+const std::vector<Solution> Algorithm::getVoisinage(const Solution solution, const std::vector< std::pair<Node,Node> > listeTabou = std::vector< std::pair<Node,Node> >()) {
+    return std::vector<Solution>();
     //TODO fonction à faire
 }
 
-const std::vector<Graph> Algorithm::getVoisinage(const std::vector< std::pair<Node,Node> > listeTabou = std::vector< std::pair<Node,Node> >()) {
-    return std::vector<Graph>();
-    //TODO fonction à faire
-}
-
-const double Algorithm::funcFitness(const Graph) {
+const double Algorithm::funcFitness(const Solution solution) {
     return 0;
     //TODO définir la fonction fitness
 }
 
-const std::pair<Node, Node> Algorithm::getDifference(const Graph, const Graph) {
+const std::pair<Node, Node> Algorithm::getDifference(const Solution s1, const Solution s2) {
     return std::pair<Node, Node>();
     //TODO définir la fonction
 }
