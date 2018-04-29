@@ -37,9 +37,9 @@ public:
 
     Solution getRandomSolution();
 
-    const std::vector<Solution> getVoisinage(const Solution, const std::vector< std::pair<Node,Node> >);
+    const std::vector<Solution> getVoisinage(const Solution, const std::vector< std::pair<unsigned int, unsigned int> >);
 
-    const std::pair<Node, Node> getDifference(const Solution, const Solution);
+    const std::pair<unsigned int, unsigned int> getDifference(const Solution, const Solution);
 
     virtual void lancerAlgo();
 

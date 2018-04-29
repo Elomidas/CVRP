@@ -29,7 +29,7 @@ void TabouAlgorithm::lancerAlgo() {
                 }
             }
             double delta_f = f_y - x.getCost();
-            std::pair<Node,Node> diff = getDifference(y, x);
+            std::pair<unsigned int, unsigned int> diff = getDifference(y, x);
             if(delta_f >= 0)
                 m_T.push_back(diff);
             if(f_y < m_fmin){
@@ -44,10 +44,9 @@ void TabouAlgorithm::lancerAlgo() {
 }
 
 TabouAlgorithm::~TabouAlgorithm() {
-    for(std::pair<Node, Node> node : m_T){
-        delete node.first;
-        delete node.second;
-        delete node;
+    delete m_xmin;
+    for(std::pair<unsigned int, unsigned int> pair : m_T){
+        delete pair;
     }
 }
 

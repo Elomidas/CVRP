@@ -57,12 +57,13 @@ Solution Algorithm::getRandomSolution() {
     return m_graph.getSolution();
 }
 
-const std::vector<Solution> Algorithm::getVoisinage(const Solution solution, const std::vector< std::pair<Node,Node> > listeTabou = std::vector< std::pair<Node,Node> >()) {
+const std::vector<Solution> Algorithm::getVoisinage(const Solution solution, const std::vector< std::pair<unsigned int,unsigned int> > listeTabou = std::vector< std::pair<unsigned int,unsigned int> >()) {
     //TODO fonction à faire
+
     return std::vector<Solution>();
 }
 
-const std::pair<Node, Node> Algorithm::getDifference(const Solution s1, const Solution s2) {
+const std::pair<unsigned int, unsigned int> Algorithm::getDifference(const Solution s1, const Solution s2) {
     //TODO définir la fonction
-    return std::pair<Node, Node>();
+    return std::pair<unsigned int, unsigned int>();
 }
