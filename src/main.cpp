@@ -36,7 +36,7 @@ bool testRandomSolution() {
 }
 
 bool testAlgoTabou(){
-    Algorithm algo = Algorithm();
+    Algorithm algo;
     //TabouAlgorithm tabou = TabouAlgorithm();
     //tabou.lancerAlgo();
     //tabou.lancerAlgo();

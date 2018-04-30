@@ -28,7 +28,7 @@ namespace graph {
     public:
         Graph(const Graph &);
         explicit Graph(unsigned int);
-        explicit Graph(std::vector<Node> &);
+        explicit Graph(std::vector<Node>);
         ~Graph();
 
         void loadSolution(const Solution &);

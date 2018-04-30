@@ -25,7 +25,7 @@ Graph::Graph(const unsigned int nodeNb) : m_nodeNb(nodeNb), m_distances(nodeNb),
  * Constructor from a queue of Nodes
  * @param nodes vector of all the Nodes in the Graph
  */
-Graph::Graph(std::vector<Node> &nodes) :
+Graph::Graph(std::vector<Node> nodes) :
         m_trucks(), m_nodeNb(static_cast<unsigned int>(nodes.size())), m_nodes(),
         m_distances(static_cast<unsigned int>(nodes.size())), m_qTotal(0) {
     std::clog << "Create Graph from a " << m_nodeNb << " Node queue" << std::endl;
