@@ -48,14 +48,14 @@ bool testVoisinage(){
     std::vector<graph::Node> vector = GraphFactory::readFile("../data/data01.txt");
     Graph graph(vector);
     graph.buildRandomSolution();
-    /*
+
     std::cout << std::endl << std::endl;
     Solution res = graph.getSolution();
     std::cout << res.toString() << std::endl << std::endl;
 
     std::vector<Graph> voisinage = graph.getVoisinage(std::vector<std::pair<unsigned int, unsigned int>>());
 
-
+    /*
     Solution base = graph.getSolution();
     for(Graph voisin : voisinage){
         Solution sol = voisin.getSolution();
@@ -63,6 +63,11 @@ bool testVoisinage(){
         std::cout << sol.toString() << std::endl << std::endl;
     }
     */
+    std::pair<unsigned int , unsigned int> diff = graph.getDifference(voisinage.at(0));
+    std::cout << diff.first << std::endl << diff.second <<std::endl << std::endl;
+
+    diff = graph.getDifference(voisinage.at(1));
+    std::cout << diff.first << std::endl << diff.second <<std::endl << std::endl;
 }
 
 bool testOperationsEl(){
@@ -103,7 +108,7 @@ void testProject() {
     //assert(testDistancesMatrix());
     //assert(testGraph());
     //assert(testAlgoTabou());
-    assert(testRandomSolution());
+    //assert(testRandomSolution());
     //assert(testOperationsEl());
-    //assert(testVoisinage());
+    assert(testVoisinage());
 }

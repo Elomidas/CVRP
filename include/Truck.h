@@ -8,7 +8,7 @@
 #include <vector>
 #include "TruckStep.h"
 
-#define _CAPACITY   30
+#define _CAPACITY   100
 
 class Truck {
 public:

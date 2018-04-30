@@ -58,6 +58,8 @@ namespace graph {
         double getCost() const;
 
         const std::vector<Graph> getVoisinage(std::vector< std::pair<unsigned int, unsigned int> >);
+
+        const std::pair<unsigned int, unsigned int> getDifference(const Graph graph);
     };
 }
 

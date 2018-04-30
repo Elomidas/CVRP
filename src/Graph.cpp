@@ -323,7 +323,6 @@ const std::vector<Graph> Graph::getVoisinage(std::vector< std::pair<unsigned int
                         if(new_graph.isSolution())
                             voisinage.push_back(new_graph);
                     }
-
                     node_nb++;
                 }
                 node_nb=1;
@@ -332,6 +331,25 @@ const std::vector<Graph> Graph::getVoisinage(std::vector< std::pair<unsigned int
         }
     }
     return voisinage;
+}
+
+/**
+ * Récupère la différences dans les parcours de camion de deux graphes
+ * @param graph
+ * @return
+ */
+const std::pair<unsigned int, unsigned int> Graph::getDifference(const Graph graph) {
+    //TODO à tester
+    for(unsigned int i(0);i<m_truckNb;i++){
+        std::vector<unsigned int> path1 = getTruck(i).toVector();
+        std::vector<unsigned int> path2 = graph.getTruck(i).toVector();
+        for(unsigned int j(1);j<m_trucks[i].getSize();j++){
+            if(path1.at(j) != path2.at(j)){
+                return std::make_pair(path1.at(j), path2.at(j));
+            }
+        }
+    }
+    return std::pair<unsigned int, unsigned int>();
 }
 
 

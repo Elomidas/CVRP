@@ -10,10 +10,6 @@ TabouAlgorithm::TabouAlgorithm() : m_xmin(), m_nmax(10), m_T(), m_fmin(0) {
     //Nothing
 }
 
-const std::pair<unsigned int, unsigned int> TabouAlgorithm::getDifference(const Solution s1, const Solution s2) {
-    //TODO définir la fonction
-    return std::pair<unsigned int, unsigned int>();
-}
 
 void TabouAlgorithm::lancerAlgo() {
     m_graph.buildRandomSolution();
