@@ -54,6 +54,8 @@ namespace graph {
         void invertNodesByIndex(unsigned int node1, unsigned int node2, unsigned int index1, unsigned int index2);
 
         double getCost() const;
+
+        const std::vector<Graph> getVoisinage(std::vector< std::pair<unsigned int, unsigned int> >);
     };
 }
 

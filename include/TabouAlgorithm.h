@@ -18,7 +18,6 @@ private:
     std::vector< std::pair<unsigned int, unsigned int> > m_T;
     double m_fmin;
     const int m_nmax;
-    const std::vector<Graph> getVoisinage(Graph &graph);
     const std::pair<unsigned int, unsigned int> getDifference(const Solution s1, const Solution s2);
 
 public:

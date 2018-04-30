@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cassert>
+#include <unistd.h>
 #include "../include/DistancesMatrix.h"
 #include "../include/GraphFactory.h"
 #include "../include/TabouAlgorithm.h"
@@ -36,11 +37,32 @@ bool testRandomSolution() {
 }
 
 bool testAlgoTabou(){
-    Algorithm algo;
+    //Algorithm algo;
     //TabouAlgorithm tabou = TabouAlgorithm();
     //tabou.lancerAlgo();
     //tabou.lancerAlgo();
     return true;
+}
+
+bool testVoisinage(){
+    std::vector<graph::Node> vector = GraphFactory::readFile("../data/data01.txt");
+    Graph graph(vector);
+    graph.buildRandomSolution();
+    std::cout << std::endl << std::endl;
+    Solution res = graph.getSolution();
+    std::cout << res.toString() << std::endl << std::endl;
+
+    std::vector<Graph> voisinage = graph.getVoisinage(std::vector<std::pair<unsigned int, unsigned int>>());
+
+
+    Solution base = graph.getSolution();
+    for(Graph voisin : voisinage){
+        Solution sol = voisin.getSolution();
+        std::cout << base.toString() << std::endl << std::endl;
+        usleep(15000);
+        std::cout << sol.toString() << std::endl << std::endl;
+    }
+
 }
 
 bool testOperationsEl(){
@@ -80,7 +102,8 @@ unsigned long computeDistance(unsigned int i, unsigned int j) {
 void testProject() {
     //assert(testDistancesMatrix());
     //assert(testGraph());
-    assert(testAlgoTabou());
+    //assert(testAlgoTabou());
     //assert(testRandomSolution());
     //assert(testOperationsEl());
+    assert(testVoisinage());
 }
