@@ -33,16 +33,7 @@ public:
 
     void setConfigurationFile(const std::string&);
 
-    void reverse(Solution &solution, unsigned int n1, unsigned int n2);
-
-    Solution getRandomSolution();
-
-    const std::vector<Solution> getVoisinage(const Solution, const std::vector< std::pair<unsigned int, unsigned int> >);
-
-    const std::pair<unsigned int, unsigned int> getDifference(const Solution, const Solution);
-
     virtual void lancerAlgo();
-
 };
 
 

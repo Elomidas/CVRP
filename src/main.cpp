@@ -36,8 +36,10 @@ bool testRandomSolution() {
 }
 
 bool testAlgoTabou(){
-    TabouAlgorithm tabou = TabouAlgorithm();
-    tabou.lancerAlgo();
+    Algorithm algo = Algorithm();
+    //TabouAlgorithm tabou = TabouAlgorithm();
+    //tabou.lancerAlgo();
+    //tabou.lancerAlgo();
     return true;
 }
 
@@ -48,7 +50,7 @@ bool testOperationsEl(){
     std::cout << std::endl << std::endl;
     Solution res = graph.getSolution();
     std::cout << res.toString() << std::endl << std::endl;
-21
+
     int num, cam, index;
     std::cin >> num >> cam;
 
@@ -78,7 +80,7 @@ unsigned long computeDistance(unsigned int i, unsigned int j) {
 void testProject() {
     //assert(testDistancesMatrix());
     //assert(testGraph());
-    //assert(testAlgoTabou());
+    assert(testAlgoTabou());
     //assert(testRandomSolution());
-    assert(testOperationsEl());
+    //assert(testOperationsEl());
 }

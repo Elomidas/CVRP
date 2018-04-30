@@ -273,4 +273,17 @@ void Graph::loadSolution(const Solution &solution) {
     }
 }
 
+/**
+ * Compute and return the cost of the graph
+ * @return cost of Trucks path
+ */
+double Graph::getCost() const {
+    assert(isSolution());
+    double cost = 0;
+    for(unsigned int i(0); i < m_trucks.size(); i++) {
+        cost += m_trucks[i].getDistance(m_distances);
+    }
+    return cost;
+}
+
 
