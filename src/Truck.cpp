@@ -3,6 +3,7 @@
 //
 
 #include <cassert>
+#include <iostream>
 #include "../include/Truck.h"
 
 /**
@@ -43,11 +44,8 @@ Truck::Truck(const Truck &old) :
 Truck::~Truck() {
     //Make sure that origin is always marked as used
     if(m_origin != nullptr) {
-        graph::Node origin = m_origin->getNode();
-        unsigned int user = origin.getUser();
         delete m_origin;
         m_origin = nullptr;
-        origin.setUsed(user);
     }
 }
 
@@ -73,8 +71,13 @@ unsigned int Truck::getTruckLoad() const {
  * @return Load needed to deliver all clients on truck's path
  */
 unsigned int Truck::getComputedLoad() {
-    m_currentLoad = m_origin->getLoad();
+    computeLoad();
     return getTruckLoad();
+}
+
+
+void Truck::computeLoad() {
+    m_currentLoad = m_origin->getLoad();
 }
 
 /**

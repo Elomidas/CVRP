@@ -28,10 +28,11 @@ namespace graph {
     public:
         Graph(const Graph &);
         explicit Graph(unsigned int);
-        explicit Graph(std::vector<Node> &);
+        explicit Graph(std::vector<Node>);
         ~Graph();
 
         void loadSolution(const Solution &);
+        void loadGenetic(const std::vector<unsigned int> &);
         const unsigned int getTrucksNb() const { return m_truckNb; };
         const std::vector<Node> getNodes() const { return m_nodes; };
         const std::vector<Truck> getTrucks() const { return m_trucks; };
@@ -42,10 +43,15 @@ namespace graph {
         void setTrucksNumber(unsigned int);
         bool isSolution() const;
         Solution getSolution() const;
+        std::vector<unsigned int> getGenetic() const;
+        double getCost() const;
         void buildRandomSolution();
         void addNodeToTruck(unsigned int, unsigned int);
         void addNodeToTruck(unsigned int, unsigned int, unsigned int);
         void invertNodes(unsigned int, unsigned int);
+
+        static std::vector<unsigned int> splitLine(std::string &line);
+        static unsigned int atoi(const std::string &number);
 
     };
 }
