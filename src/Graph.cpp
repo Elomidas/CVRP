@@ -286,17 +286,24 @@ double Graph::getCost() const {
     return cost;
 }
 
-const std::vector<Graph> Graph::getVoisinage(std::vector< std::pair<unsigned int, unsigned int> > tabou) {
-    //TODO fonction à tester
-    //TODO ajouter liste tabou
+const bool Graph::isInTabou(const std::vector< std::pair<unsigned int, unsigned int> > listeTabou, const std::pair<unsigned int,unsigned int> pair_tabou) const{
+    for(std::pair<unsigned int, unsigned int> pair : listeTabou){
+        if( ( pair.first == pair_tabou.first && pair.second==pair_tabou.second ) || ( pair.first==pair_tabou.second && pair.second==pair_tabou.first ) )
+            return true;
+    }
+    return false;
+}
+
+const std::vector<Graph> Graph::getVoisinage(std::vector< std::pair<unsigned int, unsigned int> > listeTabou) {
+    //TODO vérifier liste tabou
     std::vector<Graph> voisinage = std::vector<Graph>();
     unsigned int node_nb, truck_nb;
 
     for(unsigned int i(0); i<m_truckNb;i++){
-        for(unsigned int j(1); j<getTruck(i).getSize()-1;j++){
+        for(unsigned int j(1); j<getTruck(i).getSize();j++){
             std::vector<unsigned int> path1 = getTruck(i).toVector();
             unsigned int node1 = path1.at(j);
-            if(j == getTruck(i).getSize()-2){
+            if(j == getTruck(i).getSize()){
                 node_nb = 1;
                 truck_nb = i+1;
             }
@@ -305,30 +312,23 @@ const std::vector<Graph> Graph::getVoisinage(std::vector< std::pair<unsigned int
                 truck_nb = i;
             }
             while(truck_nb<m_truckNb){
-                while(node_nb<getTruck(truck_nb).getSize()-1){
+                while(node_nb<getTruck(truck_nb).getSize()){
                     std::vector<unsigned int> path2 = getTruck(truck_nb).toVector();
                     unsigned int node2 = path2.at(node_nb);
-                    Graph new_graph(*this);
-                    new_graph.invertNodes(node1, node2);
-                    if(new_graph.isSolution())
-                        voisinage.push_back(new_graph);
+
+                    std::pair<unsigned int,unsigned int> pair_tabou = std::make_pair(node1 ,node2);
+                    if(!isInTabou(listeTabou, pair_tabou)){
+                        Graph new_graph(*this);
+                        new_graph.invertNodes(node1, node2);
+                        if(new_graph.isSolution())
+                            voisinage.push_back(new_graph);
+                    }
+
                     node_nb++;
                 }
                 node_nb=1;
                 truck_nb++;
             }
-
-
-
-            /*
-            std::pair<unsigned int,unsigned int> test_tabou = std::make_pair(i ,j);
-
-            if(std::find(listeTabou.begin(), listeTabou.end(), test_tabou) != test_tabou){
-                Solution tmp = Solution(solution);
-                reverse(tmp, i, j);
-                voisinage.push_back(tmp);
-            }
-             */
         }
     }
     return voisinage;

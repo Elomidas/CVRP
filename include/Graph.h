@@ -24,6 +24,8 @@ namespace graph {
         DistancesMatrix m_distances;
         std::vector<Truck> m_trucks;
         void computeTruckNbMin();
+        const bool isInTabou(const std::vector<std::pair<unsigned int, unsigned int>>,
+                             const std::pair<unsigned int, unsigned int> pair_tabou1) const;
 
     public:
         Graph(const Graph &);
