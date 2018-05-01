@@ -13,10 +13,6 @@ class GraphFactory {
 public:
     static std::vector<graph::Node> readFile(const std::string&);
     static void test(const std::string&);
-
-private:
-    static void splitLine(std::string &, unsigned int*);
-    static unsigned int atoi(const std::string &);
 };
 
 

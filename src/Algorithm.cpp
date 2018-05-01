@@ -8,9 +8,12 @@
 
 #define _DEFAULT_INPUT "data/data01.txt"
 
-Algorithm::Algorithm() : m_graph((unsigned int)0) {
-    std::vector<graph::Node> vector = GraphFactory::readFile("../data/data01.txt");
-    m_graph = graph::Graph(vector);
+Algorithm::Algorithm() : m_graph(GraphFactory::readFile("../data/data01.txt")) {
+    //Nothing
+}
+
+Algorithm::Algorithm(const std::string &str) : m_graph(GraphFactory::readFile(str)) {
+    //Nothing
 }
 
 Algorithm::~Algorithm() = default;
