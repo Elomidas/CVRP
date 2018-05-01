@@ -8,7 +8,6 @@
 #include <string>
 
 #include "Graph.h"
-#include "AlgorithmSettings.h"
 #include "Node.h"
 
 using namespace graph;
@@ -17,16 +16,16 @@ class Algorithm {
 
 protected:
     graph::Graph m_graph;
-    AlgorithmSettings m_settings;
+
+    virtual void getMini();
 
 public:
-    Algorithm();
     explicit Algorithm(const std::string &);
-    ~Algorithm();
+    virtual ~Algorithm();
 
-    void setInputFile(const std::string&);
-    void setConfigurationFile(const std::string&);
-    virtual void lancerAlgo();
+    virtual void launchAlgo();
+    virtual void display();
+    virtual void display(const std::string &);
 };
 
 

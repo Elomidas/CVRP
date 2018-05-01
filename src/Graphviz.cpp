@@ -2,43 +2,22 @@
 // Created by elomidas on 01/05/18.
 //
 
-#include <boost/graph/graphviz.hpp>
-#include <graphviz/gvc.h>
+#include <fstream>
 
 #include "../include/Graphviz.h"
-#include "../include/Graph.h"
 
-struct vertex_info {
-    int color;
-};
+unsigned int Graphviz::_count = 0;
 
-typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, vertex_info> MyGraph;
-typedef std::pair<int, int> Edge;
-
-Graphviz::Graphviz() = default;
-
-int Graphviz::test() {
-    MyGraph g;
-    add_edge(0, 1, g);
-    add_edge(1, 2, g);
-
-    g[0].color = 1;
-
-    boost::dynamic_properties dp;
-    dp.property("color", get(&vertex_info::color, g));
-    dp.property("node_id", get(boost::vertex_index, g));
-    write_graphviz_dp(std::cout, g, dp);
-
-    return 0;
-}
-
-std::string Graphviz::fromGraph(const graph::Graph &graph) {
+std::string Graphviz::fromGraph(const graph::Graph &graph, const std::string &title) {
     std::string fname("../graphviz/tmp.dot");
+    auto cost(static_cast<unsigned long>(graph.getCost()));
     std::ofstream data(fname);
-    unsigned int counter(0);
     data << "digraph g {" << std::endl
-         << "ratio=\"compress\"" << std::endl
-         << "node [fontsize = 100];" <<std::endl;
+         << "labelloc=\"t\";" << std::endl
+         << "label=\"" << title << " (cost = " << cost << ")\";" << std::endl
+         << "margin=\"3,3!\";" << std::endl
+         << "outputorder=\"edgesfirst\";" << std::endl
+         << "node [fontsize = 100, shape=circle, fillcolor=white, style=filled];" <<std::endl;
     for(unsigned int i(0); i < graph.getNodeNb(); i++) {
         const graph::Node &n = graph.getNode(i);
         data << n.getId() << " [pos = \"" << n.getX() << "," << n.getY() << "!\", penwidth=15];" << std::endl;
@@ -60,33 +39,9 @@ std::string Graphviz::fromGraph(const graph::Graph &graph) {
     return fname;
 }
 
-void Graphviz::getImg(const graph::Graph &myGraph) {
-    std::string fname(fromGraph(myGraph));
-    std::string o_arg = std::string("-o") + "../graphviz/image_file.svg";
-    char* args[] = {const_cast<char*>("dot"),
-                    const_cast<char*>("-Kfdp"),
-                    const_cast<char*>("-Tsvg"),
-                    const_cast<char*>(fname.c_str()),
-                    const_cast<char*>(o_arg.c_str()) };
-
-    const int argc = sizeof(args)/sizeof(args[0]);
-    Agraph_t *g, *prev = nullptr;
-    GVC_t *gvc;
-
-    gvc = gvContext();
-    gvParseArgs(gvc, argc, args);
-
-    while ((g = gvNextInputGraph(gvc)))
-    {
-        if (prev)
-        {
-            gvFreeLayout(gvc, prev);
-            agclose(prev);
-        }
-        gvLayoutJobs(gvc, g);
-        gvRenderJobs(gvc, g);
-        prev = g;
-    }
-
-    gvFreeContext(gvc);
+void Graphviz::getImg(const graph::Graph &myGraph, const std::string &out) {
+    std::string fname(fromGraph(myGraph, out));
+    std::string cmd("dot -Kneato -Tsvg " + fname + " -o ../graphviz/" + out + ".svg");
+    system(cmd.c_str());
+    _count++;
 }

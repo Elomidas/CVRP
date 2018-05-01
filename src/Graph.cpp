@@ -227,7 +227,7 @@ void Graph::buildRandomSolution() {
 void Graph::addNodeToTruck(unsigned int node, unsigned int truck) {
     assert(node < m_nodeNb);
     assert(truck > 0);
-    assert(truck <= m_truckNb);
+    assert(truck <= m_trucks.size());
     m_trucks[truck-1].addState(m_nodes[node]);
 }
 

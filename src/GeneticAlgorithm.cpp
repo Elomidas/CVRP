@@ -8,8 +8,14 @@
 #include <cassert>
 
 #include "../include/GeneticAlgorithm.h"
-#include "../include/GraphFactory.h"
 
+/**
+ * Constructor
+ * @param populationSize    Size of population for each iteration
+ * @param path              Path to source file
+ * @param ite               Number of iteration (<0 for infinite run)
+ * @param display           Nuber of iteration between to status' display
+ */
 GeneticAlgorithm::GeneticAlgorithm(const unsigned int populationSize, const std::string &path, const double &ite,
                                    const double &display) :
         Algorithm(path), m_populationSize(populationSize), m_iterations(ite), m_display(display), m_bestCost(DBL_MAX),
@@ -17,12 +23,18 @@ GeneticAlgorithm::GeneticAlgorithm(const unsigned int populationSize, const std:
     generateFirstPopulation();
 }
 
+/**
+ * Destructor
+ */
 GeneticAlgorithm::~GeneticAlgorithm() {
     if(!m_population.empty()) {
         m_population.clear();
     }
 }
 
+/**
+ * Generate the population before launching algorithm
+ */
 void GeneticAlgorithm::generateFirstPopulation() {
     if(!m_population.empty()) {
         m_population.clear();
@@ -37,12 +49,19 @@ void GeneticAlgorithm::generateFirstPopulation() {
     checkFitness();
 }
 
+/**
+ * Add a member to population
+ * @param member Member to add
+ */
 void GeneticAlgorithm::addMember(const std::vector<unsigned int> &member) {
     assert(isValid(member));
     assert(m_population.size() < m_populationSize);
     m_population.emplace_back(member);
 }
 
+/**
+ * Iterate one time
+ */
 void GeneticAlgorithm::nextStep() {
     //Step 1 : select parents and reproduce
     selectParents();
@@ -52,6 +71,9 @@ void GeneticAlgorithm::nextStep() {
     m_step++;
 }
 
+/**
+ * Attribute a score to each population member
+ */
 void GeneticAlgorithm::checkFitness() {
     if(!m_costs.empty()) {
         m_costs.clear();
@@ -73,12 +95,17 @@ void GeneticAlgorithm::checkFitness() {
     }
 }
 
+/**
+ * Display a vector
+ * @param vector
+ * @return
+ */
 std::string displayVector(const std::vector<unsigned int> &vector) {
-    std::string res(std::to_string(vector[0]));
+    std::string res;
     for (unsigned int i : vector) {
         res += "-" + std::to_string(i);
     }
-    return res;
+    return res.substr(1);
 }
 
 void GeneticAlgorithm::getStatus() const {
@@ -241,7 +268,7 @@ void GeneticAlgorithm::swapNodes(const std::vector<unsigned int> member) {
     addMember(child);
 }
 
-void GeneticAlgorithm::launch() {
+void GeneticAlgorithm::launchAlgo() {
     m_step = 0;
     double display(m_display);
     while((m_iterations < 0) || (m_step < m_iterations)) {
@@ -249,17 +276,9 @@ void GeneticAlgorithm::launch() {
         if((display <= 0) || (m_step == m_iterations)) {
             getStatus();
             display = m_display;
-        } else {
-            display--;
         }
+        display--;
     }
-}
-
-void GeneticAlgorithm::launch(const unsigned int iterations) {
-    double tmp(m_iterations);
-    m_iterations = iterations;
-    launch();
-    m_iterations = tmp;
 }
 
 bool GeneticAlgorithm::isValid(const std::vector<unsigned int> &vector) const {
@@ -272,4 +291,8 @@ bool GeneticAlgorithm::isValid(const std::vector<unsigned int> &vector) const {
         check[i-1] = false;
     }
     return true;
+}
+
+void GeneticAlgorithm::getMini() {
+    m_graph.loadGenetic(m_best);
 }

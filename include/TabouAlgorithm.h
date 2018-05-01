@@ -21,14 +21,14 @@ private:
     double m_fmin;
     const int m_nmax = M_NBITERATIONMAX;
     void addList(ElementaryTransformation);
-    Solution getMini() const;
+    void getMini() override;
 
 public:
     TabouAlgorithm();
+    explicit TabouAlgorithm(const std::string &);
     ~TabouAlgorithm();
 
-    void lancerAlgo() override;
-    void display();
+    void launchAlgo() override;
 };
 
 

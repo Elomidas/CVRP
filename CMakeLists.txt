@@ -13,7 +13,7 @@ include_directories(${Boost_INCLUDE_DIRS})
 
 include_directories("${GRAPHVIZ_INCLUDE_DIR}")
 
-add_executable(CVRP src/main.cpp src/Node.cpp include/Node.h src/Graph.cpp include/Graph.h src/Algorithm.cpp include/Algorithm.h src/Truck.cpp include/Truck.h src/TruckStep.cpp include/TruckStep.h src/DistancesMatrix.cpp include/DistancesMatrix.h src/DistanceNode.cpp include/DistanceNode.h src/GeneticAlgorithm.cpp include/GeneticAlgorithm.h src/AlgorithmSettings.cpp include/AlgorithmSettings.h src/GraphFactory.cpp include/GraphFactory.h src/TabouAlgorithm.cpp include/TabouAlgorithm.h src/Solution.cpp include/Solution.h src/ElementaryTransformation.cpp include/ElementaryTransformation.h src/Graphviz.cpp include/Graphviz.h)
+add_executable(CVRP src/main.cpp src/Node.cpp include/Node.h src/Graph.cpp include/Graph.h src/Algorithm.cpp include/Algorithm.h src/Truck.cpp include/Truck.h src/TruckStep.cpp include/TruckStep.h src/DistancesMatrix.cpp include/DistancesMatrix.h src/DistanceNode.cpp include/DistanceNode.h src/GeneticAlgorithm.cpp include/GeneticAlgorithm.h src/GraphFactory.cpp include/GraphFactory.h src/TabouAlgorithm.cpp include/TabouAlgorithm.h src/Solution.cpp include/Solution.h src/ElementaryTransformation.cpp include/ElementaryTransformation.h src/Graphviz.cpp include/Graphviz.h)
 
 target_link_libraries(CVRP ${GRAPHVIZ_LIBS})
 

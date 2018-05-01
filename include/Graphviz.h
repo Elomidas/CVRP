@@ -12,10 +12,8 @@
 
 class Graphviz {
 public:
-    Graphviz();
-    int test();
-    static std::string fromGraph(const graph::Graph &);
-    static void getImg(const graph::Graph &);
+    static std::string fromGraph(const graph::Graph &, const std::string &);
+    static void getImg(const graph::Graph &, const std::string &);
 
 private:
     static unsigned int _count;

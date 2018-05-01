@@ -83,10 +83,11 @@ bool testRandomSolution() {
  * test tabou algorithm
  * @return
  */
-bool testAlgoTabou(){
-    TabouAlgorithm tabou = TabouAlgorithm();
-    tabou.lancerAlgo();
-    tabou.display();
+bool testAlgoTabou() {
+    std::string jeu("03");
+    TabouAlgorithm tabou("../data/data"+jeu+".txt");
+    tabou.launchAlgo();
+    tabou.display("data"+jeu+"-tabou");
     return true;
 }
 
@@ -179,16 +180,18 @@ void testGeneticLoad() {
  * test genetic algorithm
  */
 void testGenetic() {
-    GeneticAlgorithm gen(50, "../data/data01.txt", 10000, 1000);
+    std::string jeu("03");
+    GeneticAlgorithm gen(50, "../data/data"+jeu+".txt", 1000, 100);
     gen.getStatus();
-    gen.launch();
+    gen.launchAlgo();
+    gen.display("data"+jeu+"_gen");
 }
 
 bool testGraphviz() {
     Graph graph(GraphFactory::readFile("../data/data01.txt"));
     graph.buildRandomSolution();
     //std::clog << Graphviz::fromGraph(graph.getSolution()) << std::endl;
-    Graphviz::getImg(graph);
+    Graphviz::getImg(graph, "test");
     return true;
 }
 
