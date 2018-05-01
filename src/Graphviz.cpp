@@ -6,8 +6,12 @@
 
 #include "../include/Graphviz.h"
 
-unsigned int Graphviz::_count = 0;
-
+/**
+ * Create data/tmp.dot, a file containing all info to build graph
+ * @param   graph Graph to build
+ * @param   title Title of the graph
+ * @return  path to created .dot file
+ */
 std::string Graphviz::fromGraph(const graph::Graph &graph, const std::string &title) {
     std::string fname("../graphviz/tmp.dot");
     auto cost(static_cast<unsigned long>(graph.getCost()));
@@ -39,9 +43,13 @@ std::string Graphviz::fromGraph(const graph::Graph &graph, const std::string &ti
     return fname;
 }
 
+/**
+ * Create the .svg graph
+ * @param myGraph Graph to build
+ * @param out     Image name (without the .svg)
+ */
 void Graphviz::getImg(const graph::Graph &myGraph, const std::string &out) {
     std::string fname(fromGraph(myGraph, out));
     std::string cmd("dot -Kneato -Tsvg " + fname + " -o ../graphviz/" + out + ".svg");
     system(cmd.c_str());
-    _count++;
 }

@@ -91,6 +91,9 @@ TabouAlgorithm::~TabouAlgorithm() {
     }
 }
 
+/**
+ * Load best solution in graph
+ */
 void TabouAlgorithm::getMini() {
     m_graph.loadSolution(m_xmin);
 }

@@ -15,9 +15,6 @@ public:
     static std::string fromGraph(const graph::Graph &, const std::string &);
     static void getImg(const graph::Graph &, const std::string &);
 
-private:
-    static unsigned int _count;
-
 };
 
 

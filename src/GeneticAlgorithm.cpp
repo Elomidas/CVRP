@@ -97,8 +97,8 @@ void GeneticAlgorithm::checkFitness() {
 
 /**
  * Display a vector
- * @param vector
- * @return
+ * @param vector Vector to display
+ * @return String representing the vector
  */
 std::string displayVector(const std::vector<unsigned int> &vector) {
     std::string res;
@@ -108,6 +108,9 @@ std::string displayVector(const std::vector<unsigned int> &vector) {
     return res.substr(1);
 }
 
+/**
+ * Describe current algorithm status
+ */
 void GeneticAlgorithm::getStatus() const {
     std::clog << "Step : " << m_step << std::endl
               << "Current min : " << m_min << std::endl
@@ -115,6 +118,9 @@ void GeneticAlgorithm::getStatus() const {
               << "Global min : " << m_bestCost << std::endl << " > " << displayVector(m_best) << std::endl;
 }
 
+/**
+ * Select parents for reproduce population
+ */
 void GeneticAlgorithm::selectParents() {
     std::vector<std::vector<unsigned int>> parents(m_population);
     m_population.clear();
@@ -137,7 +143,9 @@ void GeneticAlgorithm::selectParents() {
     } while(m_population.size() < m_populationSize);
 }
 
-
+/**
+ * Create new population with selected parents
+ */
 void GeneticAlgorithm::reproduction() {
     assert(m_parents.size() == 2);
     double rand(std::rand() / (double)RAND_MAX);
@@ -154,6 +162,9 @@ void GeneticAlgorithm::reproduction() {
     }
 }
 
+/**
+ * Recombination of edges (type of reproduction)
+ */
 void GeneticAlgorithm::edgeRecombination() {
     assert(m_population.size() < m_populationSize);
 
@@ -187,6 +198,11 @@ void GeneticAlgorithm::edgeRecombination() {
     }
 }
 
+/**
+ * Get Node's neighbors list for each Node
+ * @param member Member of the population to analyze
+ * @return Adjacency matrix of this member
+ */
 std::vector<std::vector<unsigned int>> GeneticAlgorithm::getAdjacencyMatrix(const std::vector<unsigned int> &member) const {
     std::vector<std::vector<unsigned int>> matrix(member.size());
     for(unsigned int i(0); i < member.size(); i++) {
@@ -208,6 +224,12 @@ std::vector<std::vector<unsigned int>> GeneticAlgorithm::getAdjacencyMatrix(cons
     return matrix;
 }
 
+/**
+ * Check if a vector contains a value
+ * @param vector Vector to check
+ * @param value  Value tu search
+ * @return true if vector contains value, false else
+ */
 bool contains(const std::vector<unsigned int> &vector, const unsigned int value) {
     for(unsigned int i : vector) {
         if(i == value) {
@@ -217,6 +239,10 @@ bool contains(const std::vector<unsigned int> &vector, const unsigned int value)
     return false;
 }
 
+/**
+ * Get adjacency matrix for the selected parents
+ * @return Adjacency Matrix
+ */
 std::vector<std::vector<unsigned int>> GeneticAlgorithm::getAdjacencyMatrix() const {
     std::vector<std::vector<unsigned int>>
             matrix1(getAdjacencyMatrix(m_parents[0])),
@@ -236,12 +262,22 @@ std::vector<std::vector<unsigned int>> GeneticAlgorithm::getAdjacencyMatrix() co
     return matrix;
 }
 
+/**
+ * Remove a Node from an adjacency matrix
+ * @param matrix Adjacency matrix
+ * @param node   Node to delete
+ */
 void GeneticAlgorithm::removeNodeFromAdjacencyMatrix(std::vector<std::vector<unsigned int>> &matrix, const unsigned int node) {
     for (auto &m : matrix) {
         removeNodeFromVector(m, node);
     }
 }
 
+/**
+ * Remove a Node from a vector
+ * @param vector Vector
+ * @param node   Node to delete
+ */
 void GeneticAlgorithm::removeNodeFromVector(std::vector<unsigned int> &vector, const unsigned int node) {
     for(unsigned int i(0); i < vector.size(); i++) {
         if(vector[i] == node) {
@@ -251,9 +287,13 @@ void GeneticAlgorithm::removeNodeFromVector(std::vector<unsigned int> &vector, c
     }
 }
 
+/**
+ * Swap two Nodes (reproduction method)
+ * @param member Parent to alterate
+ */
 void GeneticAlgorithm::swapNodes(const std::vector<unsigned int> member) {
     std::vector<unsigned int> child(member);
-    double proba(1 / (double)member.size());
+    double proba(1 / (2.0 * member.size()));
     for(unsigned int i(0); i < member.size(); i++) {
         if(proba > (rand() / (double)RAND_MAX)) {
             unsigned int target;
@@ -268,6 +308,9 @@ void GeneticAlgorithm::swapNodes(const std::vector<unsigned int> member) {
     addMember(child);
 }
 
+/**
+ * Launch algorithm
+ */
 void GeneticAlgorithm::launchAlgo() {
     m_step = 0;
     double display(m_display);
@@ -281,6 +324,11 @@ void GeneticAlgorithm::launchAlgo() {
     }
 }
 
+/**
+ * Check if a member is valid
+ * @param vector member to check
+ * @return true if member is valid, false else
+ */
 bool GeneticAlgorithm::isValid(const std::vector<unsigned int> &vector) const {
     std::vector<bool> check(vector.size(), true);
     for(const unsigned int &i : vector) {
@@ -293,6 +341,9 @@ bool GeneticAlgorithm::isValid(const std::vector<unsigned int> &vector) const {
     return true;
 }
 
+/**
+ * Load best solution in the graph
+ */
 void GeneticAlgorithm::getMini() {
     m_graph.loadGenetic(m_best);
 }
