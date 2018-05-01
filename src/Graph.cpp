@@ -47,7 +47,6 @@ Graph::Graph(std::vector<Node> nodes) :
 Graph::Graph(const Graph &g) :
         m_nodeNb(g.m_nodeNb), m_qTotal(g.m_qTotal), m_distances(g.m_distances),
         m_truckNbMin(g.m_truckNbMin), m_truckNb(g.m_truckNb), m_nodes(), m_trucks() {
-    //std::clog << std::endl << "Copy graph" << std::endl;
     //Nodes copy
     for(unsigned int i(0); i < m_nodeNb; i++) {
         m_nodes.emplace_back(g.m_nodes[i]);
@@ -56,7 +55,6 @@ Graph::Graph(const Graph &g) :
     for(unsigned int i(0); i < m_truckNb; i++) {
         m_trucks.emplace_back(Truck(g.m_trucks[i], m_nodes));
     }
-    //std::clog << "Graph copied" << std::endl;
 }
 
 /**
@@ -95,7 +93,6 @@ bool Graph::isSolution() const {
     //Check that all trucks are correct
     for(Truck t : m_trucks) {
         if(!t.isValid()) {
-            std::clog << "Truck " << t.getIndex() << " isn't valid." << std::endl;
             return false;
         }
     }
@@ -536,6 +533,7 @@ unsigned int Graph::atoi(const std::string &number) {
     }
     return static_cast<unsigned int>(val);
 }
+
 
 std::vector<unsigned int> Graph::getGenetic() const {
     std::vector<unsigned int> res;
