@@ -5,18 +5,23 @@
 #include <iostream>
 #include <cfloat>
 #include "../include/TabouAlgorithm.h"
+#include "../include/Graphviz.h"
 
 /**
  * Default constructor
  */
-TabouAlgorithm::TabouAlgorithm() : m_xmin(), m_T(), m_fmin(0) {
+TabouAlgorithm::TabouAlgorithm() : Algorithm("../data/data01.txt") {
+    //Nothing
+}
+
+TabouAlgorithm::TabouAlgorithm(const std::string &path) : Algorithm(path) {
     //Nothing
 }
 
 /**
  * launching Tabou algorithm
  */
-void TabouAlgorithm::lancerAlgo() {
+void TabouAlgorithm::launchAlgo() {
     m_graph.buildRandomSolution();
     m_xmin = m_graph.getSolution();
     m_fmin = m_xmin.getCost();
@@ -30,7 +35,7 @@ void TabouAlgorithm::lancerAlgo() {
     do{
         V = m_graph.getVoisinage(m_T, transfos);
         if(!V.empty()){
-            double y_fmin(DBL_MAX); // valeur de y
+            auto y_fmin(DBL_MAX); // valeur de y
             unsigned int y_jmin(0); // indice où se trouve y dans la liste C
 
             for(unsigned int j(0); j < V.size(); j++) {
@@ -50,7 +55,10 @@ void TabouAlgorithm::lancerAlgo() {
             }
 
             m_graph.loadSolution(V[y_jmin].getSolution());
-            std::cout << "passage : " << i <<std::endl << m_graph.getSolution().toString() << std::endl <<std::endl;
+            if(i % 20 == 0) {
+                std::cout << "passage : " << i << std::endl << m_graph.getSolution().toString() << std::endl
+                          << std::endl;
+            }
         }
         i++;
         if(V.empty()) {
@@ -81,5 +89,12 @@ TabouAlgorithm::~TabouAlgorithm() {
     if(!m_T.empty()) {
         m_T.clear();
     }
+}
+
+/**
+ * Load best solution in graph
+ */
+void TabouAlgorithm::getMini() {
+    m_graph.loadSolution(m_xmin);
 }
 

@@ -1,10 +1,10 @@
 #include <iostream>
 #include <cassert>
-#include <unistd.h>
 #include "../include/DistancesMatrix.h"
 #include "../include/GraphFactory.h"
 #include "../include/TabouAlgorithm.h"
 #include "../include/GeneticAlgorithm.h"
+#include "../include/Graphviz.h"
 
 /**
  * function used
@@ -83,9 +83,11 @@ bool testRandomSolution() {
  * test tabou algorithm
  * @return
  */
-bool testAlgoTabou(){
-    TabouAlgorithm tabou = TabouAlgorithm();
-    tabou.lancerAlgo();
+bool testAlgoTabou() {
+    std::string jeu("03");
+    TabouAlgorithm tabou("../data/data"+jeu+".txt");
+    tabou.launchAlgo();
+    tabou.display("data"+jeu+"-tabou");
     return true;
 }
 
@@ -178,9 +180,19 @@ void testGeneticLoad() {
  * test genetic algorithm
  */
 void testGenetic() {
-    GeneticAlgorithm gen(50, "../data/data01.txt", 10000, 1000);
+    std::string jeu("03");
+    GeneticAlgorithm gen(50, "../data/data"+jeu+".txt", 1000, 100);
     gen.getStatus();
-    gen.launch();
+    gen.launchAlgo();
+    gen.display("data"+jeu+"_gen");
+}
+
+bool testGraphviz() {
+    Graph graph(GraphFactory::readFile("../data/data01.txt"));
+    graph.buildRandomSolution();
+    //std::clog << Graphviz::fromGraph(graph.getSolution()) << std::endl;
+    Graphviz::getImg(graph, "test");
+    return true;
 }
 
 /**
@@ -195,4 +207,5 @@ void testProject() {
     //testGenetic();
     //assert(testOperationsEl());
     //assert(testVoisinage());
+    //assert(testGraphviz());
 }

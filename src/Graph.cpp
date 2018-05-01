@@ -7,11 +7,9 @@
 #include <utility>
 #include <cassert>
 #include <random>
-#include <cstdlib>
 #include <climits>
 
 #include "../include/Graph.h"
-#include "../include/ElementaryTransformation.h"
 
 using namespace graph;
 
@@ -70,9 +68,9 @@ Graph::~Graph() {
 }
 
 /**
- *
- * @param start
- * @param end
+ * Get distance between two Nodes
+ * @param start First Node
+ * @param end   Second Node
  * @return distance between two nodes
  */
 const double Graph::getDistance(const unsigned int start, const unsigned int end) const {
@@ -143,7 +141,7 @@ Solution Graph::getSolution() const {
 
 /**
  * Set the number of Trucks we're going to use
- * @param number
+ * @param number Number of Trucks wanted
  */
 void Graph::setTrucksNumber(unsigned int number) {
     assert(number >= m_truckNbMin);
@@ -227,7 +225,7 @@ void Graph::buildRandomSolution() {
 void Graph::addNodeToTruck(unsigned int node, unsigned int truck) {
     assert(node < m_nodeNb);
     assert(truck > 0);
-    assert(truck <= m_truckNb);
+    assert(truck <= m_trucks.size());
     m_trucks[truck-1].addState(m_nodes[node]);
 }
 
@@ -340,6 +338,10 @@ void Graph::loadSolution(const Solution &solution) {
     }
 }
 
+/**
+ * Load the genetic representation of a graph
+ * @param vector Genetic representation
+ */
 void Graph::loadGenetic(const std::vector<unsigned int> &vector) {
     if(!m_trucks.empty()) {
         m_trucks.clear();
@@ -362,7 +364,7 @@ void Graph::loadGenetic(const std::vector<unsigned int> &vector) {
 double Graph::getCost() const {
     assert(isSolution());
     double cost(0);
-    for(Truck t : m_trucks) {
+    for(const Truck &t : m_trucks) {
         cost += t.getDistance(m_distances);
     }
     return cost;
@@ -375,7 +377,7 @@ double Graph::getCost() const {
  * @return boolean used to check if a ElementaryTransformation is in tabou list or not
  */
 const bool Graph::isInTabou(const std::list< ElementaryTransformation > listeTabou, ElementaryTransformation pair_tabou) const{
-    for(ElementaryTransformation transformation : listeTabou){
+    for(const ElementaryTransformation &transformation : listeTabou){
         // If mooved
         if(transformation.getType() == 2){
             if(transformation.getFirstNode() == pair_tabou.getFirstNode() && transformation.getOldTruck() == pair_tabou.getOldTruck() && transformation.getOldIndex() == pair_tabou.getOldIndex() ||
@@ -502,10 +504,10 @@ std::vector<unsigned int> Graph::splitLine(std::string &line) {
     unsigned int i;
     size_t pos = 0;
     for(i = 0; ((pos = line.find(delimiter)) != std::string::npos); i++) {
-        res.emplace_back(atoi(line.substr(0, pos).c_str()));
+        res.emplace_back(atoi(line.substr(0, pos)));
         line.erase(0, pos + delimiter.length());
     }
-    res.emplace_back(atoi(line.c_str()));
+    res.emplace_back(atoi(line));
     return res;
 }
 
@@ -534,7 +536,10 @@ unsigned int Graph::atoi(const std::string &number) {
     return static_cast<unsigned int>(val);
 }
 
-
+/**
+ * Get the genetic representation of the graph
+ * @return Genetic representation of the graph
+ */
 std::vector<unsigned int> Graph::getGenetic() const {
     std::vector<unsigned int> res;
     for (const auto &m_truck : m_trucks) {
@@ -544,4 +549,14 @@ std::vector<unsigned int> Graph::getGenetic() const {
         }
     }
     return res;
+}
+
+/**
+ * Get a Node
+ * @param index Node's index
+ * @return Node at the given index
+ */
+const Node &Graph::getNode(const unsigned int index) const {
+    assert(index < m_nodeNb);
+    return m_nodes[index];
 }

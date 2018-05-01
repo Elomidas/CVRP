@@ -19,8 +19,7 @@ public:
     ~GeneticAlgorithm();
 
     void getStatus() const;
-    void launch();
-    void launch(unsigned int);
+    void launchAlgo();
 
 private:
     unsigned int m_populationSize;
@@ -35,6 +34,7 @@ private:
     void checkFitness();
     void addMember(const std::vector<unsigned int> &);
     bool isValid(const std::vector<unsigned int> &) const;
+    void getMini() override;
 
     //Legacy
     void selectParents();
@@ -47,8 +47,6 @@ private:
     std::vector<std::vector<unsigned int>> getAdjacencyMatrix() const;
     static void removeNodeFromAdjacencyMatrix(std::vector<std::vector<unsigned int>> &, unsigned int);
     static void removeNodeFromVector(std::vector<unsigned int> &, unsigned int);
-
-    //Crossover
 
 };
 
