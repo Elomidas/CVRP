@@ -43,11 +43,8 @@ Truck::Truck(const Truck &old) :
 Truck::~Truck() {
     //Make sure that origin is always marked as used
     if(m_origin != nullptr) {
-        graph::Node origin = m_origin->getNode();
-        unsigned int user = origin.getUser();
         delete m_origin;
         m_origin = nullptr;
-        origin.setUsed(user);
     }
 }
 
@@ -197,6 +194,10 @@ std::vector<unsigned int> Truck::toVector() const {
     return result;
 }
 
+/**
+ *
+ * @return capacity available for this truck
+ */
 unsigned int Truck::getAvailableCapacity() const {
     return m_capacity - m_currentLoad;
 }
