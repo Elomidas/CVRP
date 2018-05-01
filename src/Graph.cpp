@@ -441,3 +441,8 @@ std::vector<unsigned int> Graph::getGenetic() const {
     }
     return res;
 }
+
+const Node &Graph::getNode(const unsigned int index) const {
+    assert(index < m_nodeNb);
+    return m_nodes[index];
+}

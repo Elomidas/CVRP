@@ -41,6 +41,7 @@ namespace graph {
         const Truck getTruck(unsigned int i) const { return m_trucks[i]; };
         void setNode(unsigned int i, Node node) { m_nodes[i] = node; }
         const unsigned int getNodeNb() const;
+        const Node& getNode(unsigned int) const;
         const double getDistance(unsigned int, unsigned int) const;
         void setTrucksNumber(unsigned int);
         bool isSolution() const;

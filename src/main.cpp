@@ -5,6 +5,7 @@
 #include "../include/GraphFactory.h"
 #include "../include/TabouAlgorithm.h"
 #include "../include/GeneticAlgorithm.h"
+#include "../include/Graphviz.h"
 
 unsigned long computeDistance(unsigned int i, unsigned int j);
 
@@ -144,6 +145,14 @@ void testGenetic() {
     gen.launch();
 }
 
+bool testGraphviz() {
+    Graph graph(GraphFactory::readFile("../data/data01.txt"));
+    graph.buildRandomSolution();
+    //std::clog << Graphviz::fromGraph(graph.getSolution()) << std::endl;
+    Graphviz::getImg(graph);
+    return true;
+}
+
 void testProject() {
     //assert(testDistancesMatrix());
     //assert(testGraph());
@@ -152,5 +161,6 @@ void testProject() {
     //testGeneticLoad();
     //testGenetic();
     //assert(testOperationsEl());
-    assert(testVoisinage());
+    //assert(testVoisinage());
+    //assert(testGraphviz());
 }
