@@ -56,6 +56,8 @@ void GeneticAlgorithm::checkFitness() {
     if(!m_costs.empty()) {
         m_costs.clear();
     }
+    m_min = DBL_MAX;
+    m_max = 0;
     for(std::vector<unsigned int> &vector : m_population) {
         m_graph.loadGenetic(vector);
         double cost(m_graph.getCost());
@@ -82,7 +84,8 @@ std::string displayVector(const std::vector<unsigned int> &vector) {
 }
 
 void GeneticAlgorithm::getStatus() const {
-    std::clog << "Step : " << m_step << std::endl
+    std::clog << std::endl
+              << "Step : " << m_step << std::endl
               << "Current min : " << m_min << std::endl
               << "Current max : " << m_max << std::endl
               << "Global min : " << m_bestCost << std::endl << " > " << displayVector(m_best) << std::endl;
@@ -249,9 +252,8 @@ void GeneticAlgorithm::launch() {
         if((display <= 0) || (m_step == m_iterations)) {
             getStatus();
             display = m_display;
-        } else {
-            display--;
         }
+        display--;
     }
 }
 
