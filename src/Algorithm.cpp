@@ -15,6 +15,14 @@ Algorithm::Algorithm() : m_graph(GraphFactory::readFile("../data/data01.txt")) {
 }
 
 /**
+ * Other constructor
+ * @param str
+ */
+Algorithm::Algorithm(const std::string &str) : m_graph(GraphFactory::readFile(str)) {
+    //Nothing
+}
+
+/**
  * Destructor
  */
 Algorithm::~Algorithm() = default;

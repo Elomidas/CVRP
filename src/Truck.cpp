@@ -3,6 +3,7 @@
 //
 
 #include <cassert>
+#include <iostream>
 #include "../include/Truck.h"
 
 /**
@@ -70,8 +71,13 @@ unsigned int Truck::getTruckLoad() const {
  * @return Load needed to deliver all clients on truck's path
  */
 unsigned int Truck::getComputedLoad() {
-    m_currentLoad = m_origin->getLoad();
+    computeLoad();
     return getTruckLoad();
+}
+
+
+void Truck::computeLoad() {
+    m_currentLoad = m_origin->getLoad();
 }
 
 /**

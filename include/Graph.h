@@ -43,6 +43,7 @@ namespace graph {
         ~Graph();
 
         void loadSolution(const Solution &);
+        void loadGenetic(const std::vector<unsigned int> &);
         const unsigned int getTrucksNb() const { return m_truckNb; };
         const std::vector<Node> getNodes() const { return m_nodes; };
         const std::vector<Truck> getTrucks() const { return m_trucks; };
@@ -53,10 +54,13 @@ namespace graph {
         void setTrucksNumber(unsigned int);
         bool isSolution() const;
         Solution getSolution() const;
-        void buildRandomSolution();
+        std::vector<unsigned int> getGenetic() const;
         double getCost() const;
+        void buildRandomSolution();
         const std::vector<Graph> getVoisinage(std::list< ElementaryTransformation >, std::vector<ElementaryTransformation>&);
         const void testElementaryOp();
+        static std::vector<unsigned int> splitLine(std::string &line);
+        static unsigned int atoi(const std::string &number);
     };
 }
 

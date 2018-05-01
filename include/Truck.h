@@ -18,8 +18,10 @@ public:
     ~Truck();
 
     double getDistance(const graph::DistancesMatrix &) const;
+    unsigned int getIndex() const {return m_index;};
     unsigned int getTruckLoad() const;
     unsigned int getComputedLoad();
+    void computeLoad();
     unsigned int getAvailableCapacity() const;
     void addState(graph::Node &);
     void addStateByIndex(unsigned int, graph::Node &);

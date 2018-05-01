@@ -4,6 +4,7 @@
 #include "../include/DistancesMatrix.h"
 #include "../include/GraphFactory.h"
 #include "../include/TabouAlgorithm.h"
+#include "../include/GeneticAlgorithm.h"
 
 /**
  * function used
@@ -20,8 +21,22 @@ void testProject();
  */
 int main() {
     std::cout << "Main CVRP" << std::endl;
+    std::srand(static_cast<unsigned int>(time(nullptr)));
     testProject();
     return 0;
+}
+
+/**
+ *
+ * @param vector
+ * @return string which represents the vector
+ */
+std::string vectToStr(const std::vector<unsigned int> &vector) {
+    std::string res(std::to_string(vector[0]));
+    for (unsigned int i : vector) {
+        res += "-" + std::to_string(i);
+    }
+    return res;
 }
 
 /**
@@ -46,7 +61,7 @@ bool testDistancesMatrix() {
  * @return
  */
 bool testRandomSolution() {
-    std::vector<graph::Node> vector = GraphFactory::readFile("../data/data01.txt");
+    std::vector<graph::Node> vector = GraphFactory::readFile("../data/data02.txt");
     Graph graph(vector);
     graph.buildRandomSolution();
     Solution solution = graph.getSolution();
@@ -54,6 +69,13 @@ bool testRandomSolution() {
     Graph second(vector);
     second.loadSolution(solution);
     std::clog << "Solution 2 :" << std::endl << second.getSolution().toString() << std::endl;
+    second.buildRandomSolution();
+    std::clog << "Solution 3 :" << std::endl << second.getSolution().toString() << std::endl;
+    std::vector<unsigned int> genetic(graph.getGenetic());
+    std::clog << "Gen1 : " << vectToStr(genetic) << std::endl;
+    second.loadGenetic(genetic);
+    std::clog << "Gen2 : " << vectToStr(second.getGenetic()) << std::endl;
+    std::clog << "Solution 3 :" << std::endl << second.getSolution().toString() << std::endl;
     return true;
 }
 
@@ -133,6 +155,35 @@ unsigned long computeDistance(unsigned int i, unsigned int j) {
 }
 
 /**
+ * test generic algorithm load
+ */
+void testGeneticLoad() {
+    Graph graph(GraphFactory::readFile("../data/data02.txt"));
+    double total(0);
+    double iterations(1000);
+
+    for(unsigned int i(0); i < iterations; i++) {
+        graph.buildRandomSolution();
+        std::vector<unsigned int> genetic(graph.getGenetic());
+        double res(graph.getCost());
+        graph.loadGenetic(genetic);
+        res -= graph.getCost();
+        total += res;
+    }
+    total /= iterations;
+    std::clog << "Margin : " << total;
+}
+
+/**
+ * test genetic algorithm
+ */
+void testGenetic() {
+    GeneticAlgorithm gen(50, "../data/data01.txt", 10000, 1000);
+    gen.getStatus();
+    gen.launch();
+}
+
+/**
  * Main function of project
  */
 void testProject() {
@@ -140,6 +191,8 @@ void testProject() {
     //assert(testGraph());
     assert(testAlgoTabou());
     //assert(testRandomSolution());
+    //testGeneticLoad();
+    //testGenetic();
     //assert(testOperationsEl());
     //assert(testVoisinage());
 }

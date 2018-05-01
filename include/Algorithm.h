@@ -17,12 +17,11 @@ class Algorithm {
 
 protected:
     graph::Graph m_graph;
-    std::string m_inputFile;
     AlgorithmSettings m_settings;
 
 public:
     Algorithm();
-    //Algorithm(const std::string&, const std::string&);
+    explicit Algorithm(const std::string &);
     ~Algorithm();
 
     void setInputFile(const std::string&);

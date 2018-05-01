@@ -7,6 +7,8 @@
 #include <utility>
 #include <cassert>
 #include <random>
+#include <cstdlib>
+#include <climits>
 
 #include "../include/Graph.h"
 #include "../include/ElementaryTransformation.h"
@@ -91,8 +93,9 @@ bool Graph::isSolution() const {
         }
     }
     //Check that all trucks are correct
-    for(unsigned int i(0); i < m_truckNb; i++) {
-        if(!m_trucks[i].isValid()) {
+    for(Truck t : m_trucks) {
+        if(!t.isValid()) {
+            std::clog << "Truck " << t.getIndex() << " isn't valid." << std::endl;
             return false;
         }
     }
@@ -167,35 +170,53 @@ void Graph::buildRandomSolution() {
     std::vector<unsigned int> truckIDs;
     std::vector< std::uniform_int_distribution<int> > ranges;
     unsigned int currentRangeIndex;
+    bool fail(false);
 
-    std::srand(static_cast<unsigned int>(time(0)));
+    do {
+        fail = false;
+        if (!m_trucks.empty()) {
+            m_trucks.clear();
+        }
 
-    for(unsigned int i(0); i < m_truckNb; i++) {
-        truckIDs.emplace_back(i);
-        ranges.emplace_back(std::uniform_int_distribution<int>(0, m_truckNb-i));
-    }
+        for (unsigned int i(0); i < m_truckNb; i++) {
+            truckIDs.emplace_back(i);
+            ranges.emplace_back(std::uniform_int_distribution<int>(0, m_truckNb - i));
+            m_trucks.emplace_back(Truck(m_nodes[0], (i + 1)));
+        }
 
-    for(unsigned int i(1); i < m_nodeNb; i++) {
-        unsigned int rand;
-        bool stop(false);
-        std::vector<unsigned int> ids(truckIDs);
-        currentRangeIndex = 0;
-        do {
-            rand = static_cast<unsigned int>(std::rand() % ids.size());
-            rand = ids[rand];
-            if(m_trucks[rand].getAvailableCapacity() > m_nodes[i].getQuantity()) {
-                stop = true;
-            } else {
-                unsigned int j(0);
-                for(j = 0; (j < ids.size()) && (ids[j] != rand); j++);
-                if(j < ids.size()) {
-                    ids.erase(ids.begin() + j);
-                    currentRangeIndex++;
+
+        for (unsigned int i(1); (i < m_nodeNb) && !fail; i++) {
+            unsigned int rand;
+            bool stop(false);
+            std::vector<unsigned int> ids(truckIDs);
+            currentRangeIndex = 0;
+            do {
+                int irand(std::rand());
+                rand = static_cast<unsigned int>(irand % ids.size());
+                rand = ids[rand];
+                m_trucks[rand].computeLoad();
+                if (m_trucks[rand].getAvailableCapacity() > m_nodes[i].getQuantity()) {
+                    stop = true;
+                    fail = false;
+                } else {
+                    unsigned int j(0);
+                    for (j = 0; (j < ids.size()) && (ids[j] != rand); j++);
+                    if (j < ids.size()) {
+                        if (ids.size() > 1) {
+                            ids.erase(ids.begin() + j);
+                            currentRangeIndex++;
+                        } else {
+                            stop = true;
+                            fail = true;
+                        }
+                    }
                 }
+            } while (!stop);
+            if(!fail) {
+                m_trucks[rand].addState(m_nodes[i]);
             }
-        } while(!stop);
-        m_trucks[rand].addState(m_nodes[i]);
-    }
+        }
+    } while(fail);
 
     assert(isSolution());
 
@@ -322,15 +343,30 @@ void Graph::loadSolution(const Solution &solution) {
     }
 }
 
+void Graph::loadGenetic(const std::vector<unsigned int> &vector) {
+    if(!m_trucks.empty()) {
+        m_trucks.clear();
+    }
+    m_trucks.emplace_back(Truck(m_nodes[0], 1));
+    unsigned int currentTruck(0);
+    for (unsigned int step : vector) {
+        if(m_trucks[currentTruck].getAvailableCapacity() < m_nodes[step].getQuantity()) {
+            m_trucks.emplace_back(Truck(m_nodes[0], currentTruck + 2));
+            currentTruck++;
+        }
+        addNodeToTruck(step, currentTruck+1);
+    }
+}
+
 /**
  * Compute and return the cost of the graph
  * @return cost of Trucks path
  */
 double Graph::getCost() const {
     assert(isSolution());
-    double cost = 0;
-    for(unsigned int i(0); i < m_trucks.size(); i++) {
-        cost += m_trucks[i].getDistance(m_distances);
+    double cost(0);
+    for(Truck t : m_trucks) {
+        cost += t.getDistance(m_distances);
     }
     return cost;
 }
@@ -458,4 +494,56 @@ const void Graph::testElementaryOp() {
 
 }
 
+/**
+ * Retrieve informations from a file's line
+ * @param line  Line from the file.
+ * @param res   List of the intels retrieved.
+ */
+std::vector<unsigned int> Graph::splitLine(std::string &line) {
+    std::vector<unsigned int> res;
+    std::string delimiter = ";";
+    unsigned int i;
+    size_t pos = 0;
+    for(i = 0; ((pos = line.find(delimiter)) != std::string::npos); i++) {
+        res.emplace_back(atoi(line.substr(0, pos).c_str()));
+        line.erase(0, pos + delimiter.length());
+    }
+    res.emplace_back(atoi(line.c_str()));
+    return res;
+}
 
+/**
+ * Convert a string into an unsigned int.
+ * @param number String to convert.
+ * @return Unsigned int obtained.
+ */
+unsigned int Graph::atoi(const std::string &number) {
+    char *endptr;
+    long val;
+
+    errno = 0;
+    val = strtol(number.c_str(), &endptr, 10);
+
+    if ((errno == ERANGE && (val == LONG_MAX || val == LONG_MIN))
+        || (errno != 0 && val == 0)) {
+        perror("strtol");
+        exit(EXIT_FAILURE);
+    }
+
+    if (endptr == number) {
+        std::cerr << "No digits were found in '" << number << "'." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    return static_cast<unsigned int>(val);
+}
+
+std::vector<unsigned int> Graph::getGenetic() const {
+    std::vector<unsigned int> res;
+    for (const auto &m_truck : m_trucks) {
+        std::vector<unsigned int> vect = m_truck.toVector();
+        for(unsigned int j(1); j < vect.size() - 1; j++) {
+            res.emplace_back(vect[j]);
+        }
+    }
+    return res;
+}
