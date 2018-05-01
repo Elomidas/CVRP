@@ -48,5 +48,5 @@ void Algorithm::display() {
  */
 void Algorithm::display(const std::string &out) {
     getMini();
-    Graphviz::getImg(m_graph, (out.empty() ? "noName" : out));
+    Graphviz::getImg(m_graph, (out.empty() ? std::string("noName") : out));
 }
