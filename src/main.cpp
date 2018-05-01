@@ -84,7 +84,7 @@ bool testRandomSolution() {
  * @return
  */
 bool testAlgoTabou() {
-    std::string jeu("03");
+    std::string jeu("01");
     TabouAlgorithm tabou("../data/data"+jeu+".txt");
     tabou.launchAlgo();
     tabou.display("data"+jeu+"-tabou");
