@@ -129,7 +129,7 @@ Solution Graph::getSolution() const {
     assert(isSolution());
     Solution s;
     unsigned long cost(0);
-    for(unsigned int i(0); i < m_truckNb; i++) {
+    for(unsigned int i(0); i < m_trucks.size(); i++) {
         s.addPath(m_trucks[i].toVector());
         cost += m_trucks[i].getDistance(m_distances);
     }
@@ -235,11 +235,50 @@ void Graph::addNodeToTruck(unsigned int node, unsigned int truck) {
  */
 void Graph::addNodeToTruck(unsigned int node, unsigned int truck, unsigned int index) {
     assert(node < m_nodeNb);
+    assert(index < m_nodes.size());
     assert(truck > 0);
     assert(truck <= m_truckNb);
     m_trucks[truck-1].addState(m_nodes[node]);
     m_trucks[truck-1].addStateByIndex(index,m_nodes[node]);
 }
+
+void Graph::deleteNodeToTruck(unsigned int node, unsigned int truck){
+    assert(node < m_nodeNb);
+    assert(truck > 0);
+    assert(truck <= m_truckNb);
+    m_trucks[truck-1].removeStateById(node);
+}
+
+void Graph::deleteNodeToTruckByIndex(unsigned int index, unsigned int truck){
+    assert(index < m_nodes.size());
+    assert(truck > 0);
+    assert(truck <= m_truckNb);
+    m_trucks[truck-1].removeStateByIndex(index);
+}
+
+void Graph::invertNodes(unsigned int node1, unsigned int node2) {
+    assert(node1 < m_nodeNb);
+    assert(node2 < m_nodeNb);
+    if(m_nodes[node1].getUser() == m_nodes[node2].getUser()){
+        assert(m_trucks[m_nodes[node1].getUser()-1].hasNode(node1) >= 0);
+        assert(m_trucks[m_nodes[node2].getUser()-1].hasNode(node2) >= 0);
+        invertNodesByIndex(node1, node2, (unsigned int)m_trucks[m_nodes[node1].getUser()-1].hasNode(node1), (unsigned int)m_trucks[m_nodes[node1].getUser()-1].hasNode(node2));
+    }
+    else{
+        unsigned int tmp = m_nodes[node2].getUser();
+        m_trucks[m_nodes[node1].getUser()-1].replaceStateById(node1, m_nodes[node2]);
+        m_trucks[tmp-1].replaceStateById(node2, m_nodes[node1]);
+    }
+}
+
+void Graph::invertNodesByIndex(unsigned int node1, unsigned int node2, unsigned int index1, unsigned int index2) {
+    assert(node1 < m_nodes.size());
+    assert(node2 < m_nodes.size());
+    unsigned int truck2(m_nodes[node2].getUser());
+    m_trucks[m_nodes[node1].getUser()-1].replaceStateByIndex(index1, m_nodes[node2]);
+    m_trucks[truck2-1].replaceStateByIndex(index2, m_nodes[node1]);
+}
+
 
 void Graph::loadSolution(const Solution &solution) {
     if(!m_trucks.empty()) {
@@ -268,6 +307,85 @@ void Graph::loadGenetic(const std::vector<unsigned int> &vector) {
         }
         addNodeToTruck(step, currentTruck+1);
     }
+}
+
+/**
+ * Compute and return the cost of the graph
+ * @return cost of Trucks path
+ */
+double Graph::getCost() const {
+    assert(isSolution());
+    double cost(0);
+    for(Truck t : m_trucks) {
+        cost += t.getDistance(m_distances);
+    }
+    return cost;
+}
+
+const bool Graph::isInTabou(const std::vector< std::pair<unsigned int, unsigned int> > listeTabou, const std::pair<unsigned int,unsigned int> pair_tabou) const{
+    for(std::pair<unsigned int, unsigned int> pair : listeTabou){
+        if( ( pair.first == pair_tabou.first && pair.second==pair_tabou.second ) || ( pair.first==pair_tabou.second && pair.second==pair_tabou.first ) )
+            return true;
+    }
+    return false;
+}
+
+const std::vector<Graph> Graph::getVoisinage(std::vector< std::pair<unsigned int, unsigned int> > listeTabou) {
+    //TODO vérifier liste tabou
+    std::vector<Graph> voisinage = std::vector<Graph>();
+    unsigned int node_nb, truck_nb;
+
+    for(unsigned int i(0); i<m_truckNb;i++){
+        for(unsigned int j(1); j<getTruck(i).getSize();j++){
+            std::vector<unsigned int> path1 = getTruck(i).toVector();
+            unsigned int node1 = path1.at(j);
+            if(j == getTruck(i).getSize()){
+                node_nb = 1;
+                truck_nb = i+1;
+            }
+            else{
+                node_nb = j+1;
+                truck_nb = i;
+            }
+            while(truck_nb<m_truckNb){
+                while(node_nb<getTruck(truck_nb).getSize()){
+                    std::vector<unsigned int> path2 = getTruck(truck_nb).toVector();
+                    unsigned int node2 = path2.at(node_nb);
+
+                    std::pair<unsigned int,unsigned int> pair_tabou = std::make_pair(node1 ,node2);
+                    if(!isInTabou(listeTabou, pair_tabou)){
+                        Graph new_graph(*this);
+                        new_graph.invertNodes(node1, node2);
+                        if(new_graph.isSolution())
+                            voisinage.push_back(new_graph);
+                    }
+                    node_nb++;
+                }
+                node_nb=1;
+                truck_nb++;
+            }
+        }
+    }
+    return voisinage;
+}
+
+/**
+ * Récupère la différences dans les parcours de camion de deux graphes
+ * @param graph
+ * @return
+ */
+const std::pair<unsigned int, unsigned int> Graph::getDifference(const Graph graph) {
+    //TODO à tester
+    for(unsigned int i(0);i<m_truckNb;i++){
+        std::vector<unsigned int> path1 = getTruck(i).toVector();
+        std::vector<unsigned int> path2 = graph.getTruck(i).toVector();
+        for(unsigned int j(1);j<m_trucks[i].getSize();j++){
+            if(path1.at(j) != path2.at(j)){
+                return std::make_pair(path1.at(j), path2.at(j));
+            }
+        }
+    }
+    return std::pair<unsigned int, unsigned int>();
 }
 
 /**
@@ -322,12 +440,4 @@ std::vector<unsigned int> Graph::getGenetic() const {
         }
     }
     return res;
-}
-
-double Graph::getCost() const {
-    double cost(0);
-    for(Truck t : m_trucks) {
-        cost += t.getDistance(m_distances);
-    }
-    return cost;
 }

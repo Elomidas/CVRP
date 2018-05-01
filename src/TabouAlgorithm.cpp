@@ -10,22 +10,27 @@ TabouAlgorithm::TabouAlgorithm() : m_xmin(), m_nmax(10), m_T(), m_fmin(0) {
     //Nothing
 }
 
+
 void TabouAlgorithm::lancerAlgo() {
     m_graph.buildRandomSolution();
-    Solution x = m_graph.getSolution();
-    x.toString();
-    m_xmin = Solution(x);
+    Graph x(m_graph);
+    m_xmin = x.getSolution();
     m_fmin = m_xmin.getCost();
-    int i=0;
-    std::vector<Solution> C;
+    std::cout << m_xmin.toString() << std::endl << std::endl;
+    std::cout << m_fmin << std::endl;
+
+    unsigned int i(0);
+    std::vector<Graph> C;
+    //C = x.getVoisinage();
+    /*
     do{
-        C = getVoisinage(x, m_T);
+        C = getVoisinage(x);
         if(!C.empty()){
-            Solution y(C.at(0));
+            Graph y(C.at(0));
             double f_y = y.getCost();
-            for(int j=1;j<C.size();j++){
+            for(unsigned int j(1);j<C.size();j++){
                 if(C[j].getCost() < f_y){
-                    y = C[j];
+                    y = C.at(j);
                     f_y = y.getCost();
                 }
             }
@@ -35,18 +40,23 @@ void TabouAlgorithm::lancerAlgo() {
                 m_T.push_back(diff);
             if(f_y < m_fmin){
                 m_fmin = f_y;
-                m_xmin = Solution(y);
+                m_xmin = y.getSolution();
             }
+            x = y;
         }
         i++;
     }
     while(!C.empty() && (i < m_nmax));
+     */
     //std::cout << m_xmin.getNodeNb() << std::endl;
+
 }
 
 TabouAlgorithm::~TabouAlgorithm() {
+
     if(!m_T.empty()) {
         m_T.clear();
     }
+
 }
 

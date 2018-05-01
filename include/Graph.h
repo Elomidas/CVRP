@@ -24,6 +24,8 @@ namespace graph {
         DistancesMatrix m_distances;
         std::vector<Truck> m_trucks;
         void computeTruckNbMin();
+        const bool isInTabou(const std::vector<std::pair<unsigned int, unsigned int>>,
+                             const std::pair<unsigned int, unsigned int> pair_tabou1) const;
 
     public:
         Graph(const Graph &);
@@ -52,7 +54,15 @@ namespace graph {
 
         static std::vector<unsigned int> splitLine(std::string &line);
         static unsigned int atoi(const std::string &number);
+        void deleteNodeToTruck(unsigned int node, unsigned int truck);
 
+        void deleteNodeToTruckByIndex(unsigned int index, unsigned int truck);
+
+        void invertNodesByIndex(unsigned int node1, unsigned int node2, unsigned int index1, unsigned int index2);
+
+        const std::vector<Graph> getVoisinage(std::vector< std::pair<unsigned int, unsigned int> >);
+
+        const std::pair<unsigned int, unsigned int> getDifference(const Graph graph);
     };
 }
 

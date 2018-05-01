@@ -1,11 +1,13 @@
 #include <iostream>
 #include <cassert>
+#include <unistd.h>
 #include "../include/DistancesMatrix.h"
 #include "../include/GraphFactory.h"
 #include "../include/TabouAlgorithm.h"
 #include "../include/GeneticAlgorithm.h"
 
 unsigned long computeDistance(unsigned int i, unsigned int j);
+
 void testProject();
 
 int main() {
@@ -52,8 +54,66 @@ bool testRandomSolution() {
 }
 
 bool testAlgoTabou(){
-    TabouAlgorithm tabou = TabouAlgorithm();
-    tabou.lancerAlgo();
+    //Algorithm algo;
+    //TabouAlgorithm tabou = TabouAlgorithm();
+    //tabou.lancerAlgo();
+    //tabou.lancerAlgo();
+    return true;
+}
+
+bool testVoisinage(){
+    std::vector<graph::Node> vector = GraphFactory::readFile("../data/data01.txt");
+    Graph graph(vector);
+    graph.buildRandomSolution();
+
+    std::cout << std::endl << std::endl;
+    Solution res = graph.getSolution();
+    std::cout << res.toString() << std::endl << std::endl;
+
+    std::vector<Graph> voisinage = graph.getVoisinage(std::vector<std::pair<unsigned int, unsigned int>>());
+
+    /*
+    Solution base = graph.getSolution();
+    for(Graph voisin : voisinage){
+        Solution sol = voisin.getSolution();
+        std::cout << base.toString() << std::endl << std::endl;
+        std::cout << sol.toString() << std::endl << std::endl;
+    }
+    */
+    std::pair<unsigned int , unsigned int> diff = graph.getDifference(voisinage.at(0));
+    std::cout << diff.first << std::endl << diff.second <<std::endl << std::endl;
+
+    diff = graph.getDifference(voisinage.at(1));
+    std::cout << diff.first << std::endl << diff.second <<std::endl << std::endl;
+}
+
+bool testOperationsEl(){
+    std::vector<graph::Node> vector = GraphFactory::readFile("../data/data01.txt");
+    Graph graph(vector);
+    graph.buildRandomSolution();
+    std::cout << std::endl << std::endl;
+    Solution res = graph.getSolution();
+    std::cout << res.toString() << std::endl << std::endl;
+
+    int num, cam, index;
+    std::cin >> num >> cam;
+
+    graph.deleteNodeToTruck(num, cam);
+    res = graph.getSolution();
+    std::cout << res.toString() << std::endl << std::endl;
+
+    graph.addNodeToTruck(num, cam);
+    res = graph.getSolution();
+    std::cout << res.toString() << std::endl << std::endl;
+
+    int num1(15), num2(13);
+    std::cin >> num1 >> num2;
+    graph.invertNodes(num1, num2);
+    res = graph.getSolution();
+    std::cout << res.toString() << std::endl << std::endl;
+
+
+    std::clog << "End of test" <<std::endl;
     return true;
 }
 
@@ -79,7 +139,7 @@ void testGeneticLoad() {
 }
 
 void testGenetic() {
-    GeneticAlgorithm gen(50, "../data/data01.txt", 10000);
+    GeneticAlgorithm gen(50, "../data/data01.txt", 10000, 1000);
     gen.getStatus();
     gen.launch();
 }
@@ -90,5 +150,7 @@ void testProject() {
     //assert(testAlgoTabou());
     //assert(testRandomSolution());
     //testGeneticLoad();
-    testGenetic();
+    //testGenetic();
+    //assert(testOperationsEl());
+    assert(testVoisinage());
 }
