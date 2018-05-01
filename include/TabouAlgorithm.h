@@ -7,26 +7,26 @@
 
 
 #include "Algorithm.h"
+#include "ElementaryTransformation.h"
+#include <list>
 
+#define M_TAILLE_LISTE_TABOU 20
+#define M_NBITERATIONMAX 100
 
 class TabouAlgorithm : Algorithm{
 private:
     Solution m_xmin;
-    /**
-     * les deux noeuds utilisés pour la transformation élémentaire
-     */
-    std::vector< std::pair<unsigned int, unsigned int> > m_T;
+    const static unsigned int M_TAILLE = M_TAILLE_LISTE_TABOU;
+    std::list< ElementaryTransformation > m_T;
     double m_fmin;
-    const int m_nmax;
-    const std::pair<unsigned int, unsigned int> getDifference(const Solution s1, const Solution s2);
+    const int m_nmax = M_NBITERATIONMAX;
+    void addList(ElementaryTransformation);
 
 public:
     TabouAlgorithm();
-
-    ~TabouAlgorithm() override;
+    ~TabouAlgorithm();
 
     void lancerAlgo() override;
-
 };
 
 

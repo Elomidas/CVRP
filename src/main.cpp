@@ -7,10 +7,19 @@
 #include "../include/GeneticAlgorithm.h"
 #include "../include/Graphviz.h"
 
+/**
+ * function used
+ * @param i
+ * @param j
+ * @return
+ */
 unsigned long computeDistance(unsigned int i, unsigned int j);
-
 void testProject();
 
+/**
+ * main
+ * @return
+ */
 int main() {
     std::cout << "Main CVRP" << std::endl;
     std::srand(static_cast<unsigned int>(time(nullptr)));
@@ -18,6 +27,11 @@ int main() {
     return 0;
 }
 
+/**
+ *
+ * @param vector
+ * @return string which represents the vector
+ */
 std::string vectToStr(const std::vector<unsigned int> &vector) {
     std::string res(std::to_string(vector[0]));
     for (unsigned int i : vector) {
@@ -26,15 +40,27 @@ std::string vectToStr(const std::vector<unsigned int> &vector) {
     return res;
 }
 
+/**
+ * test the graph
+ * @return
+ */
 bool testGraph() {
     GraphFactory::test("../data/data01.txt");
     return true;
 }
 
+/**
+ * test distance matrix
+ * @return
+ */
 bool testDistancesMatrix() {
     return graph::DistancesMatrix::test(&computeDistance, 70);
 }
 
+/**
+ * test generation of random solution
+ * @return
+ */
 bool testRandomSolution() {
     std::vector<graph::Node> vector = GraphFactory::readFile("../data/data02.txt");
     Graph graph(vector);
@@ -54,14 +80,20 @@ bool testRandomSolution() {
     return true;
 }
 
+/**
+ * test tabou algorithm
+ * @return
+ */
 bool testAlgoTabou(){
-    //Algorithm algo;
-    //TabouAlgorithm tabou = TabouAlgorithm();
-    //tabou.lancerAlgo();
-    //tabou.lancerAlgo();
+    TabouAlgorithm tabou = TabouAlgorithm();
+    tabou.lancerAlgo();
     return true;
 }
 
+/**
+ * test neighbour generation
+ * @return
+ */
 bool testVoisinage(){
     std::vector<graph::Node> vector = GraphFactory::readFile("../data/data01.txt");
     Graph graph(vector);
@@ -71,57 +103,61 @@ bool testVoisinage(){
     Solution res = graph.getSolution();
     std::cout << res.toString() << std::endl << std::endl;
 
-    std::vector<Graph> voisinage = graph.getVoisinage(std::vector<std::pair<unsigned int, unsigned int>>());
+    unsigned int id(0);
+    std::cin >> id;
 
-    /*
+    std::vector<ElementaryTransformation> transfo;
+    ElementaryTransformation tabou1, tabou2;
+    tabou1.setTransfo(2, id, 0, 0);
+    tabou2.setTransfo(2, id, 0, 1);
+    std::list<ElementaryTransformation> tabouList;
+    tabouList.push_back(tabou1);
+    tabouList.push_back(tabou2);
+
+    std::vector<Graph> voisinage = graph.getVoisinage(tabouList, transfo);
+
+
     Solution base = graph.getSolution();
-    for(Graph voisin : voisinage){
+    for(Graph &voisin : voisinage) {
         Solution sol = voisin.getSolution();
-        std::cout << base.toString() << std::endl << std::endl;
-        std::cout << sol.toString() << std::endl << std::endl;
+        std::cout << base.toString() << std::endl << std::endl
+                  << sol.toString() << std::endl << std::endl;
     }
-    */
-    std::pair<unsigned int , unsigned int> diff = graph.getDifference(voisinage.at(0));
-    std::cout << diff.first << std::endl << diff.second <<std::endl << std::endl;
 
-    diff = graph.getDifference(voisinage.at(1));
-    std::cout << diff.first << std::endl << diff.second <<std::endl << std::endl;
+    //std::pair<unsigned int , unsigned int> diff = graph.getDifference(voisinage.at(0));
+    std::cout << transfo[0].getType() << std::endl << transfo[0].getFirstNode() << std::endl << transfo[0].getSecNode() << std::endl << transfo[0].getOldTruck() << std::endl << transfo[0].getOldIndex() <<std::endl << std::endl;
+
+    //diff = graph.getDifference(voisinage.at(1));
+    std::cout << transfo[1].getType() << std::endl << transfo[1].getFirstNode() << std::endl << transfo[1].getSecNode() << std::endl << transfo[1].getOldTruck() << std::endl << transfo[1].getOldIndex() <<std::endl << std::endl;
 }
 
+/**
+ * test elementary operations
+ * @return
+ */
 bool testOperationsEl(){
     std::vector<graph::Node> vector = GraphFactory::readFile("../data/data01.txt");
     Graph graph(vector);
-    graph.buildRandomSolution();
-    std::cout << std::endl << std::endl;
-    Solution res = graph.getSolution();
-    std::cout << res.toString() << std::endl << std::endl;
 
-    int num, cam, index;
-    std::cin >> num >> cam;
-
-    graph.deleteNodeToTruck(num, cam);
-    res = graph.getSolution();
-    std::cout << res.toString() << std::endl << std::endl;
-
-    graph.addNodeToTruck(num, cam);
-    res = graph.getSolution();
-    std::cout << res.toString() << std::endl << std::endl;
-
-    int num1(15), num2(13);
-    std::cin >> num1 >> num2;
-    graph.invertNodes(num1, num2);
-    res = graph.getSolution();
-    std::cout << res.toString() << std::endl << std::endl;
-
+    graph.testElementaryOp();
 
     std::clog << "End of test" <<std::endl;
     return true;
 }
 
+/**
+ *
+ * @param i
+ * @param j
+ * @return distance computed
+ */
 unsigned long computeDistance(unsigned int i, unsigned int j) {
     return i + j;
 }
 
+/**
+ * test generic algorithm load
+ */
 void testGeneticLoad() {
     Graph graph(GraphFactory::readFile("../data/data02.txt"));
     double total(0);
@@ -139,6 +175,9 @@ void testGeneticLoad() {
     std::clog << "Margin : " << total;
 }
 
+/**
+ * test genetic algorithm
+ */
 void testGenetic() {
     GeneticAlgorithm gen(50, "../data/data01.txt", 10000, 1000);
     gen.getStatus();
@@ -153,10 +192,13 @@ bool testGraphviz() {
     return true;
 }
 
+/**
+ * Main function of project
+ */
 void testProject() {
     //assert(testDistancesMatrix());
     //assert(testGraph());
-    //assert(testAlgoTabou());
+    assert(testAlgoTabou());
     //assert(testRandomSolution());
     //testGeneticLoad();
     //testGenetic();

@@ -73,6 +73,11 @@ const std::string Solution::toString() const {
     return result;
 }
 
+/**
+ *
+ * @param index
+ * @return path of truck in parameter
+ */
 const std::vector<unsigned int>& Solution::getPath(const unsigned int index) const {
     assert(index < m_paths.size());
     return m_paths[index];

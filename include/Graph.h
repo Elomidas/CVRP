@@ -7,11 +7,13 @@
 
 #include <queue>
 #include <string>
+#include <list>
 
 #include "Node.h"
 #include "Truck.h"
 #include "DistancesMatrix.h"
 #include "Solution.h"
+#include "ElementaryTransformation.h"
 
 class Truck;
 
@@ -24,8 +26,15 @@ namespace graph {
         DistancesMatrix m_distances;
         std::vector<Truck> m_trucks;
         void computeTruckNbMin();
-        const bool isInTabou(const std::vector<std::pair<unsigned int, unsigned int>>,
-                             const std::pair<unsigned int, unsigned int> pair_tabou1) const;
+        const bool isInTabou(const std::list<ElementaryTransformation>,
+                             ElementaryTransformation pair_tabou1) const;
+        void addNodeToTruck(unsigned int, unsigned int);
+        void addNodeToTruck(unsigned int, unsigned int, unsigned int);
+        void invertNodes(unsigned int, unsigned int);
+        void deleteNodeToTruck(unsigned int node, unsigned int truck);
+        void deleteNodeToTruckByIndex(unsigned int index, unsigned int truck);
+        void invertNodesByIndex(unsigned int node1, unsigned int node2, unsigned int index1, unsigned int index2);
+        void mooveNode(unsigned int node,unsigned int old_truck, unsigned int new_truck, unsigned int new_position);
 
     public:
         Graph(const Graph &);
@@ -49,21 +58,10 @@ namespace graph {
         std::vector<unsigned int> getGenetic() const;
         double getCost() const;
         void buildRandomSolution();
-        void addNodeToTruck(unsigned int, unsigned int);
-        void addNodeToTruck(unsigned int, unsigned int, unsigned int);
-        void invertNodes(unsigned int, unsigned int);
-
+        const std::vector<Graph> getVoisinage(std::list< ElementaryTransformation >, std::vector<ElementaryTransformation>&);
+        const void testElementaryOp();
         static std::vector<unsigned int> splitLine(std::string &line);
         static unsigned int atoi(const std::string &number);
-        void deleteNodeToTruck(unsigned int node, unsigned int truck);
-
-        void deleteNodeToTruckByIndex(unsigned int index, unsigned int truck);
-
-        void invertNodesByIndex(unsigned int node1, unsigned int node2, unsigned int index1, unsigned int index2);
-
-        const std::vector<Graph> getVoisinage(std::vector< std::pair<unsigned int, unsigned int> >);
-
-        const std::pair<unsigned int, unsigned int> getDifference(const Graph graph);
     };
 }
 

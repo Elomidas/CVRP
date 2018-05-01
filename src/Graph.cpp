@@ -11,6 +11,7 @@
 #include <climits>
 
 #include "../include/Graph.h"
+#include "../include/ElementaryTransformation.h"
 
 using namespace graph;
 
@@ -46,7 +47,6 @@ Graph::Graph(std::vector<Node> nodes) :
 Graph::Graph(const Graph &g) :
         m_nodeNb(g.m_nodeNb), m_qTotal(g.m_qTotal), m_distances(g.m_distances),
         m_truckNbMin(g.m_truckNbMin), m_truckNb(g.m_truckNb), m_nodes(), m_trucks() {
-    std::clog << std::endl << "Copy graph" << std::endl;
     //Nodes copy
     for(unsigned int i(0); i < m_nodeNb; i++) {
         m_nodes.emplace_back(g.m_nodes[i]);
@@ -55,7 +55,6 @@ Graph::Graph(const Graph &g) :
     for(unsigned int i(0); i < m_truckNb; i++) {
         m_trucks.emplace_back(Truck(g.m_trucks[i], m_nodes));
     }
-    std::clog << "Graph copied" << std::endl;
 }
 
 /**
@@ -70,6 +69,12 @@ Graph::~Graph() {
     }
 }
 
+/**
+ *
+ * @param start
+ * @param end
+ * @return distance between two nodes
+ */
 const double Graph::getDistance(const unsigned int start, const unsigned int end) const {
     return m_distances.getDistance(start, end);
 }
@@ -88,7 +93,6 @@ bool Graph::isSolution() const {
     //Check that all trucks are correct
     for(Truck t : m_trucks) {
         if(!t.isValid()) {
-            std::clog << "Truck " << t.getIndex() << " isn't valid." << std::endl;
             return false;
         }
     }
@@ -151,7 +155,7 @@ void Graph::setTrucksNumber(unsigned int number) {
         }
 
         for (unsigned int i(0); i < m_truckNb; i++) {
-            m_trucks.emplace_back(Truck(m_nodes[0], i + 1));
+            m_trucks.emplace_back(Truck(m_nodes[0], i+1));
         }
     }
 }
@@ -238,10 +242,14 @@ void Graph::addNodeToTruck(unsigned int node, unsigned int truck, unsigned int i
     assert(index < m_nodes.size());
     assert(truck > 0);
     assert(truck <= m_truckNb);
-    m_trucks[truck-1].addState(m_nodes[node]);
     m_trucks[truck-1].addStateByIndex(index,m_nodes[node]);
 }
 
+/**
+ * delete node to truck using its id
+ * @param node
+ * @param truck
+ */
 void Graph::deleteNodeToTruck(unsigned int node, unsigned int truck){
     assert(node < m_nodeNb);
     assert(truck > 0);
@@ -249,6 +257,11 @@ void Graph::deleteNodeToTruck(unsigned int node, unsigned int truck){
     m_trucks[truck-1].removeStateById(node);
 }
 
+/**
+ * delete node to truck using its index
+ * @param index
+ * @param truck
+ */
 void Graph::deleteNodeToTruckByIndex(unsigned int index, unsigned int truck){
     assert(index < m_nodes.size());
     assert(truck > 0);
@@ -256,6 +269,11 @@ void Graph::deleteNodeToTruckByIndex(unsigned int index, unsigned int truck){
     m_trucks[truck-1].removeStateByIndex(index);
 }
 
+/**
+ * Invert two nodes in trucks paths using their Ids.
+ * @param node1
+ * @param node2
+ */
 void Graph::invertNodes(unsigned int node1, unsigned int node2) {
     assert(node1 < m_nodeNb);
     assert(node2 < m_nodeNb);
@@ -271,6 +289,13 @@ void Graph::invertNodes(unsigned int node1, unsigned int node2) {
     }
 }
 
+/**
+ * Invert two nodes in trucks paths using their indexes.
+ * @param node1
+ * @param node2
+ * @param index1
+ * @param index2
+ */
 void Graph::invertNodesByIndex(unsigned int node1, unsigned int node2, unsigned int index1, unsigned int index2) {
     assert(node1 < m_nodes.size());
     assert(node2 < m_nodes.size());
@@ -279,7 +304,28 @@ void Graph::invertNodesByIndex(unsigned int node1, unsigned int node2, unsigned 
     m_trucks[truck2-1].replaceStateByIndex(index2, m_nodes[node1]);
 }
 
+/**
+ * Moove the node using its id
+ * @param node
+ * @param old_truck
+ * @param new_truck
+ * @param new_position
+ */
+void Graph::mooveNode(unsigned int node, unsigned int old_truck, unsigned int new_truck, unsigned int new_position){
+    assert(node < m_nodes.size());
+    assert(old_truck > 0);
+    assert(old_truck <= m_truckNb);
+    assert(new_truck > 0);
+    assert(new_truck <= m_truckNb);
+    assert(new_position <m_nodes.size());
+    deleteNodeToTruck(node, old_truck);
+    addNodeToTruck(node, new_truck, new_position);
+}
 
+/**
+ * Load solution, transform the solution into graph
+ * @param solution
+ */
 void Graph::loadSolution(const Solution &solution) {
     if(!m_trucks.empty()) {
         m_trucks.clear();
@@ -322,47 +368,89 @@ double Graph::getCost() const {
     return cost;
 }
 
-const bool Graph::isInTabou(const std::vector< std::pair<unsigned int, unsigned int> > listeTabou, const std::pair<unsigned int,unsigned int> pair_tabou) const{
-    for(std::pair<unsigned int, unsigned int> pair : listeTabou){
-        if( ( pair.first == pair_tabou.first && pair.second==pair_tabou.second ) || ( pair.first==pair_tabou.second && pair.second==pair_tabou.first ) )
-            return true;
+/**
+ *
+ * @param listeTabou
+ * @param pair_tabou
+ * @return boolean used to check if a ElementaryTransformation is in tabou list or not
+ */
+const bool Graph::isInTabou(const std::list< ElementaryTransformation > listeTabou, ElementaryTransformation pair_tabou) const{
+    for(ElementaryTransformation transformation : listeTabou){
+        // If mooved
+        if(transformation.getType() == 2){
+            if(transformation.getFirstNode() == pair_tabou.getFirstNode() && transformation.getOldTruck() == pair_tabou.getOldTruck() && transformation.getOldIndex() == pair_tabou.getOldIndex() ||
+               transformation.getSecNode() == pair_tabou.getSecNode() && transformation.getOldTruck() == pair_tabou.getOldTruck() && transformation.getOldIndex() == pair_tabou.getOldIndex())
+                return true;
+        }
+        // If invert
+        else if(transformation.getType() == 1){
+            if( ( transformation.getFirstNode() == pair_tabou.getFirstNode() && transformation.getSecNode() == pair_tabou.getSecNode() ) ||
+                ( transformation.getFirstNode() == pair_tabou.getSecNode() && transformation.getSecNode() == pair_tabou.getFirstNode() ) )
+                return true;
+        }
+
     }
     return false;
 }
 
-const std::vector<Graph> Graph::getVoisinage(std::vector< std::pair<unsigned int, unsigned int> > listeTabou) {
-    //TODO vérifier liste tabou
-    std::vector<Graph> voisinage = std::vector<Graph>();
+/**
+ *
+ * @param listeTabou
+ * @param listTransformation
+ * @return list of Graph which are neighbour of the actual graph
+ */
+const std::vector<Graph> Graph::getVoisinage(std::list< ElementaryTransformation > listeTabou, std::vector<ElementaryTransformation> &listTransformation) {
+    std::vector<Graph> voisinage;
     unsigned int node_nb, truck_nb;
 
-    for(unsigned int i(0); i<m_truckNb;i++){
-        for(unsigned int j(1); j<getTruck(i).getSize();j++){
+    for(unsigned int i(0); i < m_trucks.size(); i++){
+        for(unsigned int j(1); j < getTruck(i).getSize(); j++){
             std::vector<unsigned int> path1 = getTruck(i).toVector();
             unsigned int node1 = path1.at(j);
-            if(j == getTruck(i).getSize()){
+            if(j == (getTruck(i).getSize() - 1)){
                 node_nb = 1;
                 truck_nb = i+1;
-            }
-            else{
+            } else {
                 node_nb = j+1;
                 truck_nb = i;
             }
-            while(truck_nb<m_truckNb){
+            // Make all elementary OP based on node inversion
+            while(truck_nb < m_trucks.size()){
                 while(node_nb<getTruck(truck_nb).getSize()){
                     std::vector<unsigned int> path2 = getTruck(truck_nb).toVector();
                     unsigned int node2 = path2.at(node_nb);
 
-                    std::pair<unsigned int,unsigned int> pair_tabou = std::make_pair(node1 ,node2);
+                    ElementaryTransformation pair_tabou;
+                    pair_tabou.setTransfo(1, node1, node2);
                     if(!isInTabou(listeTabou, pair_tabou)){
                         Graph new_graph(*this);
                         new_graph.invertNodes(node1, node2);
-                        if(new_graph.isSolution())
+                        if(new_graph.isSolution()){
                             voisinage.push_back(new_graph);
+                            listTransformation.push_back(pair_tabou);
+                        }
                     }
                     node_nb++;
                 }
                 node_nb=1;
                 truck_nb++;
+            }
+            // Make all elementary OP mooving just one node
+            for(unsigned int k(0);k<m_trucks.size();k++){
+                for(unsigned int l(1);l<getTruck(k).getSize();l++){
+                    ElementaryTransformation pair_tabou;
+                    pair_tabou.setTransfo(2,node1, k, l-1);
+                    if(!isInTabou(listeTabou, pair_tabou)){
+                        if(k != i || l != j){
+                            Graph new_graph(*this);
+                            new_graph.mooveNode(node1, i+1, k+1, l-1);
+                            if(new_graph.isSolution()){
+                                voisinage.push_back(new_graph);
+                                listTransformation.push_back(pair_tabou);
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -370,22 +458,37 @@ const std::vector<Graph> Graph::getVoisinage(std::vector< std::pair<unsigned int
 }
 
 /**
- * Récupère la différences dans les parcours de camion de deux graphes
- * @param graph
- * @return
+ * Function used to test Elementary Operations
  */
-const std::pair<unsigned int, unsigned int> Graph::getDifference(const Graph graph) {
-    //TODO à tester
-    for(unsigned int i(0);i<m_truckNb;i++){
-        std::vector<unsigned int> path1 = getTruck(i).toVector();
-        std::vector<unsigned int> path2 = graph.getTruck(i).toVector();
-        for(unsigned int j(1);j<m_trucks[i].getSize();j++){
-            if(path1.at(j) != path2.at(j)){
-                return std::make_pair(path1.at(j), path2.at(j));
-            }
-        }
-    }
-    return std::pair<unsigned int, unsigned int>();
+const void Graph::testElementaryOp() {
+    buildRandomSolution();
+    std::cout << std::endl << std::endl;
+    Solution res = getSolution();
+    std::cout << res.toString() << std::endl << std::endl;
+
+    unsigned int num(0), cam(0);
+    std::cin >> num >> cam;
+
+    deleteNodeToTruck(num, cam);
+    res = getSolution();
+    std::cout << res.toString() << std::endl << std::endl;
+
+    addNodeToTruck(num, cam);
+    res = getSolution();
+    std::cout << res.toString() << std::endl << std::endl;
+
+    unsigned int num1(15), num2(13);
+    std::cin >> num1 >> num2;
+    invertNodes(num1, num2);
+    res = getSolution();
+    std::cout << res.toString() << std::endl << std::endl;
+
+    unsigned int id(0), old_cam(0), new_cam(0), index1(0);
+    std::cin >> id >> old_cam >> new_cam >> index1;
+    mooveNode(id, old_cam, new_cam, index1);
+    res = getSolution();
+    std::cout << res.toString() << std::endl << std::endl;
+
 }
 
 /**
@@ -430,6 +533,7 @@ unsigned int Graph::atoi(const std::string &number) {
     }
     return static_cast<unsigned int>(val);
 }
+
 
 std::vector<unsigned int> Graph::getGenetic() const {
     std::vector<unsigned int> res;

@@ -19,20 +19,13 @@ protected:
     graph::Graph m_graph;
     AlgorithmSettings m_settings;
 
-    const unsigned int getGraphSize();
-
 public:
     Algorithm();
     explicit Algorithm(const std::string &);
-
-    //Algorithm(const std::string&, const std::string&);
-
-    virtual ~Algorithm();
+    ~Algorithm();
 
     void setInputFile(const std::string&);
-
     void setConfigurationFile(const std::string&);
-
     virtual void lancerAlgo();
 };
 

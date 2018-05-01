@@ -25,9 +25,7 @@ namespace graph {
     private:
         std::vector<DistanceNode> m_distancesNodes;
         unsigned int m_numberOfNodes;
-
         void sortIndices(unsigned int &first, unsigned int &second) const;
-
         static const double computeDistance(const Node &, const Node &);
     };
 }

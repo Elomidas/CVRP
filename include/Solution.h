@@ -17,6 +17,7 @@ private:
 public:
     Solution();
     ~Solution();
+
     std::vector< std::vector< unsigned int > > getPaths() const { return m_paths; };
     void addPath(const std::vector<unsigned int>&);
     void setCost(const double &);

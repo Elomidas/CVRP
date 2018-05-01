@@ -3,60 +3,83 @@
 //
 
 #include <iostream>
+#include <cfloat>
 #include "../include/TabouAlgorithm.h"
 
-
-TabouAlgorithm::TabouAlgorithm() : m_xmin(), m_nmax(10), m_T(), m_fmin(0) {
+/**
+ * Default constructor
+ */
+TabouAlgorithm::TabouAlgorithm() : m_xmin(), m_T(), m_fmin(0) {
     //Nothing
 }
 
-
+/**
+ * launching Tabou algorithm
+ */
 void TabouAlgorithm::lancerAlgo() {
     m_graph.buildRandomSolution();
-    Graph x(m_graph);
-    m_xmin = x.getSolution();
+    m_xmin = m_graph.getSolution();
     m_fmin = m_xmin.getCost();
-    std::cout << m_xmin.toString() << std::endl << std::endl;
-    std::cout << m_fmin << std::endl;
+    std::cout << "Graphe de base" << std::endl << m_xmin.toString() << std::endl << std::endl;
 
     unsigned int i(0);
-    std::vector<Graph> C;
-    //C = x.getVoisinage();
-    /*
+    std::vector<Graph> V; // voisinage
+    std::vector<ElementaryTransformation> transfos; // liste des transformations élementaires
+    bool end = false;
+
     do{
-        C = getVoisinage(x);
-        if(!C.empty()){
-            Graph y(C.at(0));
-            double f_y = y.getCost();
-            for(unsigned int j(1);j<C.size();j++){
-                if(C[j].getCost() < f_y){
-                    y = C.at(j);
-                    f_y = y.getCost();
+        V = m_graph.getVoisinage(m_T, transfos);
+        if(!V.empty()){
+            double y_fmin(DBL_MAX); // valeur de y
+            unsigned int y_jmin(0); // indice où se trouve y dans la liste C
+
+            for(unsigned int j(0); j < V.size(); j++) {
+                double cost(V[j].getCost());
+                if(cost < y_fmin) {
+                    y_fmin = cost;
+                    y_jmin = j;
                 }
             }
-            double delta_f = f_y - x.getCost();
-            std::pair<unsigned int, unsigned int> diff = getDifference(y, x);
+
+            double delta_f = y_fmin - m_graph.getCost();
             if(delta_f >= 0)
-                m_T.push_back(diff);
-            if(f_y < m_fmin){
-                m_fmin = f_y;
-                m_xmin = y.getSolution();
+                addList(transfos[y_jmin]);
+            if(y_fmin < m_fmin){
+                m_fmin = y_fmin;
+                m_xmin = V[y_jmin].getSolution();
             }
-            x = y;
+
+            m_graph.loadSolution(V[y_jmin].getSolution());
+            std::cout << "passage : " << i <<std::endl << m_graph.getSolution().toString() << std::endl <<std::endl;
         }
         i++;
+        if(V.empty()) {
+            end = true;
+        } else {
+            V.clear();
+        }
+        transfos.clear();
     }
-    while(!C.empty() && (i < m_nmax));
-     */
-    //std::cout << m_xmin.getNodeNb() << std::endl;
-
+    while(!end && (i < m_nmax));
 }
 
-TabouAlgorithm::~TabouAlgorithm() {
+/**
+ * Add a transformation into Tabou list
+ * @param transformation
+ */
+void TabouAlgorithm::addList(ElementaryTransformation transformation){
+    if(m_T.size() == M_TAILLE){
+        m_T.pop_back();
+    }
+    m_T.push_front(transformation);
+}
 
+/**
+ * Destructor
+ */
+TabouAlgorithm::~TabouAlgorithm() {
     if(!m_T.empty()) {
         m_T.clear();
     }
-
 }
 
