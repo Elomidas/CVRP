@@ -79,9 +79,9 @@ void testGeneticLoad() {
 }
 
 void testGenetic() {
-    GeneticAlgorithm gen(50, "../data/data01.txt");
+    GeneticAlgorithm gen(50, "../data/data01.txt", 10000);
     gen.getStatus();
-    gen.nextStep();
+    gen.launch();
 }
 
 void testProject() {

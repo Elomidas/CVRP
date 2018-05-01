@@ -10,9 +10,10 @@
 #include "../include/GeneticAlgorithm.h"
 #include "../include/GraphFactory.h"
 
-GeneticAlgorithm::GeneticAlgorithm(const unsigned int populationSize, const std::string &path) :
-        Algorithm(path), m_populationSize(populationSize),
-        m_bestCost(DBL_MAX), m_step(0) {
+GeneticAlgorithm::GeneticAlgorithm(const unsigned int populationSize, const std::string &path, const double &ite,
+                                   const double &display) :
+        Algorithm(path), m_populationSize(populationSize), m_iterations(ite), m_display(display), m_bestCost(DBL_MAX),
+        m_step(0) {
     generateFirstPopulation();
 }
 
@@ -31,30 +32,45 @@ void GeneticAlgorithm::generateFirstPopulation() {
     for(unsigned int i(0); i < m_populationSize; i++) {
         m_graph.buildRandomSolution();
         std::vector<unsigned int> gen(m_graph.getGenetic());
-        m_graph.loadGenetic(gen);
+        addMember(gen);
+    }
+    checkFitness();
+}
+
+void GeneticAlgorithm::addMember(const std::vector<unsigned int> &member) {
+    assert(isValid(member));
+    assert(m_population.size() < m_populationSize);
+    m_population.emplace_back(member);
+}
+
+void GeneticAlgorithm::nextStep() {
+    //Step 1 : select parents and reproduce
+    selectParents();
+    //Step 2 :
+    checkFitness();
+    //End
+    m_step++;
+}
+
+void GeneticAlgorithm::checkFitness() {
+    if(!m_costs.empty()) {
+        m_costs.clear();
+    }
+    for(std::vector<unsigned int> &vector : m_population) {
+        m_graph.loadGenetic(vector);
         double cost(m_graph.getCost());
         if(m_min > cost) {
             m_min = cost;
-            m_bestCost = cost;
-            m_best = gen;
+            if(m_min < m_bestCost) {
+                m_bestCost = cost;
+                m_best = vector;
+            }
         }
         if(m_max < cost) {
             m_max = cost;
         }
-        m_population.emplace_back(gen);
         m_costs.emplace_back(cost);
     }
-}
-
-void GeneticAlgorithm::nextStep() {
-    //Step 1 : select parents
-    selectParents();
-    unsigned int nbParents(static_cast<unsigned int>(m_population.size()));
-    std::clog << nbParents << " parents selected." << std::endl;
-    //Step 2 :
-    //TODO
-    //End
-    m_step++;
 }
 
 std::string displayVector(const std::vector<unsigned int> &vector) {
@@ -73,67 +89,81 @@ void GeneticAlgorithm::getStatus() const {
 }
 
 void GeneticAlgorithm::selectParents() {
-    std::vector<std::vector<unsigned int>> parents;
+    std::vector<std::vector<unsigned int>> parents(m_population);
+    m_population.clear();
     double gap(m_max - m_min);
-    /* We want to be sure to have at least 6 parents available
-     */
     do {
-        if(!parents.empty()) {
-            parents.clear();
-        }
-        for (unsigned int i(0); i < m_population.size(); i++) {
+        for (unsigned int i(0); (i < parents.size()) && (m_population.size() < m_populationSize); i++) {
             /* Solution with the best score is taken at 75%
              * Solution with the worst score is taken at 25%
-             * We use a linear repartition
              */
             double proba(0.25 + ((m_costs[i] - m_min) / gap) * 0.5);
             double rand(std::rand() / (double)RAND_MAX);
             if (rand < proba) {
-                parents.emplace_back(m_population[i]);
+                m_parents.emplace_back(parents[i]);
+                if(m_parents.size() == 2) {
+                    reproduction();
+                    m_parents.clear();
+                }
             }
         }
-    } while(parents.size() < 6);
-    m_population = parents;
+    } while(m_population.size() < m_populationSize);
+}
+
+
+void GeneticAlgorithm::reproduction() {
+    assert(m_parents.size() == 2);
+    double rand(std::rand() / (double)RAND_MAX);
+    if(rand < 0.75) {
+        //Crossover
+        edgeRecombination();
+    } else {
+        //Swap Node
+        for(const int id : {0, 1}) {
+            if(m_population.size() < m_populationSize) {
+                swapNodes(m_parents[id]);
+            }
+        }
+    }
 }
 
 void GeneticAlgorithm::edgeRecombination() {
     assert(m_population.size() < m_populationSize);
-    //Family
-    std::vector<unsigned int> child;
-    unsigned int id1(static_cast<unsigned int>(rand() % m_population.size())), id2(0);
-    do {
-        id2 = static_cast<unsigned int>(rand() % m_population.size());
-    }while(id2 == id1);
-    std::vector<unsigned int> parent1 = m_population[id1];
-    std::vector<unsigned int> parent2 = m_population[id2];
 
     //Neighbor lists
-    std::vector<std::vector<unsigned int>> neighbors(getAdjacencyMatrix(id1, id2));
-    std::vector<unsigned int> available(parent1);
+    std::vector<std::vector<unsigned int>> neighborsList(getAdjacencyMatrix());
 
     //Algorithm
-    std::vector<unsigned int> &parent = ((rand() / (double)RAND_MAX) > 0.5) ? parent1 : parent2;
-    unsigned int node = parent[0];
-    while(child.size() < parent.size()) {
-        child.emplace_back(node);
-        removeNodeFromAdjacencyMatrix(neighbors, node);
-        removeNodeFromVector(available, node);
-        if(!neighbors[node].empty()) {
-            auto tmp = static_cast<unsigned int>(rand() % neighbors[node].size());
-            node = neighbors[node][tmp];
-        } else {
-            auto tmp = static_cast<unsigned int>(rand() % available.size());
-            node = available[tmp];
+    for(std::vector<unsigned int> parent : {m_parents[0], m_parents[1]}) {
+        assert(isValid(parent));
+        if(m_population.size() < m_populationSize) {
+            std::vector<unsigned int> available(parent);
+            std::vector<std::vector<unsigned int>> neighbors(neighborsList);
+            std::vector<unsigned int> child;
+            unsigned int node = parent[0];
+            while (child.size() < parent.size()) {
+                child.emplace_back(node);
+                removeNodeFromAdjacencyMatrix(neighbors, node);
+                removeNodeFromVector(available, node);
+                if(child.size() < parent.size()) {
+                    if (!neighbors[node - 1].empty()) {
+                        auto tmp = static_cast<unsigned int>(std::rand() % neighbors[node - 1].size());
+                        node = neighbors[node - 1][tmp];
+                    } else {
+                        auto tmp = static_cast<unsigned int>(std::rand() % available.size());
+                        node = available[tmp];
+                    }
+                }
+            }
+            addMember(child);
         }
     }
-    m_population.emplace_back(child);
 }
 
-std::vector<std::vector<unsigned int>> GeneticAlgorithm::getAdjacencyMatrix(const unsigned int memberIndex) const {
-    std::vector<unsigned int> &member = m_population[memberIndex];
-    std::vector<std::vector<unsigned int>> matrix(member.size(), std::vector<unsigned int>());
+std::vector<std::vector<unsigned int>> GeneticAlgorithm::getAdjacencyMatrix(const std::vector<unsigned int> &member) const {
+    std::vector<std::vector<unsigned int>> matrix(member.size());
     for(unsigned int i(0); i < member.size(); i++) {
-        unsigned int index = member[i];
+        unsigned int index = member[i]-1;
         unsigned int prev, next;
         if(i == 0) {
             prev = member[member.size() - 1];
@@ -148,6 +178,7 @@ std::vector<std::vector<unsigned int>> GeneticAlgorithm::getAdjacencyMatrix(cons
         matrix[index].emplace_back(prev);
         matrix[index].emplace_back(next);
     }
+    return matrix;
 }
 
 bool contains(const std::vector<unsigned int> &vector, const unsigned int value) {
@@ -159,12 +190,12 @@ bool contains(const std::vector<unsigned int> &vector, const unsigned int value)
     return false;
 }
 
-std::vector<std::vector<unsigned int>> GeneticAlgorithm::getAdjacencyMatrix(const unsigned int member1,
-                                                                            const unsigned int member2) const {
+std::vector<std::vector<unsigned int>> GeneticAlgorithm::getAdjacencyMatrix() const {
     std::vector<std::vector<unsigned int>>
-            matrix1(getAdjacencyMatrix(member1)),
-            matrix2(getAdjacencyMatrix(member2)),
-            matrix(matrix1.size(), std::vector<unsigned int>());
+            matrix1(getAdjacencyMatrix(m_parents[0])),
+            matrix2(getAdjacencyMatrix(m_parents[1]));
+    std::vector<std::vector<unsigned int>>
+            matrix(matrix1.size());
     for(unsigned int i(0); i < matrix.size(); i++) {
         for(unsigned int j(0); j < fmax(matrix1[i].size(), matrix2[i].size()); j++) {
             if((j < matrix1[i].size()) && (!contains(matrix[i], matrix1[i][j]))) {
@@ -188,22 +219,57 @@ void GeneticAlgorithm::removeNodeFromVector(std::vector<unsigned int> &vector, c
     for(unsigned int i(0); i < vector.size(); i++) {
         if(vector[i] == node) {
             vector.erase(vector.begin() + i);
+            i--;
         }
     }
 }
 
-void GeneticAlgorithm::swaphNodes(const std::vector<unsigned int> member) {
+void GeneticAlgorithm::swapNodes(const std::vector<unsigned int> member) {
     std::vector<unsigned int> child(member);
     double proba(1 / (double)member.size());
     for(unsigned int i(0); i < member.size(); i++) {
         if(proba > (rand() / (double)RAND_MAX)) {
             unsigned int target;
             do {
-                target = static_cast<unsigned int>(rand() % member.size());
+                target = static_cast<unsigned int>(std::rand() % member.size());
             } while(target == i);
-            child[i] = member[target];
-            child[target] = member[i];
+            unsigned int tmp(child[i]);
+            child[i] = child[target];
+            child[target] = tmp;
         }
     }
-    m_population.emplace_back(child);
+    addMember(child);
+}
+
+void GeneticAlgorithm::launch() {
+    m_step = 0;
+    double display(m_display);
+    while((m_iterations < 0) || (m_step < m_iterations)) {
+        nextStep();
+        if((display <= 0) || (m_step == m_iterations)) {
+            getStatus();
+            display = m_display;
+        } else {
+            display--;
+        }
+    }
+}
+
+void GeneticAlgorithm::launch(const unsigned int iterations) {
+    double tmp(m_iterations);
+    m_iterations = iterations;
+    launch();
+    m_iterations = tmp;
+}
+
+bool GeneticAlgorithm::isValid(const std::vector<unsigned int> &vector) const {
+    std::vector<bool> check(vector.size(), true);
+    for(const unsigned int &i : vector) {
+        if(!check[i-1]) {
+            std::cerr << "Duplicate entry " << i << std::endl;
+            return false;
+        }
+        check[i-1] = false;
+    }
+    return true;
 }
