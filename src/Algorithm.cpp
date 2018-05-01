@@ -4,6 +4,7 @@
 
 #include "../include/Algorithm.h"
 #include "../include/GraphFactory.h"
+#include "../include/Graphviz.h"
 #include <iostream>
 #include <math.h>
 

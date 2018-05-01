@@ -5,6 +5,7 @@
 #include <iostream>
 #include <cfloat>
 #include "../include/TabouAlgorithm.h"
+#include "../include/Graphviz.h"
 
 /**
  * Default constructor
@@ -81,5 +82,14 @@ TabouAlgorithm::~TabouAlgorithm() {
     if(!m_T.empty()) {
         m_T.clear();
     }
+}
+
+Solution TabouAlgorithm::getMini() const {
+    return m_xmin;
+}
+
+void TabouAlgorithm::display() {
+    m_graph.loadSolution(m_xmin);
+    Graphviz::getImg(m_graph);
 }
 

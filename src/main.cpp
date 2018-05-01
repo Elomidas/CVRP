@@ -1,6 +1,5 @@
 #include <iostream>
 #include <cassert>
-#include <unistd.h>
 #include "../include/DistancesMatrix.h"
 #include "../include/GraphFactory.h"
 #include "../include/TabouAlgorithm.h"
@@ -87,6 +86,7 @@ bool testRandomSolution() {
 bool testAlgoTabou(){
     TabouAlgorithm tabou = TabouAlgorithm();
     tabou.lancerAlgo();
+    tabou.display();
     return true;
 }
 

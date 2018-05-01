@@ -13,7 +13,7 @@
 #define M_TAILLE_LISTE_TABOU 20
 #define M_NBITERATIONMAX 100
 
-class TabouAlgorithm : Algorithm{
+class TabouAlgorithm : public Algorithm {
 private:
     Solution m_xmin;
     const static unsigned int M_TAILLE = M_TAILLE_LISTE_TABOU;
@@ -21,12 +21,14 @@ private:
     double m_fmin;
     const int m_nmax = M_NBITERATIONMAX;
     void addList(ElementaryTransformation);
+    Solution getMini() const;
 
 public:
     TabouAlgorithm();
     ~TabouAlgorithm();
 
     void lancerAlgo() override;
+    void display();
 };
 
 

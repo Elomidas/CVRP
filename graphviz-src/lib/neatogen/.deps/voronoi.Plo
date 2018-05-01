@@ -1,0 +1,18 @@
+voronoi.lo: voronoi.c /usr/include/stdc-predef.h mem.h geometry.h edges.h \
+ site.h hedges.h heap.h voronoi.h
+
+/usr/include/stdc-predef.h:
+
+mem.h:
+
+geometry.h:
+
+edges.h:
+
+site.h:
+
+hedges.h:
+
+heap.h:
+
+voronoi.h:

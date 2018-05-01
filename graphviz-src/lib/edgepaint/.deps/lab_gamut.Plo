@@ -1,0 +1,5 @@
+lab_gamut.lo: lab_gamut.c /usr/include/stdc-predef.h lab_gamut.h
+
+/usr/include/stdc-predef.h:
+
+lab_gamut.h:
