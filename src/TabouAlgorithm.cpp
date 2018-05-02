@@ -18,6 +18,10 @@ TabouAlgorithm::TabouAlgorithm(const std::string &path) : Algorithm(path) {
     //Nothing
 }
 
+TabouAlgorithm::TabouAlgorithm(const unsigned int size, const std::string &path, const unsigned int ite, const unsigned int display) : Algorithm(path), M_TAILLE(size), M_NMAX(ite), M_DISPLAY(display) {
+    //Nothing
+}
+
 /**
  * launching Tabou algorithm
  */
@@ -55,7 +59,7 @@ void TabouAlgorithm::launchAlgo() {
             }
 
             m_graph.loadSolution(V[y_jmin].getSolution());
-            if(i % 20 == 0) {
+            if(i % M_DISPLAY == 0) {
                 std::cout << "passage : " << i << std::endl << m_graph.getSolution().toString() << std::endl
                           << std::endl;
             }
@@ -68,7 +72,7 @@ void TabouAlgorithm::launchAlgo() {
         }
         transfos.clear();
     }
-    while(!end && (i < m_nmax));
+    while(!end && (i < M_NMAX));
 }
 
 /**

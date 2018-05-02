@@ -12,20 +12,23 @@
 
 #define M_TAILLE_LISTE_TABOU 20
 #define M_NBITERATIONMAX 100
+#define M_NB_DISPLAY 20
 
 class TabouAlgorithm : public Algorithm {
 private:
     Solution m_xmin;
-    const static unsigned int M_TAILLE = M_TAILLE_LISTE_TABOU;
+    const unsigned int M_TAILLE = M_TAILLE_LISTE_TABOU;
+    const int M_NMAX = M_NBITERATIONMAX;
+    const int M_DISPLAY = M_NB_DISPLAY;
     std::list< ElementaryTransformation > m_T;
     double m_fmin;
-    const int m_nmax = M_NBITERATIONMAX;
     void addList(ElementaryTransformation);
     void getMini() override;
 
 public:
     TabouAlgorithm();
     explicit TabouAlgorithm(const std::string &);
+    explicit TabouAlgorithm(const unsigned int, const std::string&, const unsigned int, const unsigned int);
     ~TabouAlgorithm();
 
     void launchAlgo() override;
