@@ -84,6 +84,7 @@ node [fontsize = 100, shape=circle, fillcolor=white, style=filled];
 77 [pos = "59,66!", penwidth=15];
 78 [pos = "51,16!", penwidth=15];
 79 [pos = "87,11!", penwidth=15];
+
 0->62 [color=blue, penwidth=15];
 62->12 [color=blue, penwidth=15];
 12->29 [color=blue, penwidth=15];
