@@ -201,10 +201,10 @@ bool testGraphviz() {
 void testProject() {
     //assert(testDistancesMatrix());
     //assert(testGraph());
-    //assert(testAlgoTabou());
+    assert(testAlgoTabou());
     //assert(testRandomSolution());
     //testGeneticLoad();
-    testGenetic();
+    //testGenetic();
     //assert(testOperationsEl());
     //assert(testVoisinage());
     //assert(testGraphviz());

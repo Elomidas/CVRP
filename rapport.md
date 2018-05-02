@@ -1,17 +1,46 @@
 # Rapport Optimisation Discrète - Printemps 2018
 
 ### Étudiants
- -  JACOUD Bastien
- -  REMOND Victor
+ - **JACOUD Bastien**
+ - **REMOND Victor**
  
-[GraphExampleGenetic] : (graphviz/example1.svg)
+ * Lien [dépôt GitHub Clion](https://github.com/Elomidas/CVRP)
+ 
+ * Lien [dépôt GitHub QT](https://github.com/Elomidas/CVRP-Qt)
+ 
+ * Téléchargement [Version Stable]() 
+ 
+ * [GraphExampleGenetic] : (graphviz/example1.svg)
  
 ## I - Introduction
 
+Dans le cadre d'un projet, nous avons eu à traiter le cas du *Capacited Vehicule Routing Problem*, ou *CVRP*. 
+Le but de cet exercice est de déterminer le meilleur ensemble d'itinéraires, commançant et finissant tous au même point, aussi appelé *dépot*.
+Cet ensemble d'itinéraires doit être capable de desservir chacun des points préalablement définis. Il faut alors non seulement déterminer un trajet solution capable de
+désservir chacun des points, mais aussi en **minimisant le coût**, c'est à dire en **minimisant la somme des distances** effectuées par les camions.
 
+Pour ce projet, nous avons eu à réaliser deux étapes principales :
+ 
+ - La modélisation du problème sous forme de graphe.
+ - L'implémentation des deux algorithmes permettant de diminuer le coût de la solution.
+ 
+Nous avons donc eu à réaliser un algorithme à base de voisinage et un algorithme à base de population. 
+Nous avons finalement fait le choix de réaliser une **Recherche Tabou** comme algorithme à base de voisinage ainsi qu'un **Algorithme
+Génétique** comme algorithme à base de population.
+
+Afin de minimiser le temps d'exécution de notre application, nous avons fait le choix de réaliser ce projet avec le langage *C++*. Dans un premier temps, 
+nous avons utilisé l'IDE *CLion*, puis nous avons par la suite utilisé *QT* afin de réaliser une interface Graphique. 
+
+Pour générer nos graphes, nous utilisons *Graphviz*, comme mention dans notre [Readme](README.md).
 
 ## II - Algorithme Tabou
 
+### 1 - Implémentation
+
+L'implémentation de l'Algorithme Tabou n'est pas des plus compliqué. Pour ce faire, nous utilisons une classe ```TabouAlgorithm```, contenant tous les 
+élements indispensables au bon fonctionnement de l'algorithme.
+
+### 2 - Résultats obtenu
 
 
 ## III - Algorithme Génétique
