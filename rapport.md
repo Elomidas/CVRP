@@ -4,6 +4,8 @@
  - **JACOUD Bastien**
  - **REMOND Victor**
  
+ <br>
+ 
  * Lien [dépôt GitHub Clion](https://github.com/Elomidas/CVRP)
  
  * Lien [dépôt GitHub QT](https://github.com/Elomidas/CVRP-Qt)
