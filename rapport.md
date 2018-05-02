@@ -16,6 +16,10 @@
  
  * ![GraphExample1](graphviz/example1.svg)
  
+## Table des matières
+
+
+
 ## I - Introduction
 
 Dans le cadre d'un projet, nous avons eu à traiter le cas du *Capacited Vehicule Routing Problem*, ou *CVRP*. Le but de cet exercice est de déterminer le meilleur ensemble d'itinéraires, commençant et finissant tous au même point, aussi appelé *dépot*.Cet ensemble d'itinéraires doit être capable de desservir chaque des point préalablement défini. Il faut alors non seulement déterminer un trajet solution capable de désservir chacun des points, mais aussi en **minimisant le coût**, c'est à dire en **minimisant la somme des distances** effectuées par les camions.
@@ -236,7 +240,7 @@ Nous avons donc réalisé de nombreux tests sur notre algorithme de recherche ta
  1. Dans un premier temps nous avons utilisé le jeu de données *Data01.txt*. Nous obtenons une solution initiale générée qui possède un coût d'environ **2000**. Notre algorithme tabou nous permet de diminuer considérablement le coût, qui va se rapprocher de **800** et même parfois va devenir inférieur. Voici un exemple de résultat obtenu pour le premier jeu de données :
  ![Graph1](graphviz/Tabou_01_OK.svg)
 
- 1. Nous avons ensuite utilisé le second jeu de données : *data02.txt*. Cette fois, la solution initiale générée est d'environ ??? et diminue jusqu'a ???. Voici un exemple obtenu avec ce jeu de données :
+ 2. Nous avons ensuite utilisé le second jeu de données : *data02.txt*. Cette fois, la solution initiale générée est d'environ **3800** et diminue jusqu'a **1500**. Voici un exemple obtenu avec ce jeu de données :
  ![Graph1](graphviz/Tabou_02_OK.svg)
  
  3. Pour le troisième jeu de données, le côut débute à environ **4500** et diminue jusqu'à **2000**. Voici un exemple de graphe obtenu en sortie de notre algorithme :
