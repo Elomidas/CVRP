@@ -16,22 +16,16 @@
  
 ## I - Introduction
 
-Dans le cadre d'un projet, nous avons eu à traiter le cas du *Capacited Vehicule Routing Problem*, ou *CVRP*. 
-Le but de cet exercice est de déterminer le meilleur ensemble d'itinéraires, commançant et finissant tous au même point, aussi appelé *dépot*.
-Cet ensemble d'itinéraires doit être capable de desservir chacun des points préalablement définis. Il faut alors non seulement déterminer un trajet solution capable de
-désservir chacun des points, mais aussi en **minimisant le coût**, c'est à dire en **minimisant la somme des distances** effectuées par les camions.
+Dans le cadre d'un projet, nous avons eu à traiter le cas du *Capacited Vehicule Routing Problem*, ou *CVRP*. Le but de cet exercice est de déterminer le meilleur ensemble d'itinéraires, commançant et finissant tous au même point, aussi appelé *dépot*.Cet ensemble d'itinéraires doit être capable de desservir chacun des points préalablement définis. Il faut alors non seulement déterminer un trajet solution capable dedésservir chacun des points, mais aussi en **minimisant le coût**, c'est à dire en **minimisant la somme des distances** effectuées par les camions.
 
 Pour ce projet, nous avons eu à réaliser deux étapes principales :
  
  - La modélisation du problème sous forme de graphe.
  - L'implémentation des deux algorithmes permettant de diminuer le coût de la solution.
  
-Nous avons donc eu à réaliser un algorithme à base de voisinage et un algorithme à base de population. 
-Nous avons finalement fait le choix de réaliser une **Recherche Tabou** comme algorithme à base de voisinage ainsi qu'un **Algorithme
-Génétique** comme algorithme à base de population.
+Nous avons donc eu à réaliser un algorithme à base de voisinage et un algorithme à base de population. Nous avons finalement fait le choix de réaliser une **Recherche Tabou** comme algorithme à base de voisinage ainsi qu'un **Algorithme Génétique** comme algorithme à base de population.
 
-Afin de minimiser le temps d'exécution de notre application, nous avons fait le choix de réaliser ce projet avec le langage *C++*. Dans un premier temps, 
-nous avons utilisé l'IDE *CLion*, puis nous avons par la suite utilisé *QT* afin de réaliser une interface Graphique. 
+Afin de minimiser le temps d'exécution de notre application, nous avons fait le choix de réaliser ce projet avec le langage *C++*. Dans un premier temps, nous avons utilisé l'IDE *CLion*, puis nous avons par la suite utilisé *QT* afin de réaliser une interface Graphique. 
 
 Pour générer nos graphes, nous utilisons *Graphviz*, comme mention dans notre [Readme](README.md).
 
@@ -151,11 +145,91 @@ Tant Que ( go == false )
 
 ### 1 - Implémentation
 
-L'implémentation de l'Algorithme Tabou n'est pas des plus compliqué. Pour ce faire, nous utilisons une classe ```TabouAlgorithm```, contenant tous les 
-élements indispensables au bon fonctionnement de l'algorithme.
+L'implémentation de l'Algorithme Tabou n'est pas des plus compliqué. Pour ce faire, nous utilisons une classe ```TabouAlgorithm```, contenant tous les élements indispensables au bon fonctionnement de l'algorithme.
 
-### 2 - Résultats obtenu
+Cette classe est donc principalement composée de trois attributs :
 
+ * La liste ```m_T```, représentant notre liste Tabou, qui comportera les transformations élémentaires à ne pas reproduire.
+ * La solution ```m_xmin```, représentant la solution avec le plus petit coût actuellement trouvé par l'algorithme. 
+ * Le coût ```m_fmin```, représentant le coût minimum trouvé par l'algorithme.
+
+Viennent alors s'ajouter 3 paramètres, modifiables par l'utilisateur. Le premier, et le plus important est la taille de la liste tabou, ```M_TAILLE```. Les deux autres, ```M_NMAX``` et ```M_DISPLAY``` représentent respectivement le nombre d'itérations à effectuer ainsi que le nombre d'itérations avant l'affichage en mode console d'un graphe.
+
+Nous avons alors pu réaliser l'algorithme de la recherche tabou, tel que décrit ci-dessous :
+
+```algo_tabou
+    Génération de la solution aléatoire dans m_graph
+    m_xmin <- solution associée au graphe actuel;
+    m_fmin <- coût de la solution m_xmin;
+    Faire :
+    |    V = <- récupération du voisinage, sans sélectionner les élements de la liste tabou
+    |    Si (V n'est pas vide)
+    |    |    y_jmin <- indice pour laquelle la valeur de la solution contenue dans V est minimale
+    |    |    y_fmin <- valeur de cette solution minimale de V 
+    |    |    delta_f <- y_fmin - cout de la solution actuelle (cout de m_graph);
+    |    |    Si (delta_f >= 0)
+    |    |    |       On ajoute à notre liste tabou m_T la transformation élémentaire permettant d'obtenir la solution V[y_jmin]
+    |    |    Fin Si    
+    |    |    Si (y_fmin < m_fmin)
+    |    |    |       m_fmin <- y_fmin;
+    |    |    |       m_xmin <- Solution correspondant à V[y_jmin];
+    |    |    Fin Si
+    |    |    m_graph <- Graph correspondant à la solution m_xmin
+    |    |    Affichage en mode console de m_graph tout les M_DISPLAY
+    |    Fin Si
+    Tant que (i < M_NMAX);
+```
+
+Afin d'optimiser au maximum cet algorithme, nous avons fait le choix de récupérer uniquement l'indice ```y_jmin``` du minimum contenu dans le voisinage au lieu de récupérer un objet. 
+
+De même, toutes les transformations élémentaires sont récupérées au moment de la génération du voisinage, étant donné que lorsqu'un graphe est ajouté au voisinage, on a réalisé au préalable la transformation élémentaire permattant de générer ce dernier.
+
+### 2 - La récupéraion du voisinage
+
+Nous allons maintenant approfondir la fonction ```getVoisinage(listeTabou, listTransformation)```, définie dans notre classe ```Graph```.
+
+Cette fonction est une des plus importantes des notre algorithme, puisqu'elle permet à la fois de générer et de nous retourner le voisinage du graphe actuel, mais aussi une liste de toutes les transformations élémentaires associées aux graphes contenus dans le voisinage. Cette fonction prend également en compte notre liste tabou, pour le pas réaliser de transformation élémentaire contenue dans cette dernière, et donc non autorisée.
+
+En premier lieu, nous avons défini nos transformations élémentaires. Nous nous sommes rapidement aperçu que les transformations peuvent être de deux types :
+
+ * Une permutation entre deux sommets du graphe, au niveau du passage d'un camion, ce qui correspond à la fonction ```invertNodes(node1,  node2)```.
+ * Un déplacement de n'importe quel sommet du graphe, au niveau du passage d'un camion, ce qui correspond à la fonction ```mooveNode(node, old_truck, new_truck, new_position)```.
+ 
+Grâce à ces deux transformations élémentaires, nous avons alors pû identifier tous les graphes possibles, composant notre voisinage. Voici notre algorithme nous permettant de générer notre voisinage :
+
+```algo_voisinage
+    Pour (Chaque sommet de notre graphe, nommé node1)
+    |   // Make all elementary OP based on node inversion
+    |   Pour (Chaque sommet suivant node 1, nommé node2)
+    |   |   pair_tabou <- transformation élémentaire d'inversion de node1 et node2
+    |   |   Si (pair_tabou n'est pas dans la liste tabou)
+    |   |   |   new_graph <- Inversion de node1 et node2
+    |   |   |   Si (new_graph est solution){
+    |   |   |   |   On ajoute new_graph dans notre voisinage
+    |   |   |   |   On ajoute pair_tabou à notre liste de transformations
+    |   |   |   Fin Si
+    |   |   Fin Si
+    |   Fin Pour  
+    |   // Make all elementary OP mooving just one node
+    |   Pour (Chaque sommet autre que node 1, nommé node2)
+    |   |   pair_tabou <- transformation élémentaire de changement de place de node1
+    |   |   Si (pair_tabou n'est pas dans la liste tabou)
+    |   |   |   new_graph <- déplacement de node1
+    |   |   |   Si (new_graph est solution){
+    |   |   |   |   On ajoute new_graph au voisinage
+    |   |   |   |   On ajoute pair_tabou à notre liste de transformations
+    |   |   |   Fin Si
+    |   |   Fin Si
+    |   Fin Pour
+    Fin Pour
+    On retourne notre voisinage
+```
+
+De cette manière, nous récupérons notre voisinage, composé de toutes les transformations élémentaires possibles. De plus, nous éliminons directement les transformations contenues dans notre liste tabou. Nous récupérons également toutes les transformations effectuées dans une liste, afin de pouvoir ajouter directement la prochaine transformation qui va être effectuée à notre liste tabou.
+
+### 3 - Résultats obtenu
+
+Nous avons donc réalisé de nombreux tests sur notre algorithme de recherche tabou, en variant les paramètres ainsi que les différents jeux de données.
 
 ## IV - Algorithme Génétique
 
