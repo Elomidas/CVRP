@@ -84,9 +84,9 @@ bool testRandomSolution() {
  * test tabou algorithm
  * @return
  */
-bool testAlgoTabou() {
-    std::string jeu("02");
-    TabouAlgorithm tabou(10, "../data/data"+jeu+".txt", 100, 20);
+bool testAlgoTabou(unsigned int taille, std::string data, unsigned int ite, unsigned int aff) {
+    std::string jeu(data);
+    TabouAlgorithm tabou(taille, "../data/data"+jeu+".txt", ite, aff);
     tabou.launchAlgo();
     tabou.display("data"+jeu+"-tabou");
     return true;
@@ -180,9 +180,9 @@ void testGeneticLoad() {
 /**
  * test genetic algorithm
  */
-void testGenetic() {
-    std::string jeu("01");
-    GeneticAlgorithm gen(150, "../data/data"+jeu+".txt", 150000, 500);
+void testGenetic(unsigned int pop, std::string data, unsigned int ite, unsigned int aff) {
+    std::string jeu(data);
+    GeneticAlgorithm gen(pop, "../data/data"+jeu+".txt", ite, aff);
     gen.getStatus();
     gen.launchAlgo();
     gen.display("data"+jeu+"_gen");
@@ -205,7 +205,7 @@ void testProject() {
     //assert(testAlgoTabou());
     //assert(testRandomSolution());
     //testGeneticLoad();
-    testGenetic();
+    //testGenetic();
     //assert(testOperationsEl());
     //assert(testVoisinage());
     //assert(testGraphviz());
@@ -214,4 +214,29 @@ void testProject() {
 /**
  * Main function
  */
-void launchProject();
+void launchProject(){
+    unsigned int choice = 0;
+    std:: string data;
+    unsigned int ite = 0, aff= 0;
+    std::cout << "Choisissez l'algorithme à utiliser, 1 pour tabou, 2 pour génétique." << std::endl;
+    std:: cin >> choice;
+    std:: cout << "Choisissez le jeu de données (01, 02, ..., 05)." << std::endl;
+    std:: cin >> data;
+    std::cout << "Choisissez le nombre d'itérations total." << std::endl;
+    std::cin >> ite;
+    std::cout << "Choisissez le nombre d'itérations entre deux affichages." << std::endl;
+    std::cin >> aff;
+    if(choice == 1){
+        unsigned int taille = 0;
+        std::cout << "Choisissez la taille de la liste tabou." << std::endl;
+        std::cin >> taille;
+        testAlgoTabou(taille, data, ite, aff);
+    }
+    else if (choice == 2){
+        unsigned int pop = 0;
+        std::cout << "Choisissez la taille de la population." << std::endl;
+        std::cin >> pop;
+        testGenetic(pop, data, ite, aff);
+    }
+    std::cout << "Fin du programme";
+}
