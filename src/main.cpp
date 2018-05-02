@@ -84,8 +84,8 @@ bool testRandomSolution() {
  * @return
  */
 bool testAlgoTabou() {
-    std::string jeu("01");
-    TabouAlgorithm tabou("../data/data"+jeu+".txt");
+    std::string jeu("03");
+    TabouAlgorithm tabou(10, "../data/data"+jeu+".txt", 100, 20);
     tabou.launchAlgo();
     tabou.display("data"+jeu+"-tabou");
     return true;
@@ -180,8 +180,8 @@ void testGeneticLoad() {
  * test genetic algorithm
  */
 void testGenetic() {
-    std::string jeu("03");
-    GeneticAlgorithm gen(50, "../data/data"+jeu+".txt", 1000, 100);
+    std::string jeu("01");
+    GeneticAlgorithm gen(100, "../data/data"+jeu+".txt", 1000, 100);
     gen.getStatus();
     gen.launchAlgo();
     gen.display("data"+jeu+"_gen");
@@ -201,10 +201,10 @@ bool testGraphviz() {
 void testProject() {
     //assert(testDistancesMatrix());
     //assert(testGraph());
-    assert(testAlgoTabou());
+    //assert(testAlgoTabou());
     //assert(testRandomSolution());
     //testGeneticLoad();
-    //testGenetic();
+    testGenetic();
     //assert(testOperationsEl());
     //assert(testVoisinage());
     //assert(testGraphviz());
