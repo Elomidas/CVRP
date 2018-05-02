@@ -18,7 +18,22 @@
  
 ## Table des matières
 
-
+ * I - Introduction
+ * II - Représentation d'un graphe
+   * 1 - Représentation du graphe
+      * A - Nœuds et Distances
+      * B - Parcours du Graphe
+   * 2 - Visualisation
+      * A - Mode console
+      * B - Interface graphique
+   * 3 - Génération d'une solution aléatoire
+* III - Algorithme Tabou
+   * 1 - Implémentation   
+   * 2 - La récupéraion du voisinage
+   * 3 - Résultats obtenu
+* IV - Algorithme Génétique
+   * 1 - Implémentation
+* V - Conclusion
 
 ## I - Introduction
 
