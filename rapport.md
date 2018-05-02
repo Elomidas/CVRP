@@ -14,7 +14,7 @@
  
  * Téléchargement [Version Stable Qt]() 
  
- * ![GraphExample1](graphviz/example1.svg)
+ ![GraphExample1](graphviz/example1.svg)
  
 ## Table des matières
 
@@ -73,7 +73,7 @@ Pour générer nos graphes, nous utilisons *Graphviz*, comme mentionné dans not
    
 ### 2 - Visualisation
 
-#### A - Mode console
+#### A - Mode console
 
    Au début du projet, nous avions à travailler en mode console, ce qui nous a obligé à trouver un affichage correct d'une solution. Pour cela, nous avons choiosi d'afficher les vecteurs représentant les différents camions, puis le coût du graphe.
    
