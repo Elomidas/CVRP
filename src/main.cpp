@@ -14,6 +14,7 @@
  */
 unsigned long computeDistance(unsigned int i, unsigned int j);
 void testProject();
+void launchProject();
 
 /**
  * main
@@ -22,7 +23,7 @@ void testProject();
 int main() {
     std::cout << "Main CVRP" << std::endl;
     std::srand(static_cast<unsigned int>(time(nullptr)));
-    testProject();
+    launchProject();
     return 0;
 }
 
@@ -209,3 +210,8 @@ void testProject() {
     //assert(testVoisinage());
     //assert(testGraphviz());
 }
+
+/**
+ * Main function
+ */
+void launchProject();
