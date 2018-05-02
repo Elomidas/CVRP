@@ -181,7 +181,7 @@ void testGeneticLoad() {
  */
 void testGenetic() {
     std::string jeu("01");
-    GeneticAlgorithm gen(100, "../data/data"+jeu+".txt", 1000, 100);
+    GeneticAlgorithm gen(150, "../data/data"+jeu+".txt", 150000, 500);
     gen.getStatus();
     gen.launchAlgo();
     gen.display("data"+jeu+"_gen");
@@ -201,10 +201,10 @@ bool testGraphviz() {
 void testProject() {
     //assert(testDistancesMatrix());
     //assert(testGraph());
-    assert(testAlgoTabou());
+    //assert(testAlgoTabou());
     //assert(testRandomSolution());
     //testGeneticLoad();
-    //testGenetic();
+    testGenetic();
     //assert(testOperationsEl());
     //assert(testVoisinage());
     //assert(testGraphviz());

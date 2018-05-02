@@ -117,7 +117,7 @@ Solution's cost : 2215.092281
    
    Nous avons ensuite décidé de changer de base pour notre programme : nous avions commencé en C++ pur avec CLion comme IDE, mais nous sommes ensuite passé sous Qt afin de pouvoir créer une interface graphique rendant l'utilisation du programme plus intuitive. Parmis les améliorations apportées lors du passage sous Qt se trouve l'apparition d'une fenêtre *Settings* permettant de choisir quel algorithme utiliser et d'en renseigner les paramètres.
    
-   ![SettingsWindow][SettingsWindow]
+   ![SettingsWindow](/home/elomidas/Images/settings.png)
    
    Un objectif de notre passage sous Qt était aussi la création d'une fenêtre de monitoring de l'algorithme :
    
@@ -295,6 +295,9 @@ Au niveau du paramétrage de notre liste tabou, la taille que nous avons fixé p
    
    Une seconde fonction de reproduction utilisée était la fonction *NodeSwap*, qui permettait d'intervertir deux nœuds ou plus dans le schéma de représentation d'un membre de la population.
 
-   
+### 2 - Améliorations
+
+   Suite aux performances peu convaincantes de notre algorithme, nous avons modifié son fonctionnement en ajoutant une fonction de mutation, appellée *Partially Mapped Crossover*, trouvée sur [ce site](http://www.rubicite.com/Tutorials/GeneticAlgorithms/CrossoverOperators/PMXCrossoverOperator.aspx/). Nous avons aussi modifié le passage d'une génération à une autre : dans notre précédente version, la totalité de la population était changée. Cette fois, nous avons fait en sorte de n'en modifier qu'une partie, afin de ne pas avoir un algorithme qui dérive totalement.
+
 
 ## V - Conclusion
