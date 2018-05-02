@@ -10,13 +10,15 @@
  
  * Lien [dépôt GitHub Qt](https://github.com/Elomidas/CVRP-Qt)
  
- * Téléchargement [Version Stable]() 
+ * Téléchargement [Version Stable C++ classique]() 
  
- * [GraphExample1] : (graphviz/example1.svg)
+ * Téléchargement [Version Stable Qt]() 
+ 
+ * ![GraphExample1](graphviz/example1.svg)
  
 ## I - Introduction
 
-Dans le cadre d'un projet, nous avons eu à traiter le cas du *Capacited Vehicule Routing Problem*, ou *CVRP*. Le but de cet exercice est de déterminer le meilleur ensemble d'itinéraires, commançant et finissant tous au même point, aussi appelé *dépot*.Cet ensemble d'itinéraires doit être capable de desservir chacun des points préalablement définis. Il faut alors non seulement déterminer un trajet solution capable dedésservir chacun des points, mais aussi en **minimisant le coût**, c'est à dire en **minimisant la somme des distances** effectuées par les camions.
+Dans le cadre d'un projet, nous avons eu à traiter le cas du *Capacited Vehicule Routing Problem*, ou *CVRP*. Le but de cet exercice est de déterminer le meilleur ensemble d'itinéraires, commençant et finissant tous au même point, aussi appelé *dépot*.Cet ensemble d'itinéraires doit être capable de desservir chaque des point préalablement défini. Il faut alors non seulement déterminer un trajet solution capable de désservir chacun des points, mais aussi en **minimisant le coût**, c'est à dire en **minimisant la somme des distances** effectuées par les camions.
 
 Pour ce projet, nous avons eu à réaliser deux étapes principales :
  
@@ -27,11 +29,11 @@ Nous avons donc eu à réaliser un algorithme à base de voisinage et un algorit
 
 Afin de minimiser le temps d'exécution de notre application, nous avons fait le choix de réaliser ce projet avec le langage *C++*. Dans un premier temps, nous avons utilisé l'IDE *CLion*, puis nous avons par la suite utilisé *QT* afin de réaliser une interface Graphique. 
 
-Pour générer nos graphes, nous utilisons *Graphviz*, comme mention dans notre [Readme](README.md).
+Pour générer nos graphes, nous utilisons *Graphviz*, comme mentionné dans notre [Readme](README.md).
 
 ## II - Représentation d'un graphe
 
-   Dans un premier temps, nous avons dû convenir d'un objet représentant un graphe afin de pouvoir manipuler nos données. L'une de nos principales préocupations étaient de pouvoir l'utiliser de façon relativement rapide, nous avons donc essayer de créer des fonctions de manipulation un minimum optimisées. La structure interne de notre classe ```Graph``` peut se décomposer en deux grosses partie : 
+   Dans un premier temps, nous avons dû convenir d'un objet représentant un graphe afin de pouvoir manipuler nos données. L'une de nos principales préocupations était de pouvoir l'utiliser de façon relativement rapide, nous avons donc essayé de créer des fonctions de manipulation un minimum optimisées. La structure interne de notre classe ```Graph``` peut se décomposer en deux grosses partie : 
    
  -  La représentation des Nœuds et des Distances.
  -  La représentations des chemins empruntés pour l'instance actuelle du Graphe.
@@ -49,19 +51,19 @@ Pour générer nos graphes, nous utilisons *Graphviz*, comme mention dans notre 
 
    Nous chargeons tout d'abbord les nœuds depuis le fichier de sources, en sachant que chaque nœud possède un id, une quantité de produits à livrer, et une position représentée par un couple {x,y}. 
    
-   Une fois ces nœuds chargés en mémoire, on génère la matrice des distances. Comme la distance entre deux nœuds A et B est la même qu'entre B et A, nous ne manipulons pas une matrice carrée complète mais simplement une matrice triangulaire, avec une vérification sur le indices demandés :
+   Une fois ces nœuds chargés en mémoire, on génère la matrice des distances. Comme la distance entre deux nœuds A et B est la même qu'entre B et A, nous ne manipulons pas une matrice carrée complète mais simplement une matrice triangulaire, avec une vérification sur les indices demandés :
   
   - La fonction getDistance(index1, index2) réorganise les indices afin de lire distances\[i]\[j] avec i = max(index1, index2) et j = min(index1, index2).
   
 #### B - Parcours du Graphe
 
-   Pour représenté les chemins empruntés par les camions, nous avons créé une classe ```Truck```, qui est une liste chainée améliorée de nœuds. A chaque ajout d'un nœud sur le parcours d'un camion, ce dernier est marqué comme utilisé. De plus, avant d'ajouter un nœud au parcours d'un camion on vérifie que cela ne cause pas de dépassement de capacité, afin de ne pas générer de graphe qui ne serait pas une solution.
+   Pour représenter les chemins empruntés par les camions, nous avons créé une classe ```Truck```, qui est une liste chainée améliorée de nœuds. A chaque ajout d'un nœud sur le parcours d'un camion, ce dernier est marqué comme utilisé. De plus, avant d'ajouter un nœud au parcours d'un camion on vérifie que cela ne cause pas de dépassement de capacité, afin de ne pas générer de graphe qui ne serait pas une solution.
    
    Cette classe permet aussi de calculer la distance parcourue par le camion, ce qui simplifie le calcul du coût total du graph : il nous suffit de sommer la distance parcourue par chaque camion.
    
    Enfin cette classe nous permet d'obtenir un vecteur d'entiers représenatant le parcours du camion. Exemple avec le graph ci-dessous :
    
-   ![GraphExamplePath][GraphExample1]
+   ![GraphExamplePath](graphviz/example1.svg)
    
    Le parcours bleu sera représenté par le vecteur ```{ 0, 1, 2, 3, 4, 5, 6, 0 }``` et le rouge par le vecteur ```{ 0, 14, 12, 11, 10, 9, 8, 7, 0 }```. Ces vecteurs ne permettent pas de connaitre la distance du parcours, mais restent utiles pour se faire une idée du parcours et comparer rapidement deux graphes à la console.
    
@@ -69,7 +71,7 @@ Pour générer nos graphes, nous utilisons *Graphviz*, comme mention dans notre 
 
 #### A - Mode console
 
-   Au commencement du projet, nous avions à travailler en mode console, ce qui nous a obligé à trouver un affichage correct d'une solution. Pour cela, nous avons choiosi d'afficher les vecteurs représentant les différents camions, puis le coût du graphe.
+   Au début du projet, nous avions à travailler en mode console, ce qui nous a obligé à trouver un affichage correct d'une solution. Pour cela, nous avons choiosi d'afficher les vecteurs représentant les différents camions, puis le coût du graphe.
    
    Un exemple de solution affichée serait :
    
@@ -98,7 +100,7 @@ Solution's cost : 2215.092281
    
    ![SettingsWindow][SettingsWindow]
    
-   Un objectif de notre passage sous Qt était aussi la création d'une fenêtre de monitoring de l'algorithm :
+   Un objectif de notre passage sous Qt était aussi la création d'une fenêtre de monitoring de l'algorithme :
    
    ![AlgorithmDetails][AlgorithmDetails]
    
@@ -145,7 +147,7 @@ Tant Que ( go == false )
 
 ### 1 - Implémentation
 
-L'implémentation de l'Algorithme Tabou n'est pas des plus compliqué. Pour ce faire, nous utilisons une classe ```TabouAlgorithm```, contenant tous les élements indispensables au bon fonctionnement de l'algorithme.
+L'implémentation de l'Algorithme Tabou n'est pas des plus compliqués. Pour ce faire, nous utilisons une classe ```TabouAlgorithm```, contenant tous les élements indispensables au bon fonctionnement de l'algorithme.
 
 Cette classe est donc principalement composée de trois attributs :
 
@@ -182,7 +184,7 @@ Nous avons alors pu réaliser l'algorithme de la recherche tabou, tel que décri
 
 Afin d'optimiser au maximum cet algorithme, nous avons fait le choix de récupérer uniquement l'indice ```y_jmin``` du minimum contenu dans le voisinage au lieu de récupérer un objet. 
 
-De même, toutes les transformations élémentaires sont récupérées au moment de la génération du voisinage, étant donné que lorsqu'un graphe est ajouté au voisinage, on a réalisé au préalable la transformation élémentaire permattant de générer ce dernier.
+De même, toutes les transformations élémentaires sont récupérées au moment de la génération du voisinage, étant donné que lorsqu'un graphe est ajouté au voisinage, on a réalisé au préalable la transformation élémentaire permattant de le générer.
 
 ### 2 - La récupéraion du voisinage
 
@@ -229,8 +231,25 @@ De cette manière, nous récupérons notre voisinage, composé de toutes les tra
 
 ### 3 - Résultats obtenu
 
-Nous avons donc réalisé de nombreux tests sur notre algorithme de recherche tabou, en variant les paramètres ainsi que les différents jeux de données.
+Nous avons donc réalisé de nombreux tests sur notre algorithme de recherche tabou, en variant les paramètres ainsi que les différents jeux de données. Chaque fois, nous avons paramétré notre algorithme pour qu'il **effectue 100 itérations** et **affiche le résultat toutes les 20 itérations**. 
 
+ 1. Dans un premier temps nous avons utilisé le jeu de données *Data01.txt*. Nous obtenons une solution initiale générée qui possède un coût d'environ **2000**. Notre algorithme tabou nous permet de diminuer considérablement le coût, qui va se rapprocher de **800** et même parfois va devenir inférieur. Voici un exemple de résultat obtenu pour le premier jeu de données :
+ ![Graph1](graphviz/Tabou_01_OK.svg)
+
+ 1. Nous avons ensuite utilisé le second jeu de données : *data02.txt*. Cette fois, la solution initiale générée est d'environ ??? et diminue jusqu'a ???. Voici un exemple obtenu avec ce jeu de données :
+ ![Graph1](graphviz/Tabou_02_OK.svg)
+ 
+ 3. Pour le troisième jeu de données, le côut débute à environ **4500** et diminue jusqu'à **2000**. Voici un exemple de graphe obtenu en sortie de notre algorithme :
+ ![Graph1](graphviz/Tabou_03_OK.svg)
+ 
+ 4. Cette fois le coût varie entre **3300** à la génération de la solution initiale et **1480** à la fin de l'algorithme. Voici un exemple de graphe généré :
+ ![Graph1](graphviz/Tabou_04_OK.svg)
+ 
+ 5. Pour finir, avec le dernier jeu de données, notre coût varie entre **3700** au lancement et **1600** en fin d'algorithme. Voici un exemple :
+ ![Graph1](graphviz/Tabou_05_OK.svg)
+ 
+Au niveau du paramétrage de notre liste tabou, la taille que nous avons fixé pour notre liste varie entre 10 et 20 suivant le test effectué et le jeu de données utilisé. Comme nous effectuons ici seulement 100 itérations, il est inutile d'augmenter sa taille.
+ 
 ## IV - Algorithme Génétique
 
 ### 1 - Implémentation
