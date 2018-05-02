@@ -4,6 +4,7 @@
 // Documents :
 // - https://www.sciencedirect.com/science/article/pii/S0307904X11005105
 // - https://en.wikipedia.org/wiki/Edge_recombination_operator
+// - http://www.rubicite.com/Tutorials/GeneticAlgorithms/CrossoverOperators/PMXCrossoverOperator.aspx/
 //
 
 #ifndef CVRP_GENETICALGORITHM_H
@@ -15,7 +16,8 @@
 
 class GeneticAlgorithm : public Algorithm {
 public:
-    explicit GeneticAlgorithm(unsigned int, const std::string &, const double &, const double &);
+    explicit GeneticAlgorithm(unsigned int, const std::string &, const double &,
+                              const double &, const double &probaEdgeReco = double(0.4), const double &probaPMX = double(0.4));
     ~GeneticAlgorithm();
 
     void getStatus() const;
@@ -28,6 +30,8 @@ private:
     std::vector<double> m_costs;
     double m_min, m_max, m_bestCost, m_step, m_iterations, m_display;
     std::vector<unsigned int> m_best;
+    Solution m_bestSolution;
+    double m_probaEdgeReco, m_probaPMX;
 
     void generateFirstPopulation();
     void nextStep();
@@ -36,6 +40,10 @@ private:
     bool isValid(const std::vector<unsigned int> &) const;
     void getMini() override;
 
+    //Helpers
+    unsigned int getIndexPMX(unsigned int, const std::vector<unsigned int> &) const;
+    static bool contains(const std::vector<unsigned int> &, unsigned int);
+
     //Legacy
     void selectParents();
     void reproduction();
@@ -43,6 +51,7 @@ private:
     //Mutations
     void edgeRecombination();
     void swapNodes(std::vector<unsigned int>);
+    void partiallyMappedCrossover();
     std::vector<std::vector<unsigned int>> getAdjacencyMatrix(const std::vector<unsigned int> &) const;
     std::vector<std::vector<unsigned int>> getAdjacencyMatrix() const;
     static void removeNodeFromAdjacencyMatrix(std::vector<std::vector<unsigned int>> &, unsigned int);
